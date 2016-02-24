@@ -1,2 +1,3 @@
-# core_app
-The backend web application
+# Hydrobase app
+
+A system for controlling and optimizing sensor performance
