@@ -4,7 +4,9 @@
         {% endblock %}
     </head>
     <body>
-    <div>Hydrobase</div>
+    {% block nav %}
+    <div><a href="/index">Hydrobase</a></div>
+    {% endblock %}
     <hr>
     {% block content %}{% endblock %}
     </body>

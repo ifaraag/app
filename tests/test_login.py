@@ -25,6 +25,10 @@ class TestLogin(unittest.TestCase):
         r = self.app.get('/login')
         self.assertIn(b'Hydrobase Login', r.data)
 
+    def test_login_index_link(self):
+        r = self.app.get('/login')
+        self.assertIn(b'<a href="/index">Hydrobase</a>', r.data)
+
     def test_login(self):
         r = self.login('admin', 'admin')
         self.assertEquals(200, r.status_code)
