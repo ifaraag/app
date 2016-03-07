@@ -1,7 +1,4 @@
 {% extends "base.html" %}
-{% block head %}
-    <title>Hydrobase Login</title>
-{% endblock %}
 {% block content %}
     <h2>Hydrobase</h2>
     <br>
@@ -12,6 +9,7 @@
         <input type="password" placeholder="Password" name="password" value="{{
         request.form.password }}">
         <br>
+        <p>{{ form.remember_me }} Remember Me</p>
         <input class="btn btn-default" type="submit" value="Login">
     </form>
     {% if error %}

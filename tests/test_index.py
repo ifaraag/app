@@ -19,6 +19,19 @@ class TestIndex(unittest.TestCase):
         r = self.app.get('/index')
         self.assertIn(b'Welcome to Hydrobase', r.data)
 
+    def test_index_bootstrap_cdn(self):
+        r = self.app.get('/index')
+        self.assertIn(b'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',
+                      r.data)
+
+    def test_index_index_link(self):
+        r = self.app.get('/index')
+        self.assertIn(b'<a href="/index">Hydrobase</a>', r.data)
+
+    def test_index_login_link(self):
+        r = self.app.get('/index')
+        self.assertIn(b'<a href="login">Login</a>', r.data)
+
 
 if __name__ == '__main__':
     unittest.main()
