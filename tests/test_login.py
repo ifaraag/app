@@ -23,17 +23,17 @@ class TestLogin(unittest.TestCase):
 
     def test_login_title(self):
         r = self.app.get('/login')
-        self.assertIn(b'Hydrobase Login', r.data)
+        self.assertIn(b'Login to Hydrobase', r.data)
 
     def test_login_index_link(self):
         r = self.app.get('/login')
         self.assertIn(b'<a href="/index">Hydrobase</a>', r.data)
 
     def test_login(self):
-        r = self.login('admin', 'admin')
-        self.assertEquals(200, r.status_code)
         r = self.login('admin', 'wrong-password')
         self.assertIn(b'Invalid credentials. Please try again.', r.data)
+        r = self.login('admin', 'admin')
+        self.assertEquals(200, r.status_code)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ from .forms import LoginForm
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', title='Hydrobase')
+    return render_template('index.html', title='Welcome to Hydrobase')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -16,5 +16,11 @@ def login():
             request.form['password'] != 'admin'):
             error = 'Invalid credentials. Please try again.'
         else:
-            return redirect(url_for('index'))
-    return render_template('login.html', error=error)
+            return redirect(url_for('dashboard'))
+    return render_template('login.html',
+                           title='Login to Hydrobase',
+                           error=error)
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html', title='Your Dashboard')
