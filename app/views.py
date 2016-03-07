@@ -10,6 +10,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     error = None
     if request.method == 'POST':
         if (request.form['username'] != 'admin' or
@@ -19,6 +20,7 @@ def login():
             return redirect(url_for('dashboard'))
     return render_template('login.html',
                            title='Login to Hydrobase',
+                           form=form,
                            error=error)
 
 @app.route('/dashboard')
