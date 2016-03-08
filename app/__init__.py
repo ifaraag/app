@@ -5,3 +5,5 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 from app import views
+from app.auth import views
+from app.dashboard import views
