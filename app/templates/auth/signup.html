@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Hydrobase</h2>
+    <br>
+    <form action="" method="post" accept-charset="UTF-8" role="form">
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username(placeholder="Username") }}
+            {{ form.username.errors[-1] }}
+        </p>
+        <p>
+            {{ form.email(placeholder="Email") }}
+            {{ form.email.errors[0] }}
+        </p>
+        <p>
+            {{ form.password(placeholder="Password") }}
+            {{ form.password.errors[0] }}
+        </p>
+        <p>
+            {{ form.confirm(placeholder="Confirm password") }}
+            {{ form.confirm.errors[0] }}
+        </p>
+        <div>
+            <input class="btn btn-default" type="submit" value="Sign Up">
+         </div>
+    </form>
+{% endblock %}
