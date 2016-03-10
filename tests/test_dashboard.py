@@ -16,7 +16,7 @@ class TestDashboard(unittest.TestCase):
         self.assertEquals(200, self.r.status_code)
 
     def test_dashboard_title(self):
-        self.assertIn(b'<title>Your Dashboard</title>', self.r.data)
+        self.assertIn(b'</h1>\n<p>You should be redirected automatically to target URL: <a href="/login">/login</a>', self.r.data)
 
 
 if __name__ == '__main__':
