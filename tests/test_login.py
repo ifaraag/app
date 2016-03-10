@@ -1,6 +1,7 @@
 import unittest
 
 from app import app
+from app.auth.views import load_user
 
 
 class TestLogin(unittest.TestCase):
@@ -18,6 +19,9 @@ class TestLogin(unittest.TestCase):
                                        password=password),
                              follow_redirects=True)
 
+    def logout(self):
+        return self.app.get('/logout', follow_redirects=True)
+
     def test_login_200(self):
         self.assertEquals(200, self.r.status_code)
 
@@ -27,11 +31,16 @@ class TestLogin(unittest.TestCase):
     def test_login_index_link(self):
         self.assertIn(b'<a href="/index">Hydrobase</a>', self.r.data)
 
-    def test_login(self):
+    def test_login_and_logout(self):
         r = self.login('admin', 'wrong-password')
         self.assertIn(b'Invalid credentials. Please try again.', r.data)
         r = self.login('admin', 'admin')
         self.assertEquals(200, r.status_code)
+        out = self.logout()
+        self.assertIn(b'<title>Login to Hydrobase</title>', out.data)
+
+    def test_load_user_Wolfeschlegelsteinhausenbergerdorff_is_None(self):
+        self.assertEquals(None, load_user('Wolfeschlegelsteinhausenbergerdorff'))
 
 
 if __name__ == '__main__':
