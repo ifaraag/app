@@ -1,7 +1,7 @@
 import unittest
 
 from app import app
-from auth.models import User
+from app.auth.models import User
 
 class TestIndex(unittest.TestCase):
 
