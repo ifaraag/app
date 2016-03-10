@@ -1,11 +1,19 @@
 # Import flask and template operators
 from flask import Flask, render_template, redirect
+#from flask.ext.pymongo import PyMongo
+from pymongo import MongoClient
 
 # Define the WSGI application object
 app = Flask(__name__)
 
 # Configurations
 app.config.from_object('config')
+
+# Define the database object which is imported
+# by modules and controllers
+
+client = MongoClient("mongodb://admin:admin@ds011268.mlab.com:11268/analytics-hydrobase")
+db = client['analytics-hydrobase']
 
 #Sample HTTP error handling
 @app.errorhandler(404)
