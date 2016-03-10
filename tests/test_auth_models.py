@@ -13,15 +13,15 @@ class TestIndex(unittest.TestCase):
 
     def test_is_authenticated(self):
         user=User('anubhav')
-        self.assertEquals(user.is_authenticated(), 'True')
+        self.assertEquals(user.is_authenticated(), True)
 
     def test_is_active(self):
         user=User('anubhav')
-        self.assertEquals(user.is_active(), 'True')	
+        self.assertEquals(user.is_active(), True)	
 
     def test_is_anonyous(self):
         user=User('anubhav')
-        self.assertEquals(user.is_anonymous(), 'False')
+        self.assertEquals(user.is_anonymous(), False)
 
     def test_get_id(self):
         user=User('anubhav')
