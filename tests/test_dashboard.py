@@ -12,8 +12,8 @@ class TestDashboard(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_dashboard_200(self):
-        self.assertEquals(200, self.r.status_code)
+    def test_dashboard_302(self):
+        self.assertEquals(302, self.r.status_code)
 
     def test_dashboard_title(self):
         self.assertIn(b'</h1>\n<p>You should be redirected automatically to target URL: <a href="/login">/login</a>', self.r.data)
