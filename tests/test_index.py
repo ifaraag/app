@@ -30,7 +30,7 @@ class TestIndex(unittest.TestCase):
 
     def test_index_login_link(self):
         r = self.app.get('/index')
-        self.assertIn(b'<a href="/login">Login</a>', r.data)
+        self.assertIn(b'<a href="/login">Log In</a>', r.data)
 
 
 if __name__ == '__main__':
