@@ -1,4 +1,3 @@
-# Define a User model
 class User():
 
     def __init__(self, username):
