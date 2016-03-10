@@ -3,19 +3,17 @@
     <h2>Hydrobase</h2>
     <br>
     <form action="" method="post" accept-charset="UTF-8" role="form">
-        {{form.csrf_token }}
-        <p>Username{{form.username}}</p>
-        <p>Password{{form.password}}</p>
+        {{ form.csrf_token }}
+        <p>{{ form.username }}</p>
+        <p>{{ form.password }}</p>
         <div>
-            <label>
-                <p>{{ form.remember_me }} Remember Me</p>
-                <a role="button" href="">Forgot your password?</a>
-                <br>
-            </label>
-            <input class="btn btn-default" type="submit" value="Login">
+            <p>
+                {{ form.remember_me }} Remember Me ·
+                <a role="button" href="">Forgot password?</a>
+            </p>
+            <input class="btn btn-default" type="submit" value="Log in">
          </div>
     </form>
-    
     {% if error %}
         <p class="error">{{ error }}
     {% endif %}
