@@ -26,7 +26,7 @@ class TestLogin(unittest.TestCase):
         self.assertEquals(200, self.r.status_code)
 
     def test_login_title(self):
-        self.assertIn(b'<title>Login to Hydrobase</title>', self.r.data)
+        self.assertIn(b'<title>Log In to Hydrobase</title>', self.r.data)
 
     def test_login_index_link(self):
         self.assertIn(b'<a href="/index">Hydrobase</a>', self.r.data)
@@ -37,7 +37,7 @@ class TestLogin(unittest.TestCase):
         r = self.login('admin', 'admin')
         self.assertEquals(200, r.status_code)
         out = self.logout()
-        self.assertIn(b'<title>Login to Hydrobase</title>', out.data)
+        self.assertIn(b'<title>Log In to Hydrobase</title>', out.data)
 
     def test_load_user_Wolfeschlegelsteinhausenbergerdorff_is_None(self):
         self.assertEquals(None, load_user('Wolfeschlegelsteinhausenbergerdorff'))

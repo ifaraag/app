@@ -4,8 +4,8 @@
     <br>
     <form action="" method="post" accept-charset="UTF-8" role="form">
         {{ form.csrf_token }}
-        <p>{{ form.username }}</p>
-        <p>{{ form.password }}</p>
+        <p>{{ form.username(placeholder="Username") }}</p>
+        <p>{{ form.password(placeholder="Password") }}</p>
         <div>
             <p>
                 {{ form.remember_me }} Remember Me ·

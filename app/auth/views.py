@@ -29,7 +29,7 @@ def login():
         login_user(user_obj)
         return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/login.html',
-                         title='Login to Hydrobase',
+                         title='Log In to Hydrobase',
                          form=form,
                          error=error)
 
