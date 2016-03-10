@@ -3,29 +3,27 @@ import unittest
 from app import app
 from app.auth.models import User
 
-class TestIndex(unittest.TestCase):
+class TestAuthModels(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
+        self.user = User('admin')
 
     def tearDown(self):
         pass
 
     def test_is_authenticated(self):
-        user=User('anubhav')
-        self.assertEquals(user.is_authenticated(), True)
+        self.assertEquals(True, self.user.is_authenticated())
 
     def test_is_active(self):
-        user=User('anubhav')
-        self.assertEquals(user.is_active(), True)	
+        self.assertEquals(True, self.user.is_active())
 
     def test_is_anonyous(self):
-        user=User('anubhav')
-        self.assertEquals(user.is_anonymous(), False)
+        self.assertEquals(False, self.user.is_anonymous())
 
     def test_get_id(self):
-        user=User('anubhav')
-        self.assertEquals(user.get_id(), 'anubhav')	
+        self.assertEquals('admin', self.user.get_id())
+
 
 if __name__ == '__main__':
 	unittest.main()

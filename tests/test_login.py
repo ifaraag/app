@@ -7,6 +7,7 @@ class TestLogin(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
+        self.r = self.app.get('/login')
 
     def tearDown(self):
         pass
@@ -18,16 +19,13 @@ class TestLogin(unittest.TestCase):
                              follow_redirects=True)
 
     def test_login_200(self):
-        r = self.app.get('/login')
-        self.assertEquals(200, r.status_code)
+        self.assertEquals(200, self.r.status_code)
 
     def test_login_title(self):
-        r = self.app.get('/login')
-        self.assertIn(b'Login to Hydrobase', r.data)
+        self.assertIn(b'<title>Login to Hydrobase</title>', self.r.data)
 
     def test_login_index_link(self):
-        r = self.app.get('/login')
-        self.assertIn(b'<a href="/index">Hydrobase</a>', r.data)
+        self.assertIn(b'<a href="/index">Hydrobase</a>', self.r.data)
 
     def test_login(self):
         r = self.login('admin', 'wrong-password')

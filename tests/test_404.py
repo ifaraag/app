@@ -2,7 +2,8 @@ import unittest
 
 from app import app
 
-class TestIndex(unittest.TestCase):
+
+class Test404(unittest.TestCase):
 
 	def setUp(self):
 		self.app = app.test_client()
