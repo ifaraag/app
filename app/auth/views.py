@@ -16,7 +16,9 @@ def login():
     print(request.method)
     if request.method == 'POST':
         user = db.users.find_one({'username': request.form['username']})
-        if not (user and user['password'] ==  request.form['password']):
+        if not user:
+            error = 'User does not exist'
+        elif not check_password_hash(user['password'], request.form['password']):
             error = 'Invalid credentials. Please try again.'
         else:
             user_obj = User(user['username'])
@@ -40,7 +42,7 @@ def signup():
         else:
             new_user = {'username' : request.form['username'],
                         'email' : request.form['email'],
-                        'password' : request.form['password']}
+                        'password' : generate_password_hash(request.form['password'])}
             db.users.insert_one(new_user)
             return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/signup.html', form=form,
