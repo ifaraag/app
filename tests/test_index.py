@@ -7,34 +7,29 @@ class TestIndex(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
+        self.r = self.app.get('/index')
 
     def tearDown(self):
         pass
 
     def test_index_200(self):
-        r = self.app.get('/index')
-        self.assertEquals(200, r.status_code)
+        self.assertEquals(200, self.r.status_code)
 
     def test_index_title(self):
-        r = self.app.get('/index')
-        self.assertIn(b'Welcome to Hydrobase', r.data)
+        self.assertIn(b'<title>Welcome to Hydrobase</title>', self.r.data)
 
     def test_index_bootstrap_cdn(self):
-        r = self.app.get('/index')
         self.assertIn(b'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',
-                      r.data)
+                      self.r.data)
 
     def test_index_index_link(self):
-        r = self.app.get('/index')
-        self.assertIn(b'<a href="/index">Hydrobase</a>', r.data)
+        self.assertIn(b'<a href="/index">Hydrobase</a>', self.r.data)
 
     def test_index_login_link(self):
-        r = self.app.get('/index')
-        self.assertIn(b'<a href="/login">Log In</a>', r.data)
+        self.assertIn(b'<a href="/login">Log In</a>', self.r.data)
 
     def test_index_signup_link(self):
-        r = self.app.get('/index')
-        self.assertIn(b'<a href="/signup">Sign Up</a>', r.data)
+        self.assertIn(b'<a href="/signup">Sign Up</a>', self.r.data)
 
 
 if __name__ == '__main__':
