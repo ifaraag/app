@@ -9,10 +9,6 @@ app.config.from_object('config')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
-# Define the database object which is imported
-# by modules and controllers
-
 client = MongoClient("mongodb://admin:admin@ds011268.mlab.com:11268/analytics-hydrobase")
 db = client['analytics-hydrobase']
 

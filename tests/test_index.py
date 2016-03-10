@@ -32,6 +32,10 @@ class TestIndex(unittest.TestCase):
         r = self.app.get('/index')
         self.assertIn(b'<a href="/login">Log In</a>', r.data)
 
+    def test_index_signup_link(self):
+        r = self.app.get('/index')
+        self.assertIn(b'<a href="/signup">Sign Up</a>', r.data)
+
 
 if __name__ == '__main__':
     unittest.main()
