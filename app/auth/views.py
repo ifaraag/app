@@ -2,10 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask.ext.login import login_required, login_user, logout_user
 from werkzeug import check_password_hash, generate_password_hash
 
-from app import db
-from app import login_manager
+from app import db, login_manager
 from .models import User
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
 
 
 mod_auth = Blueprint('auth', __name__)
@@ -18,15 +17,34 @@ def login():
     if request.method == 'POST':
         user = db.users.find_one({'username': request.form['username']})
         if not (user and user['password'] ==  request.form['password']):
-          error = 'Invalid credentials. Please try again.'
+            error = 'Invalid credentials. Please try again.'
         else:
-          user_obj = User(user['username'])
-          login_user(user_obj)
-          return redirect(url_for('dashboard.dashboard'))
+            user_obj = User(user['username'])
+            login_user(user_obj)
+            return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/login.html',
                            title='Log In to Hydrobase',
                            form=form,
                            error=error)
+
+@mod_auth.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm(request.form)
+    if request.method == 'POST' and form.validate():
+        existing_user = db.users.find_one({'username' :
+                                           request.form['username']})
+        if existing_user:
+            form.username.errors.append('Username already exists')
+            return render_template('auth/signup.html', form=form,
+                                   title='Sign Up for Hydrobase')
+        else:
+            new_user = {'username' : request.form['username'],
+                        'email' : request.form['email'],
+                        'password' : request.form['password']}
+            db.users.insert_one(new_user)
+            return redirect(url_for('dashboard.dashboard'))
+    return render_template('auth/signup.html', form=form,
+                           title='Sign Up for Hydrobase')
 
 # @mod_auth.route('/googlelogin', methods=['GET', 'POST'])
 
