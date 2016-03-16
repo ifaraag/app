@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask.ext.login import login_required, login_user, logout_user
 from werkzeug import check_password_hash, generate_password_hash
 
-from app import db, login_manager
+from app import db, login_manager, pubnub
 from .models import User
 from .forms import LoginForm, SignupForm
 
@@ -44,6 +44,8 @@ def signup():
                         'email' : request.form['email'],
                         'password' : generate_password_hash(request.form['password'])}
             db.users.insert_one(new_user)
+            user = db.users.find_one({'username': request.form['username']})
+            pubnub.subscribe(channels=user['username'], callback=callback, error=error)
             return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/signup.html', form=form,
                            title='Sign Up for Hydrobase')
@@ -63,7 +65,13 @@ def unauthorized_callback():
 
 @login_manager.user_loader
 def load_user(username):
-  u = db.users.find_one({"username": username})
+  u = db.users.find_one({'username': username})
   if not u:
       return None
   return User(u['username'])
+
+def callback(message, channel):
+  db.data.insert_one(message)
+
+def error(message):
+  db.data.insert_one(message)
