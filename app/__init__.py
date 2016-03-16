@@ -10,8 +10,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 #initialize the mongodb instance
-client = MongoClient("mongodb://admin:admin@ds011268.mlab.com:11268/analytics-hydrobase")
-db = client['analytics-hydrobase']
+client = MongoClient(app.config['MONGO_URI'])
+db = client[app.config['DB_NAME']]
 
 #initialize the pubnub instance
 pubnub = Pubnub(publish_key=app.config['PUBNUB_PUBLISH_KEY'], subscribe_key=app.config['PUBNUB_SUBSCRIBE_KEY'])

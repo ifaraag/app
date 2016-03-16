@@ -6,7 +6,7 @@ DEBUG = False
 SRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
 
-MONGO_URI = 'mongodb://admin:admin@ds011268.mlab.com:11268'
+MONGO_URI = 'mongodb://admin:admin@ds011268.mlab.com:11268/analytics-hydrobase'
 DB_NAME = 'analytics-hydrobase'
 
 
