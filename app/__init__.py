@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect
 from pymongo import MongoClient
 from flask_login import LoginManager
-
+from pubnub import Pubnub
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -9,8 +9,12 @@ app.config.from_object('config')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+#initialize the mongodb instance
 client = MongoClient("mongodb://admin:admin@ds011268.mlab.com:11268/analytics-hydrobase")
 db = client['analytics-hydrobase']
+
+#initialize the pubnub instance
+pubnub = Pubnub(publish_key=app.config['PUBNUB_PUBLISH_KEY'], subscribe_key=app.config['PUBNUB_SUBSCRIBE_KEY'])
 
 from app.views import mod_app
 from app.auth.views import mod_auth
