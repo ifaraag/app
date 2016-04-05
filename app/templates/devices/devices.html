@@ -468,44 +468,36 @@ Use search to find needed section.
                                     <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
                                     <div class="panel-group" role="tablist">
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="collapseListGroupHeading_sensors">
+                                            <div class="panel-heading" role="tab" id=" {{ 'collapseListGroupHeading_sensors' + device[0]}}">
                                                 <h4 class="panel-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_sensors" aria-expanded="false" aria-controls="collapseListGroup3">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" href="{{ '#collapseListGroup_sensors_'+ device[0]}}" aria-expanded="false" aria-controls="collapseListGroup3">
                                                         Sensors
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseListGroup_sensors" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors">
+                                            <div id="{{ 'collapseListGroup_sensors_'+device[0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors">
                                                 <ul class="list-group">
-                                                    <li class="list-group-item">Lux</li>
-                                                    <li class="list-group-item">Water Temperature</li>
-                                                    <li class="list-group-item">Air Temperature</li>
-                                                    <li class="list-group-item">Humidity</li>
-                                                    <li class="list-group-item">pH</li>
-                                                    <li class="list-group-item">Electrical Conductivity</li>
-                                                    <li class="list-group-item">Total Dissolved Solids</li>
-                                                    <li class="list-group-item">Practical Salinity</li>
+                                                {% for sensor in device[2] %}
+                                                    <li class="list-group-item">{{sensor}}</li>
+                                                {% endfor %}
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="panel-group" role="tablist">
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="collapseListGroupHeading_actuators">
+                                            <div class="panel-heading" role="tab" id="{{ 'collapseListGroupHeading_actuators_' + device[0]}}">
                                                 <h4 class="panel-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_actuators" aria-expanded="false" aria-controls="collapseListGroup_actuators">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" href="{{ '#collapseListGroup_actuators_' + device[0]}}" aria-expanded="false" aria-controls="collapseListGroup_actuators">
                                                         Actuators
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseListGroup_actuators" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators">
+                                            <div id="{{ 'collapseListGroup_actuators_' + device[0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators">
                                                 <ul class="list-group">
-                                                    <li class="list-group-item">Light 1 <span class="pull-right">Pin: 30</span></li>
-                                                    <li class="list-group-item">Light 2 <span class="pull-right">Pin: 31</span></li>
-                                                    <li class="list-group-item">Water Pump <span class="pull-right">Pin: 32</span></li>
-                                                    <li class="list-group-item">Nutrient Pump <span class="pull-right">Pin: 33</span></li>
-                                                    <li class="list-group-item">pH Upper <span class="pull-right">Pin: 34</span></li>
-                                                    <li class="list-group-item">pH Downer <span class="pull-right">Pin: 35</span></li>
+                                                    {% for key, value in device[3].items() %}
+                                                        <li class="list-group-item">{{key}}<span class="pull-right">Pin: {{value}}</span></li>
+                                                    {% endfor %}
                                                 </ul>
                                             </div>
                                         </div>
