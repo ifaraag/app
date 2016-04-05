@@ -694,13 +694,12 @@ Use search to find needed section.
                             <section>
                                 <label class="label">Device Type</label>
                                 <label class="input">
-                                    <input type="text" list="device_list">
-                                    <datalist id="device_list">
-                                        <option value="Arduino">Arduino</option>
-                                        <option value="Photon">Photon</option>
-                                        <option value="Raspberry Pi">Raspberry Pi</option>
-                                        <option value="Other">Other</option>
-                                    </datalist>
+                                    <select name="device_type">
+                                          <option value="Arduino">Arduino</option>
+                                          <option value="Photon">Photon</option>
+                                          <option value="Raspberry Pi">Raspberry Pi</option>
+                                          <option value="Other">Other</option>
+                                    </select>
                                 </label>
                             </section>
                         </fieldset>
@@ -712,36 +711,44 @@ Use search to find needed section.
                                     <div class="col col-6">
                                         <label class="checkbox">
                                             <input type="checkbox" name="Lux" id="lux_checkbox">
+                                            <input type="hidden" name="Lux" id="lux_checkbox_hidden" value="off">
                                                 <i></i>Lux
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="Water_Temp" id="waterTemp_checkbox">
+                                            <input type="hidden" name="Water_Temp" id="waterTemp_checkbox_hidden" value="off">
                                                 <i></i>Water Temperature
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="Air_Temp" id="airTemp_checkbox">
+                                            <input type="hidden" name="Air_Temp" id="airTemp_checkbox_hidden" value="off">
                                                 <i></i>Air Temperature
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="Humidity" id="humidity_checkbox">
+                                            <input type="hidden" name="Humidity" id="humidity_checkbox_hidden" value="off">
                                                 <i></i>Humidity
                                         </label>
                                     </div>
                                     <div class="col col-6">
                                         <label class="checkbox">
                                             <input type="checkbox" name="pH" id="ph_checkbox">
+                                            <input type="hidden" name="pH" id="ph_checkbox_hidden" value="off">
                                                 <i></i>pH
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="EC" id="ec_checkbox">
+                                            <input type="hidden" name="EC" id="ec_checkbox_hidden" value="off">
                                                 <i></i>EC
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="TDS" id="tds_checkbox">
+                                            <input type="hidden" name="TDS" id="tds_checkbox_hidden" value="off">
                                                 <i></i>Total Dissolved Solids
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="PS" id="ps_checkbox">
+                                            <input type="hidden" name="PS" id="ps_checkbox_hidden" value="off">
                                                 <i></i>Practical Salinity
                                         </label>
                                     </div>
