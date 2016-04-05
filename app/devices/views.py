@@ -16,7 +16,7 @@ def list_devices():
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
 				device['sensors'], device['actuators'], device['kit']))
-	return render_template('devices/device_test.html' , title='Your Devices', \
+	return render_template('devices/devices.html' , title='Your Devices', \
 						my_devices=device_list, username=username, uuid=UUID)
 
 @mod_devices.route('/add_device', methods=['POST'])
@@ -34,7 +34,7 @@ def add_device():
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
 				device['sensors'], device['actuators'], device['kit']))
-	return render_template('devices/device_test.html' , title='Your Devices', \
+	return render_template('devices/devices.html' , title='Your Devices', \
 						my_devices=device_list, username=username, uuid=UUID)
 
 @mod_devices.route('/modify_device', methods=['POST'])
