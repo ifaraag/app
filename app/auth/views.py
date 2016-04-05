@@ -2,10 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask.ext.login import login_required, login_user, logout_user
 from werkzeug import check_password_hash, generate_password_hash
 
-from app import db, login_manager, pubnub
+from app import db, login_manager, pubnub, app, _callback
 from .models import User
 from .forms import LoginForm, SignupForm
-
 
 mod_auth = Blueprint('auth', __name__)
 
@@ -45,7 +44,8 @@ def signup():
                         'password' : generate_password_hash(request.form['password'])}
             db.users.insert_one(new_user)
             user = db.users.find_one({'username': request.form['username']})
-            pubnub.subscribe(channels=user['username'], callback=callback, error=error)
+            pubnub.channel_group_add_channel(channel_group=app.config['PUBNUB_CHANNEL_GRP'], channel=user['username'])
+            pubnub.grant(channel=user['username'], auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0)
             return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/signup.html', form=form,
                            title='Sign Up for Hydrobase')
