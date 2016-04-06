@@ -502,8 +502,8 @@ Use search to find needed section.
                                             </div>
                                         </div>
                                     </div>
-                                    <button id="edit_btn" class="pull-right btn btn-primary edit-btn" data-toggle="modal" data-target="#modal">Edit</button>
-                                    <div id="modal" class="modal fade" role="dialog">
+                                    <button id="{{device[0]}} + '_edit_btn'}}" class="pull-right btn btn-primary edit-btn" data-toggle="modal" data-target="{{ '#' + device[0]+'modal'}}">Edit</button>
+                                    <div id="{{ device[0]+'modal'}}" class="modal fade" role="dialog">
                                         <div class="modal-dialog">
                                             <!-- Modal content-->
                                             <div class="modal-content">
@@ -512,58 +512,87 @@ Use search to find needed section.
                                                     <h4 class="modal-title">Edit {{device[0]}}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form class="smart-form" id="form">
+                                                    <form class="smart-form" id="edit_device_form" action="{{'/edit_device/'+device[5]}}" method="POST">
                                                         <fieldset>
                                                             <section>
                                                                 <label class="label">Device Name</label>
                                                                 <label class="input">
-                                                                    <input name="device_name" type="text" class="input-sm">
+                                                                    <input name="device_name" value="{{device[0]}}" type="text" placeholder="{{device[0]}}" class="input-sm" disabled>
                                                                 </label>
                                                             </section>
                                                         </fieldset>
-                                                        <section id="setUp">
+                                                        <section id="{{device[0] + 'setUp'}}">
                                                             <header>
-                                                                Set Up
+                                                                {{device[0]}} Set Up
                                                             </header>
                                                             <fieldset>
                                                                 <section>
                                                                     <label class="label"><h4>Sensors</h4></label>
                                                                     <div class="row">
                                                                         <div class="col col-6">
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="Lux" id="lux_checkbox" checked="checked">
-                                                                                <i></i>Lux
-                                                                            </label>
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="Water_Temp" id="waterTemp_checkbox" checked="checked">
-                                                                                <i></i>Water Temperature
-                                                                            </label>
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="Air_Temp" id="airTemp_checkbox" checked="checked">
-                                                                                <i></i>Air Temperature
-                                                                            </label>
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="Humidity" id="humidity_checkbox" checked="checked">
-                                                                                <i></i>Humidity
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col col-6">
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="pH" id="ph_checkbox" checked="checked">
-                                                                                <i></i>pH
-                                                                            </label>
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="EC" id="ec_checkbox" checked="checked">
-                                                                                <i></i>EC
-                                                                            </label>
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="TDS" id="tds_checkbox" checked="checked">
-                                                                                <i></i>Total Dissolved Solids
-                                                                            </label>
-                                                                            <label class="checkbox">
-                                                                                <input type="checkbox" name="PS" id="ps_checkbox" checked="checked">
-                                                                                <i></i>Practical Salinity
-                                                                            </label>
+                                                                            {% for sensor in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="{{sensor}}" id="{{sensor + '_checkbox'}}" checked="checked">
+                                                                                    <input type="hidden" name="{{sensor}}" id="{{sensor + '_checkbox_hidden'}}" value="off">
+                                                                                    <i></i>{{sensor}}
+                                                                                </label>  
+                                                                            {% endfor %}
+                                                                            {% if 'Lux' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="Lux" id="lux_checkbox">
+                                                                                    <input type="hidden" name="Lux" id="lux_checkbox_hidden" value="off">
+                                                                                    <i></i>Lux
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'Water_Temp' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="Water_Temp" id="waterTemp_checkbox">
+                                                                                    <input type="hidden" name="Water Temperature" id="waterTemp_checkbox_hidden" value="off">
+                                                                                    <i></i>Water Temperature
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'Air_Temp' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="Air_Temp" id="airTemp_checkbox">
+                                                                                    <input type="hidden" name="Air Temperature" id="airTemp_checkbox_hidden" value="off">
+                                                                                    <i></i>Air Temperature
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'Humidity' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="Humidity" id="humidity_checkbox">
+                                                                                    <input type="hidden" name="Humidity" id="humidity_checkbox_hidden" value="off">
+                                                                                    <i></i>Humidity
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'pH' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="pH" id="ph_checkbox">
+                                                                                    <input type="hidden" name="pH" id="ph_checkbox_hidden" value="off">
+                                                                                    <i></i>pH
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'EC' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="EC" id="ec_checkbox">
+                                                                                    <input type="hidden" name="EC" id="ec_checkbox_hidden" value="off">
+                                                                                    <i></i>Electrical Conductivity
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'TDS' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="TDS" id="tds_checkbox">
+                                                                                    <input type="hidden" name="TDS" id="tds_checkbox_hidden" value="off">
+                                                                                    <i></i>Total Dissolved Solids
+                                                                                </label>  
+                                                                            {% endif %}
+                                                                            {% if 'PS' not in device[2] %}
+                                                                                <label class="checkbox">
+                                                                                    <input type="checkbox" name="PS" id="ps_checkbox">
+                                                                                    <input type="hidden" name="PS" id="ps_checkbox_hidden" value="off">
+                                                                                    <i></i>Practical Salinity
+                                                                                </label>  
+                                                                            {% endif %}
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -572,55 +601,76 @@ Use search to find needed section.
                                                             <fieldset>
                                                                 <section>
                                                                     <label class="label"><h4>Actuators</h4></label>
-                                                                    <div class="col col-6">
-                                                                        <section>
-                                                                            <label class="label">Light 1</label>
-                                                                            <label class="input">
-                                                                                <input id="light_1_pin" name="light_1_pin" type="text" class="input-xs" data-mask="99" value="32" placeholder="Pin #">
-                                                                            </label>
-                                                                        </section>
-                                                                    </div>
-                                                                    <div class="col col-6">
-                                                                        <section>
-                                                                            <label class="label">Light 2</label>
-                                                                            <label class="input">
-                                                                                <input id="light_2_pin" name="light_2_pin" type="text" class="input-xs" data-mask="99" value="32" placeholder="Pin #">
-                                                                            </label>
-                                                                        </section>
-                                                                    </div>
-                                                                    <div class="col col-3">
-                                                                        <section>
-                                                                            <label class="label">Water Pump</label>
-                                                                            <label class="input">
-                                                                                <input id="water_pump_pin" name="water_pump_pin" type="text" class="input-xs" data-mask="99" value="32" placeholder="Pin #">
-                                                                            </label>
-                                                                        </section>
-                                                                    </div>
-                                                                    <div class="col col-3">
-                                                                        <section>
-                                                                            <label class="label">Nutrient Pump</label>
-                                                                            <label class="input">
-                                                                                <input id="nutrient_pump_pin" name="nutrient_pump_pin" type="text" class="input-xs" data-mask="99" value="33" placeholder="Pin #">
-                                                                            </label>
-                                                                        </section>
-                                                                    </div>
-                                                                    <div class="col col-3">
-                                                                        <section>
-                                                                            <label class="label">pH Upper</label>
-                                                                            <label class="input">
-                                                                                <input id="phUpper_pump_pin" name="phUpper_pump_pin" type="text" class="input-xs" data-mask="99" value="34" placeholder="Pin #">
-                                                                            </label>
-                                                                        </section>
-                                                                    </div>
-                                                                    <div class="col col-3">
-                                                                        <section>
-                                                                            <label class="label">pH Downer</label>
-                                                                            <label class="input">
-                                                                                <input id="phDowner_pump_pin" name="phDowner_pump_pin" type="text" class="input-xs" data-mask="99" value="35" placeholder="Pin #">
-                                                                            </label>
-                                                                        </section>
-                                                                    </div>
-                                                                </section>
+                                                                    {% for key, value in device[3].items() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">{{key}}</label>
+                                                                                <label class="input">
+                                                                                    <input id="{{key + '_pin'}}" name="{{key + '_pin'}}" type="text" class="input-xs" data-mask="99" value="{{value}}" placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                    {% if 'light_1' not in device[3].keys() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">Light 1</label>
+                                                                                <label class="input">
+                                                                                    <input id="light_1_pin" name="light_1_pin" type="text" class="input-xs" data-mask="99" placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if 'light_2' not in device[3].keys() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">Light 2</label>
+                                                                                <label class="input">
+                                                                                    <input id="light_2_pin" name="light_2_pin" type="text" class="input-xs" data-mask="99" placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if 'water_pump' not in device[3].keys() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">Water Pump</label>
+                                                                                <label class="input">
+                                                                                    <input id="water_pump_pin" name="water_pump_pin" type="text" class="input-xs" data-mask="99"placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if 'nutrient_pump' not in device[3].keys() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">Nutrient Pump</label>
+                                                                                <label class="input">
+                                                                                    <input id="nutrient_pump_pin" name="nutrient_pump_pin" type="text" class="input-xs" data-mask="99" placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if 'phUpper_pump' not in device[3].keys() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">ph Upper Pump</label>
+                                                                                <label class="input">
+                                                                                    <input id="phUpper_pump_pin" name="phUpper_pump_pin" type="text" class="input-xs" data-mask="99" placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if 'phDowner_pump' not in device[3].keys() %}
+                                                                        <div class="col col-6">
+                                                                            <section>
+                                                                                <label class="label">pH Downer Pump</label>
+                                                                                <label class="input">
+                                                                                    <input id="phDowner_pump_pin" name="phDowner_pump_pin" type="text" class="input-xs" data-mask="99" placeholder="Pin #">
+                                                                                </label>
+                                                                            </section>
+                                                                        </div>
+                                                                    {% endif %}</section>
                                                             </fieldset>
                                                         </section>
                                                         <div class="modal-footer">
@@ -664,7 +714,7 @@ Use search to find needed section.
                 <h4 class="modal-title">Add A New Device</h4>
             </div>
             <div class="modal-body">
-                <form class="smart-form" id="new_device_form" action="/add_device" method="POST">
+                <form class="smart-form" id="new_device_form" action="{{'/add_device/'+uuid}}" method="POST">
                     <fieldset>
                         <section>
                             <label class="label">Device Name</label>
