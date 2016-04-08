@@ -28,7 +28,7 @@ def add_device(new_device_id):
                                            request.form['device_name']})
 	if not existing_device:
 		if request.form['kit'] == "standard":
-			new_device = {'username' : username, 'device_id': device_id, 'device_name' : request.form['device_name'], 'type' : 'Arduino', 'kit' : request.form['kit'], \
+			new_device = {'username' : username, 'device_id': new_device_id, 'device_name' : request.form['device_name'], 'type' : 'Arduino', 'kit' : request.form['kit'], \
 			'sensors' : ['Lux', 'Water_Temp', 'Air_Temp', 'Humidity', 'pH', 'EC', 'TDS', 'PS'], \
 			'actuators': {"light_1" : "30", "light_2" : "31", "water_pump" : "32", "nutrient_pump" : "33", "phUpper_pump" : "34", "phUpper_pump" : "35"}}
 		else:
@@ -62,7 +62,7 @@ def add_device(new_device_id):
 				actuators['phUpper_pump'] = request.form['phUpper_pump_pin']
 			if request.form['phDowner_pump_pin'] != "":
 				actuators['phDowner_pump'] = request.form['phDowner_pump_pin']
-			new_device = {'username' : username, 'device_id': device_id, 'device_name' : request.form['device_name'], 'type' : request.form['device_type'], 'kit' : request.form['kit'], 'sensors' : sensors, 'actuators': actuators}
+			new_device = {'username' : username, 'device_id': new_device_id, 'device_name' : request.form['device_name'], 'type' : request.form['device_type'], 'kit' : request.form['kit'], 'sensors' : sensors, 'actuators': actuators}
 		db.devices.insert_one(new_device)
 	devices = db.devices.find({'username': current_user.get_id()})
 	for device in devices:
