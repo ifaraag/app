@@ -18,10 +18,11 @@ pubnub = Pubnub(publish_key=app.config['PUBNUB_PUBLISH_KEY'], \
 	subscribe_key=app.config['PUBNUB_SUBSCRIBE_KEY'], secret_key=app.config['PUBNUB_SECRET_KEY'], \
 		auth_key=app.config['PUBNUB_AUTH_KEY'])
 
-def _callback(message, channel):
-    print(message)
+def _callback(message):
+    # print(message)
+    pass
 
-def sub_callback(message, channel):
+def sub_callback(message):
 	db.data.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
@@ -49,3 +50,5 @@ app.register_blueprint(mod_experiments)
 @app.errorhandler(404)
 def not_found(error):
     return redirect('https://github.com/404'), 404
+
+

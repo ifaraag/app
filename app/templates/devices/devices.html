@@ -105,7 +105,7 @@ Use search to find needed section.
     <div id="logo-group">
 
         <!-- PLACE YOUR LOGO HERE -->
-        <span id="logo"> <a href="index"><img src="../../static/img/hydrobase_logo2.png" alt="SmartAdmin"> </a></span>
+        <span id="logo"> <a href="/index"><img src="../../static/img/hydrobase_logo2.png" alt="SmartAdmin"> </a></span>
         <!-- END LOGO PLACEHOLDER -->
 
         <!-- Note: The activity badge color changes when clicked and resets the number to 0
@@ -241,14 +241,13 @@ Use search to find needed section.
                 <a href="/devices"><i class="fa fa-lg fa-fw fa-cogs"></i> <span class="menu-item-parent">Devices</span></a>
             </li>
             <li>
-                <a href=/grows><i class="fa fa-lg fa-fw fa-pagelines"></i> <span class="menu-item-parent">Grows</span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-pagelines"></i> <span class="menu-item-parent">Grows</span></a>
                 <ul>
+                    {% for grow in my_grows %}
                     <li>
-                        <a href="avi.html">Avi</a>
+                        <a href="{{'/grows/'+grow[0]}}">{{grow[0]}}</a>
                     </li>
-                    <li>
-                        <a href="lilly.html">Lilly</a>
-                    </li>
+                    {% endfor %}
                     <li>
                         <a href="add_grow.html">Add Grow <span class="pull-right fa fa-fw fa-plus"></span></a>
                     </li>
@@ -465,7 +464,11 @@ Use search to find needed section.
                             <div>
                                 <!-- widget content -->
                                 <div class="widget-body">
+                                    {% if device[1] == "Arduino" %}
                                     <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                    {% elif device[1] == "Raspberry Pi" %}
+                                    <img src="../../static/img/raspberry_pi2.png">
+                                    {% endif %}
                                     <div class="panel-group" role="tablist">
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id=" {{ 'collapseListGroupHeading_sensors' + device[0]}}">

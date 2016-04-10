@@ -10,13 +10,17 @@ mod_devices = Blueprint('devices', __name__)
 @login_required
 def list_devices():
 	device_list = []
+	grows_list = []
 	UUID = str(uuid.uuid4())
 	username = current_user.get_id()
 	devices = db.devices.find({'username': current_user.get_id()})
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
 				device['sensors'], device['actuators'], device['kit'], device['device_id']))
-	return render_template('devices/devices.html' , title='Your Devices', my_devices=device_list, username=username, uuid=UUID)
+	grows = db.grows.find({'username' : current_user.get_id()})
+	for grow in grows:
+		grows_list.append((grow['grow_name'], grow['device_name']))
+	return render_template('devices/devices.html' , title='Your Devices', my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
 @mod_devices.route('/add_device/<new_device_id>', methods=['POST'])
 @login_required
@@ -24,6 +28,7 @@ def add_device(new_device_id):
 	username = current_user.get_id()
 	UUID = str(uuid.uuid4())
 	device_list = []
+	grows_list = []
 	existing_device = db.devices.find_one({'device_name' :
                                            request.form['device_name']})
 	if not existing_device:
@@ -68,8 +73,11 @@ def add_device(new_device_id):
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
 	device['sensors'], device['actuators'], device['kit'], device['device_id']))
+	grows = db.grows.find({'username' : current_user.get_id()})
+	for grow in grows:
+		grows_list.append((grow['grow_name'], grow['device_name']))
 	return render_template('devices/devices.html' , title='Your Devices', \
-		my_devices=device_list, username=username, uuid=UUID)
+		my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
 @mod_devices.route('/edit_device/<device_id>', methods=['POST'])
 @login_required
@@ -77,6 +85,7 @@ def edit_device(device_id):
 	username = current_user.get_id()
 	UUID = str(uuid.uuid4())
 	device_list = []
+	grows_list = []
 	sensors =[]
 	if request.form['Lux'] == 'on':
 		sensors.append("Lux")
@@ -119,15 +128,14 @@ def edit_device(device_id):
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
 	device['sensors'], device['actuators'], device['kit'], device['device_id']))
+	grows = db.grows.find({'username' : current_user.get_id()})
+	for grow in grows:
+		grows_list.append((grow['grow_name'], grow['device_name']))
 	return render_template('devices/devices.html' , title='Your Devices', \
-		my_devices=device_list, username=username, uuid=UUID)
+		my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
-@mod_devices.route('/modify_device', methods=['POST'])
-@login_required
-def modify_device():
-	pass
 
 @mod_devices.route('/delete_device', methods=['POST'])
 @login_required
-def delete_device():
+def remove_device():
 	pass
