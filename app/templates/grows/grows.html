@@ -1436,11 +1436,9 @@
                                                </div>
                                                <div id="collapseListGroup_actuators_Mario" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators_Mario">
                                                    <ul class="list-group">
-                                                       <li class="list-group-item">Light <span class="badge bg-color-greenDark txt-color-white">#1</span></li>
-                                                       <li class="list-group-item">Water Pump <span class="badge bg-color-greenDark txt-color-white">#1</span></li>
-                                                       <li class="list-group-item">Nutrient Pump <span class="badge bg-color-greenDark txt-color-white">#1</span></li>
-                                                       <li class="list-group-item">pH Upper <span class="badge bg-color-greenDark txt-color-white">#1</span></li>
-                                                       <li class="list-group-item">pH Downer <span class="badge bg-color-greenDark txt-color-white">#1</span></li>
+                                                   {% for key, value in device[0][3].items() %}
+                                                       <li class="list-group-item">{{key}} <span class="badge bg-color-greenDark txt-color-white">#{{value}}</span></li>
+                                                    {% endfor %}
                                                    </ul>
                                                </div>
                                            </div>
