@@ -31,5 +31,5 @@ def list_grow(current_grow):
 		user_grows.append((grow['grow_name'], grow['device_name']))
 	
 	return render_template('grows/grows.html',
-                           title='Your Grows', username=username, current_grow=current_grow, \
+                           title='Your Grows', username=username, current_grow=current_grow, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows)

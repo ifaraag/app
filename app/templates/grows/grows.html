@@ -1570,86 +1570,45 @@
                                                        <h4 class="modal-title">Link Device To Plant</h4>
                                                    </div>
                                                    <div class="modal-body">
-                                                       <div class="row">
+                                                    {% for device in my_devices %}
+                                                        {% if  loop.index%2 != 0 %}
+                                                            <div class="row">
+                                                        {% endif %}
+                                                        
                                                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Mario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
                                                                <header>
                                                                    <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                                                   <h2><strong>Mario:</strong> <i>Arduino</i></h2>
+                                                                   <h2><strong>{{device[0]}}:</strong> <i>{{device[1]}}</i></h2>
                                                                </header>
 
                                                                <!-- widget div-->
                                                                <div>
                                                                    <!-- widget content -->
                                                                    <div class="widget-body">
-                                                                       <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                                                       <button id="Mario_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
+                                                                        {% if device[1] == "Arduino" %}
+                                                                        <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                                                        {% elif device[1] == "Raspberry Pi" %}
+                                                                        <img src="../../static/img/raspberry_pi2.png">
+                                                                        {% endif %}
+                                                                        {% if device[0] == current_device %}
+                                                                       <button id="Mario_link_btn" class="btn btn-success edit-btn"><span class="fa fa-lg fa-link"></span>Unlink
+                                                                        {% else %}
+                                                                        <button id="Mario_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span>
+                                                                        Link
+                                                                        {% endif %}
+                                                                        </button>
                                                                    </div>
                                                                    <!-- end widget content -->
 
                                                                </div>
                                                                <!-- end widget div -->
+                                                            
 
                                                            </div>
-                                                           <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Luigi_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                                               <header>
-                                                                   <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                                                   <h2><strong>Luigi:</strong> <i>Arduino</i></h2>
-                                                               </header>
-
-                                                               <!-- widget div-->
-                                                               <div>
-                                                                   <!-- widget content -->
-                                                                   <div class="widget-body">
-                                                                       <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                                                       <button id="Luigi_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                                                   </div>
-                                                                   <!-- end widget content -->
-
-                                                               </div>
-                                                               <!-- end widget div -->
-
-                                                           </div>
-                                                       </div>
-                                                       <div class="row">
-                                                           <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Wario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                                               <header>
-                                                                   <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                                                   <h2><strong>Wario:</strong> <i>Arduino</i></h2>
-                                                               </header>
-
-                                                               <!-- widget div-->
-                                                               <div>
-                                                                   <!-- widget content -->
-                                                                   <div class="widget-body">
-                                                                       <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                                                       <button id="Wario_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                                                   </div>
-                                                                   <!-- end widget content -->
-
-                                                               </div>
-                                                               <!-- end widget div -->
-
-                                                           </div>
-                                                           <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Toad_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                                               <header>
-                                                                   <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                                                   <h2><strong>Toad:</strong> <i>Raspberry Pi</i></h2>
-                                                               </header>
-
-                                                               <!-- widget div-->
-                                                               <div>
-                                                                   <!-- widget content -->
-                                                                   <div class="widget-body">
-                                                                       <img src="../../static/img/raspberry_pi2.png">
-                                                                       <button id="Toad_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                                                   </div>
-                                                                   <!-- end widget content -->
-
-                                                               </div>
-                                                               <!-- end widget div -->
-
-                                                           </div>
-                                                       </div>
+                                                        {% if  loop.index%2 == 0 %}
+                                                            </div>
+                                                        {% endif %}   
+                                                    {% endfor %}
                                                    </div>
                                                </div>
                                            </div>
