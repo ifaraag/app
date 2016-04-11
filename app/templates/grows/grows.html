@@ -1373,7 +1373,6 @@
                                        <a href="#photos_tab" data-toggle="tab"><i class="fa fa-fw fa-lg fa-camera"></i> Photos</a>
                                    </li>
                                </ul>
-
                                <div id="plant_info_tabContent" class="tab-content padding-10">
                                    <div class="tab-pane fade in active" id="devices_tab">
                                        <button class="pull-right btn-primary btn" data-toggle="modal" data-target="#link_modal"><span class="fa fa-lg fa-link"></span> Device</button>
@@ -1571,7 +1570,7 @@
                                                    </div>
                                                    <div class="modal-body">
                                                     {% for device in my_devices %}
-                                                        {% if  loop.index%2 != 0 %}
+                                                        {% if loop.index%2 == 1%}
                                                             <div class="row">
                                                         {% endif %}
                                                         
@@ -1590,13 +1589,15 @@
                                                                         {% elif device[1] == "Raspberry Pi" %}
                                                                         <img src="../../static/img/raspberry_pi2.png">
                                                                         {% endif %}
+                                                                        <form action ="{{'/link/'+current_grow+"/"+device[0]}}" method = "post">
                                                                         {% if device[0] == current_device %}
-                                                                       <button id="Mario_link_btn" class="btn btn-success edit-btn"><span class="fa fa-lg fa-link"></span>Unlink
+                                                                       <button id="Mario_link_btn" class="btn btn-primary edit-btn" disabled><span class="fa fa-lg fa-link"></span> Link
                                                                         {% else %}
                                                                         <button id="Mario_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span>
                                                                         Link
                                                                         {% endif %}
                                                                         </button>
+                                                                        </form>
                                                                    </div>
                                                                    <!-- end widget content -->
 
@@ -1605,10 +1606,13 @@
                                                             
 
                                                            </div>
-                                                        {% if  loop.index%2 == 0 %}
+                                                        {% if loop.index%2 == 0 %}
                                                             </div>
-                                                        {% endif %}   
+                                                        {% endif %}
                                                     {% endfor %}
+                                                    {% if (my_devices|length)%2 !=0 %}
+                                                    </div>
+                                                    {%endif%}
                                                    </div>
                                                </div>
                                            </div>
