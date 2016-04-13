@@ -1393,31 +1393,31 @@
                                                </div>
                                                <div id="collapseListGroup_sensors_Mario" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors_Mario">
                                                    <ul class="list-group">
-                                                        {% for sensor in device[0][2] %}
+                                                        {% for sensor in grow[0][2] %}
                                                            <li class="list-group-item">{{sensor}} <span class="badge bg-color-greenLight">Active</span></li> 
                                                         {% endfor %}
-                                                        {% if 'Lux' not in device[0][2] %}
+                                                        {% if 'Lux' not in grow[0][2] %}
                                                         <li class="list-group-item"> Lux <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'Water_Temp' not in device[0][2] %}
+                                                        {% if 'Water_Temp' not in grow[0][2] %}
                                                         <li class="list-group-item"> Water Temperature <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'Air_Temp' not in device[0][2] %}
+                                                        {% if 'Air_Temp' not in grow[0][2] %}
                                                         <li class="list-group-item"> Air Temperature <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'Humidity' not in device[0][2] %}
+                                                        {% if 'Humidity' not in grow[0][2] %}
                                                         <li class="list-group-item"> Humidity <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'pH' not in device[0][2] %}
+                                                        {% if 'pH' not in grow[0][2] %}
                                                         <li class="list-group-item"> pH <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'EC' not in device[0][2] %}
+                                                        {% if 'EC' not in grow[0][2] %}
                                                         <li class="list-group-item"> Electrical Conductivity <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'TDS' not in device[0][2] %}
+                                                        {% if 'TDS' not in grow[0][2] %}
                                                         <li class="list-group-item"> Total Dissolved Salinity <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
-                                                        {% if 'PS' not in device[0][2] %}
+                                                        {% if 'PS' not in grow[0][2] %}
                                                         <li class="list-group-item"> Practical Salinity <span class="badge bg-color-orange txt-color-white">Not Active</span></li>
                                                         {% endif %}
                                                    </ul>
@@ -1435,7 +1435,7 @@
                                                </div>
                                                <div id="collapseListGroup_actuators_Mario" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators_Mario">
                                                    <ul class="list-group">
-                                                   {% for key, value in device[0][3].items() %}
+                                                   {% for key, value in grow[0][3].items() %}
                                                        <li class="list-group-item">{{key}} <span class="badge bg-color-greenDark txt-color-white">#{{value}}</span></li>
                                                     {% endfor %}
                                                    </ul>
@@ -1452,51 +1452,28 @@
                                                        <h4 class="modal-title">Choose Grow Sensors + Actuators</h4>
                                                    </div>
                                                    <div class="modal-body">
-                                                       <form class="smart-form" id="Mario_form">
-                                                           <section id="Mario_setUp">
+                                                       <form class="smart-form" id="edit_grow_form" action="{{'/edit_grows/'+current_grow}}" method="POST">
+                                                           <section id="{{device[0][0] +'_setUp'}}">
                                                                <header>
-                                                                   Avi's Sensors &amp; Acuators
+                                                                   {{current_grow}}'s Sensors &amp; Acuators
                                                                </header>
                                                                <fieldset>
                                                                    <section>
                                                                        <label class="label"><h4>Sensors</h4></label>
                                                                        <div class="row">
-                                                                           <div class="col col-6">
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_Lux" id="Mario_lux_checkbox" checked="checked">
-                                                                                   <i></i>Lux
-                                                                               </label>
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_Water_Temp" id="Mario_waterTemp_checkbox" checked="checked">
-                                                                                   <i></i>Water Temperature
-                                                                               </label>
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_Air_Temp" id="Mario_airTemp_checkbox" checked="checked">
-                                                                                   <i></i>Air Temperature
-                                                                               </label>
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_Humidity" id="Mario_humidity_checkbox" checked="checked">
-                                                                                   <i></i>Humidity
-                                                                               </label>
-                                                                           </div>
-                                                                           <div class="col col-6">
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_pH" id="Mario_ph_checkbox" checked="checked">
-                                                                                   <i></i>pH
-                                                                               </label>
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_EC" id="Mario_ec_checkbox" checked="checked">
-                                                                                   <i></i>EC
-                                                                               </label>
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_TDS" id="Mario_tds_checkbox" checked="checked">
-                                                                                   <i></i>Total Dissolved Solids
-                                                                               </label>
-                                                                               <label class="checkbox">
-                                                                                   <input type="checkbox" name="Mario_PS" id="Mario_ps_checkbox" checked="checked">
-                                                                                   <i></i>Practical Salinity
-                                                                               </label>
-                                                                           </div>
+                                                                        <div class="col col-6">
+                                                                        {% for sensor in device[0][2]%}
+                                                                            <label class="checkbox">
+                                                                                {% if sensor in grow[0][2]%}
+                                                                                   <input type="checkbox" name="{{sensor}}" id="{{sensor+'_checkbox'}}" checked="checked">
+                                                                                {%else%}
+                                                                                <input type="checkbox" name="{{sensor}}" id="{{sensor+'lux_checkbox'}}">
+                                                                                {%endif%}
+                                                                                    <input type="hidden" name="{{sensor}}" id="{{sensor + '_checkbox_hidden'}}" value="off">
+                                                                                   <i></i>{{sensor}}
+                                                                            </label>
+                                                                        {%endfor%}
+                                                                        </div>
                                                                        </div>
                                                                    </section>
                                                                </fieldset>
@@ -1505,48 +1482,17 @@
                                                                    <section>
                                                                        <label class="label"><h4>Actuators</h4></label>
                                                                        <section class="col-lg-6">
+                                                                       {% for key, value in device[0][3].items() %}
                                                                            <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="Light_#1_checkbox" checked="checked">
-                                                                               <i></i>Light #1
+                                                                           {% if key in grow[0][3].keys() %}
+                                                                               <input type="checkbox" name="{{key}}" id="{{key+'_checkbox'}}" checked="checked">
+                                                                            {%else%}
+                                                                            <input type="checkbox" name="{{key}}" id="{{key+'_checkbox'}}" >
+                                                                            {%endif%}
+                                                                            <input type="hidden" name="{{key}}" id="{{key + '_checkbox_hidden'}}" value="off">
+                                                                               <i></i>{{key}}
                                                                            </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="Light_#2_checkbox" checked="checked">
-                                                                               <i></i>Light #2
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="Water_Pump_#1_checkbox" checked="checked">
-                                                                               <i></i>Water Pump #1
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="Nutrient_Pump_#1_checkbox" checked="checked">
-                                                                               <i></i>Nutrient Pump #1
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="Nutrient_Pump_#2_checkbox" checked="checked">
-                                                                               <i></i>Nutrient Pump #2
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="Nutrient_Pump_#3_checkbox" checked="checked">
-                                                                               <i></i>Nutrient Pump #3
-                                                                           </label>
-                                                                       </section>
-                                                                       <section class="col-lg-6">
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="pH_Upper_#1_checkbox" checked="checked">
-                                                                               <i></i>pH Upper #1
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="pH_Upper_#2_checkbox" checked="checked">
-                                                                               <i></i>pH Upper #2
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="pH_Downer_#1_checkbox" checked="checked">
-                                                                               <i></i>pH Downer #1
-                                                                           </label>
-                                                                           <label class="checkbox">
-                                                                               <input type="checkbox" name="Mario_PS" id="pH_Downer_#2_checkbox" checked="checked">
-                                                                               <i></i>pH Downer #2
-                                                                           </label>
+                                                                        {%endfor %}
                                                                        </section>
                                                                    </section>
                                                                </fieldset>
@@ -1619,9 +1565,126 @@
                                        </div>
                                    </div>
                                    <div class="tab-pane fade" id="controls_tab">
-                                       <p>
-                                           Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
-                                       </p>
+                                       <h6>Avi: <em>Avocado</em></h6>
+                                       <img class="plant_img" src="../../static/img/avocado_icon.png">
+                                       <div class="panel-group" role="tablist">
+                                           <div class="panel panel-default">
+                                               <div class="panel-heading" role="tab" id="collapseListGroupHeading_time_controls">
+                                                   <h4 class="panel-title">
+                                                       <a role="button" data-toggle="collapse" href="#collapseListGroup_time_controls" aria-expanded="true" >
+                                                           Time Based Actions
+                                                       </a>
+                                                   </h4>
+                                               </div>
+                                               <div id="collapseListGroup_time_controls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading_time_controls">
+                                                   <ul class="list-group">
+                                                       <li class="list-group-item"><strong>Lights:</strong> <span class="pull-right">Toggle Lights <span class="badge bg-color-time">Every <span class="badge bg-color-orange">12 Hours</span></span></span></li>
+                                                       <li class="list-group-item"><strong>Water</strong><span class="pull-right">Toggle Water Pump <span class="badge bg-color-time">Every <span class="badge bg-color-red">15 Minutes</span></span></span></li>
+                                                   </ul>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="panel-group" role="tablist">
+                                           <div class="panel panel-default">
+                                               <div class="panel-heading" role="tab" id="collapseListGroupHeading_condition_controls">
+                                                   <h4 class="panel-title">
+                                                       <a role="button" data-toggle="collapse" href="#collapseListGroup_condition_controls" aria-expanded="false" aria-controls="collapseListGroup_condition_controls">
+                                                           Condition Based Actions
+                                                       </a>
+                                                   </h4>
+                                               </div>
+                                               <div id="collapseListGroup_condition_controls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading_condition_controls">
+                                                   <ul class="list-group">
+                                                       <li class="list-group-item"><strong>Nutrient Pump On If:</strong> <span class="badge bg-color-greenDark txt-color-white">TDS < 100</span></li>
+                                                       <li class="list-group-item"><strong>Nutrient Pump Off If:</strong> <span class="badge bg-color-greenDark txt-color-white">TDS > 100</span></li>
+                                                       <li class="list-group-item"><strong>pH Upper On If: </strong><span class="badge bg-color-pH-upper txt-color-white">pH < 5.5</span></li>
+                                                       <li class="list-group-item"><strong>pH Upper Off If: </strong><span class="badge bg-color-pH-upper txt-color-white">pH > 5.5</span></li>
+                                                       <li class="list-group-item"><strong>pH Downer On If: </strong><span class="badge bg-color-pH-downer txt-color-white">pH > 7</span></li>
+                                                       <li class="list-group-item"><strong>pH Downer Off If: </strong><span class="badge bg-color-pH-downer txt-color-white">pH < 7</span></li>
+                                                   </ul>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <button id="controls_edit_btn" class="btn btn-primary edit-btn" data-toggle="modal" data-target="#controls_modal"><span class="fa fa-lg fa-pencil"></span> Edit</button>
+                                       <div id="controls_modal" class="modal fade" role="dialog">
+                                           <div class="modal-dialog">
+                                               <!-- Modal content-->
+                                               <div class="modal-content">
+                                                   <div class="modal-header">
+                                                       <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                       <h4 class="modal-title">Set Grow Controls</h4>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                    <form id="grow_controls" class="smart-form">
+                                                        <fieldset>
+                                                            <section id="actuator_controls">
+                                                                <label class="label"><strong>What To Do:</strong></label>
+                                                                <label for="actuator_control_1_actuator" class="label" >Time Based Activity 1: </label>
+                                                                <label for="actuator_control_1_actuator" class="label">Actuator:</label>
+                                                                <label id="actuator_control_1_actuator" class="select actuator_select">
+                                                                    <select name="actuator_control_1_actuator">
+                                                                        <option value="no_actuator_chosen">Choose an Actuator</option>
+                                                                        <option value="Light_1">Light #1</option>
+                                                                        <option value="Light_2">Light #2</option>
+                                                                        <option value="Water_Pump_1">Water Pump #1</option>
+                                                                        <option value="Nutrient_Pump_1">Nutrient Pump #1</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                                <label for="actuator_control_1_time_int" class="label">Every: </label>
+                                                                <section class="col col-6">
+                                                                    <label id="actuator_control_1_time_int" class="select">
+                                                                        <select name="time_int">
+                                                                            <option value="1">1</option>
+                                                                            <option value="2">2</option>
+                                                                            <option value="3">3</option>
+                                                                            <option value="4">4</option>
+                                                                            <option value="5">5</option>
+                                                                            <option value="6">6</option>
+                                                                            <option value="7">7</option>
+                                                                            <option value="8">8</option>
+                                                                            <option value="9">9</option>
+                                                                            <option value="10">10</option>
+                                                                            <option value="11">11</option>
+                                                                            <option value="12">12</option>
+                                                                            <option value="12">13</option>
+                                                                            <option value="12">14</option>
+                                                                            <option value="12">15</option>
+                                                                            <option value="12">30</option>
+                                                                            <option value="12">45</option>
+                                                                        </select> <i></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label id="actuator_control_1_time_hour_min" class="select">
+                                                                        <select name="time_hour_min">
+                                                                            <option value="hours">Hours</option>
+                                                                            <option value="min">Minutes</option>
+                                                                        </select> <i></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label class="input"> <i class="icon-append fa fa-calendar"></i>
+                                                                        <input type="text" name="startdate_activity_1" id="startdate_activity_1" placeholder="Start date">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label class="input"> <i class="icon-append fa fa-calendar"></i>
+                                                                        <input type="text" name="finishdate_activity_1" id="finishdate_activity_1" placeholder="Finish date">
+                                                                    </label>
+                                                                </section>
+                                                            </section>
+                                                        </fieldset>
+                                                        <div class="modal-footer">
+                                                            <button style="margin-top: 20px" type="submit" class="btn btn-primary btn-xs">Save Edits</button>
+                                                            <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                    <div class="grow_add_button_div"><button id="add_actuator" class="btn btn-primary pull-right">Add Control</button></div>
+
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
                                    </div>
                                    <div class="tab-pane fade" id="photos_tab">
                                        <p>
@@ -2845,6 +2908,110 @@ you can add as many as you like
                 graph_state = 0;
             }
         });
+
+        var actuator_control_number = 1;
+
+        $('#add_actuator').click(function() {
+            if (($('#startdate_activity_'+actuator_control_number).val() != "") &&  ($('#finishdate_activity_'+actuator_control_number).val() != "")){
+                actuator_control_number += 1;
+                $('#actuator_controls').append('' +
+                        '<label for="actuator_control_'+ actuator_control_number +'_actuator" class="label" >Time Based Activity ' + actuator_control_number +': </label>' +
+                        '<label for="actuator_control_' + actuator_control_number + '_actuator" class="label">Actuator:</label>' +
+                        '<label id="actuator_control_' + actuator_control_number + '_actuator" class="select actuator_select">' +
+                        '<select name="actuator_control_' + actuator_control_number + '_actuator">' +
+                        '<option value="no_actuator_chosen">Choose an Actuator</option>' +
+                        '<option value="Light_1">Light #1</option>' +
+                        '<option value="Light_2">Light #2</option>' +
+                        '<option value="Water_Pump_1">Water Pump #1</option>' +
+                        '<option value="Nutrient_Pump_1">Nutrient Pump #1</option>' +
+                        '</select><i></i>' +
+                        '</label>' +
+                        '<label for="actuator_control_' + actuator_control_number + '_time_int" class="label">Every: </label>' +
+                        '<section class="col col-6">' +
+                        '<label id="actuator_control_' + actuator_control_number + '_time_int" class="select">' +
+                        '<select name="time_int">' +
+                        '<option value="1">1</option>' +
+                        '<option value="2">2</option>' +
+                        '<option value="3">3</option>' +
+                        '<option value="4">4</option>' +
+                        '<option value="5">5</option>' +
+                        '<option value="6">6</option>' +
+                        '<option value="7">7</option>' +
+                        '<option value="8">8</option>' +
+                        '<option value="9">9</option>' +
+                        '<option value="10">10</option>' +
+                        '<option value="11">11</option>' +
+                        '<option value="12">12</option>' +
+                        '<option value="15">15</option>' +
+                        '<option value="30">30</option>' +
+                        '<option value="45">45</option>' +
+                        '</select> <i></i>' +
+                        '</label>' +
+                        '</section>' +
+                        '<section class="col col-6">' +
+                        '<label id="actuator_control_' + actuator_control_number + '_time_hour_min" class="select">' +
+                        '<select name="time_hour_min">' +
+                        '<option value="hours">Hours</option>' +
+                        '<option value="min">Minutes</option>' +
+                        '</select> <i></i>' +
+                        '</label>' +
+                        '</section>' +
+                        '<section class="col col-6">' +
+                        '<label class="input"> <i class="icon-append fa fa-calendar"></i>' +
+                        '<input type="text" name="startdate_activity_'+ actuator_control_number +'" id="startdate_activity_' + actuator_control_number + '" placeholder="Start date">' +
+                        '</label>' +
+                        '</section>' +
+                        '<section class="col col-6">' +
+                        '<label class="input"> <i class="icon-append fa fa-calendar"></i>' +
+                        '<input type="text" name="finishdate_activity_'+ actuator_control_number +'" id="finishdate_activity_'+actuator_control_number+'" placeholder="Finish date">' +
+                        '</label>' +
+                        '</section>'
+                );
+
+
+                $('#startdate_activity_'+actuator_control_number).datepicker({
+                    //dateFormat : 'dd.mm.yy',
+                    prevText : '<i class="fa fa-chevron-left"></i>',
+                    nextText : '<i class="fa fa-chevron-right"></i>',
+                    onSelect : function(selectedDate) {
+                        $('#finishdate_activity_'+actuator_control_number).datepicker('option', 'minDate', selectedDate);
+                        console.log(selectedDate);
+                    }
+                });
+
+                $('#finishdate_activity_'+actuator_control_number).datepicker({
+                    //dateFormat : 'dd.mm.yy',
+                    prevText : '<i class="fa fa-chevron-left"></i>',
+                    nextText : '<i class="fa fa-chevron-right"></i>',
+                    onSelect : function(selectedDate) {
+                        $('#startdate_activity_'+actuator_control_number).datepicker('option', 'maxDate', selectedDate);
+                    }
+                });
+            } else {
+                alert("dude fill your shit out");
+            }
+
+        });
+
+        // START AND FINISH DATE
+        $('#startdate_activity_1').datepicker({
+            //dateFormat : 'dd.mm.yy',
+            prevText : '<i class="fa fa-chevron-left"></i>',
+            nextText : '<i class="fa fa-chevron-right"></i>',
+            onSelect : function(selectedDate) {
+                $('#finishdate_activity_1').datepicker('option', 'minDate', selectedDate);
+                console.log(selectedDate);
+            }
+        });
+
+        $('#finishdate_activity_1').datepicker({
+            //dateFormat : 'dd.mm.yy',
+            prevText : '<i class="fa fa-chevron-left"></i>',
+            nextText : '<i class="fa fa-chevron-right"></i>',
+            onSelect : function(selectedDate) {
+                $('#startdate_activity_1').datepicker('option', 'maxDate', selectedDate);
+            }
+        });   
     });
 
 </script>
