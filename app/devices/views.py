@@ -20,7 +20,7 @@ def list_devices():
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name']))
-	return render_template('devices/devices.html' , title='Your Devices', my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
+	return render_template('devices/devices.html' , my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
 @mod_devices.route('/add_device/<new_device_id>', methods=['POST'])
 @login_required
@@ -76,7 +76,7 @@ def add_device(new_device_id):
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name']))
-	return render_template('devices/devices.html' , title='Your Devices', \
+	return render_template('devices/devices.html', \
 		my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
 @mod_devices.route('/edit_device/<device_id>', methods=['POST'])
@@ -131,7 +131,7 @@ def edit_device(device_id):
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name']))
-	return render_template('devices/devices.html' , title='Your Devices', \
+	return render_template('devices/devices.html', \
 		my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
 

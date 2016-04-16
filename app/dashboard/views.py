@@ -19,4 +19,4 @@ def dashboard():
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators']))
 
-	return render_template('dashboard/dashboard.html', title='Your Dashboard', username=username, my_devices=device_list, my_grows=grows_list)
+	return render_template('dashboard/dashboard.html', username=username, my_devices=device_list, my_grows=grows_list)
