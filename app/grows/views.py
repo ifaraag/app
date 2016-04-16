@@ -31,7 +31,7 @@ def list_grow(current_grow):
 		user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators']))
 	
 	return render_template('grows/grows.html',
-                           title='Your Grows', username=username, current_grow=current_grow, current_device=assoc_device_name, \
+                       		username=username, current_grow=current_grow, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
@@ -71,7 +71,7 @@ def link(current_grow, link_device):
 		user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators']))
 	
 	return render_template('grows/grows.html',
-                           title='Your Grows', username=username, current_grow=current_grow, current_device=assoc_device_name, \
+                           username=username, current_grow=current_grow, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows)
 
 
@@ -139,7 +139,7 @@ def edit_grow(current_grow):
 		user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators']))
 	
 	return render_template('grows/grows.html',
-                           title='Your Grows', username=username, current_grow=current_grow, current_device=assoc_device_name, \
+                           username=username, current_grow=current_grow, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows)
 
 
