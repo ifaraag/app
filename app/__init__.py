@@ -22,7 +22,7 @@ def _callback(message):
     # print(message)
     pass
 
-def sub_callback(message):
+def sub_callback(message, channel):
 	db.data.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
