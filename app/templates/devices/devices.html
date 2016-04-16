@@ -187,7 +187,7 @@ Use search to find needed section.
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="/login" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>
+                        <a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>
                     </li>
                 </ul>
             </li>
@@ -195,7 +195,7 @@ Use search to find needed section.
 
         <!-- logout button -->
         <div id="logout" class="btn-header transparent pull-right">
-            <span> <a href="/login" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
+            <span> <a href="/logout" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
         </div>
         <!-- end logout button -->
 
@@ -473,9 +473,9 @@ Use search to find needed section.
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id=" {{ 'collapseListGroupHeading_sensors' + device[0]}}">
                                                 <h4 class="panel-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="{{ '#collapseListGroup_sensors_'+ device[0]}}" aria-expanded="false" aria-controls="collapseListGroup3">
-                                                        Sensors
-                                                    </a>
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="{{ '#collapseListGroup_sensors_'+ device[0]}}" aria-expanded="false" aria-controls="collapseListGroup3">
+                                                    Sensors
+                                                </a>
                                                 </h4>
                                             </div>
                                             <div id="{{ 'collapseListGroup_sensors_'+device[0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors">
@@ -673,7 +673,8 @@ Use search to find needed section.
                                                                                 </label>
                                                                             </section>
                                                                         </div>
-                                                                    {% endif %}</section>
+                                                                    {% endif %}
+                                                                    </section>
                                                             </fieldset>
                                                         </section>
                                                         <div class="modal-footer">
