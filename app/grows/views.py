@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for, redirect
 from app import db, login_manager, pubnub
 from flask.ext.login import login_required, current_user
 
@@ -143,8 +143,22 @@ def edit_grow(current_grow):
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows)
 
 
-
-
+@mod_grows.route('/add_grows/<grow>/<link_device>', methods=['POST'])
+@mod_grows.route('/add_grows/<grow>/<link_device>/<num>', methods=['POST'])
+@login_required
+def add_grow(grow, link_device, num=1):
+	username = current_user.get_id()
+	existing_grow = db.grows.find_one({'grow_name' : grow})
+	if not existing_grow:
+		devices = db.devices.find({'device_name': link_device })
+		for device in devices:
+			device_id = device['device_id']
+		new_grow = {"grow_name" : grow, "device_name" : link_device, "device_id":device_id, \
+						"username":username, "sensors":[], "actuators":{}}
+		db.grows.insert_one(new_grow)
+		return redirect(url_for('grows.list_grow', current_grow=grow))
+	else:
+		return redirect(url_for('list_plant_profiles', num=num))
 
 
 

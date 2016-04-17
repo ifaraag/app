@@ -320,7 +320,7 @@
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li>Hydrobase</li><li>Grows</li><li>Avi</li>
+            <li>Hydrobase</li><li>Plant Profiles</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -349,113 +349,56 @@
         <section id="widget-grid">
             <div class="row">
                 <!-- NEW WIDGET START -->
+                {% for plant in my_plants %}
                 <article class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                    <div class="jarviswidget" id="punica_granatum_wid" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <div class="jarviswidget" id="{{plant['identifier']+'_wid'}}" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
                         <header>
-                            <h2><strong>Pomegranate:</strong> <i>Punica Granatum</i></h2>
+                            <h2><strong>{{plant['common_name']}}: </strong> <i>{{plant['scientific_name']}}</i></h2>
 
                         </header>
                         <!-- widget div-->
                         <div>
                             <!-- widget content -->
                             <div class="widget-body">
-                                <img src="../../static/img/plant_photos/pomegranate.jpg">
+                                <img src="../../static/img/plant_photos/tree_tomato.jpg">
                                 <div class="panel-group" role="tablist">
                                     <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="collapseListGroupHeading_punica_granatum">
+                                        <div class="panel-heading" role="tab" id="{{'collapseListGroupHeading_'+plant['identifier']}}">
                                             <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_punica_granatum" aria-expanded="false" aria-controls="collapseListGroup_punica_granatum">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="{{'#collapseListGroup_'+plant['identifier']}}" aria-expanded="false" aria-controls="{{'collapseListGroup_'+plant['identifier']}}">
                                                     Basic Info Plant Info
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapseListGroup_punica_granatum" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_punica_granatum">
+                                        <div id="{{'collapseListGroup_'+plant['identifier']}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{'collapseListGroupHeading_'+plant['identifier']}}">
                                             <ul class="list-group">
-                                                <li class="list-group-item">pH Minimum: <span class="badge">6.0</span></li>
-                                                <li class="list-group-item">pH Maximum: <span class="badge">6.9</span></li>
-                                                <li class="list-group-item">Salinity Tolerance: <span class="badge">Low</span></li>
-                                                <li class="list-group-item">Precipitation Minimum: <span class="badge">30.0</span></li>
-                                                <li class="list-group-item">Precipitation Maximum: <span class="badge">60.0</span></li>
-                                                <li class="list-group-item">Drought Tolerance: <span class="badge">None</span></li>
-                                                <li class="list-group-item">Temperature Minimum (F): <span class="badge">-13.0</span></li>
-                                                <li class="list-group-item">Shade Tolerance: <span class="badge">Intermediate</span></li>
-                                                <li class="list-group-item">Height Mature Feet: <span class="badge">20.0</span></li>
-                                                <li class="list-group-item">Growth Rate: <span class="badge">Slow</span></li>
-                                                <li class="list-group-item">Growth Period: <span class="badge">Spring/Summer</span></li>
-                                                <li class="list-group-item">Lifespan: <span class="badge">Moderate</span></li>
-                                                <li class="list-group-item">Flower Conspicuous: <span class="badge">Yes</span></li>
-                                                <li class="list-group-item">Bloom Period: <span class="badge">Spring</span></li>
-                                                <li class="list-group-item">Fruit/Nut/Seed Product:<span class="badge">Yes</span></li>
-                                                <li class="list-group-item">Fruit/Nut/Seed Conspicuous: <span class="badge">Yes</span></li>
-                                                <li class="list-group-item">Fruit/Nut/Seed Abundance: <span class="badge">High</span></li>
-                                                <li class="list-group-item">Fruit/Nut/Seed Begin: <span class="badge">Summer</span></li>
-                                                <li class="list-group-item">Fruit/Nut/Seed End: <span class="badge">Fall</span></li>
-                                                <li class="list-group-item">Fruit/Nut/Seed Color: <span class="badge">Red</span></li>
-                                                <li class="list-group-item">Foliage Color: <span class="badge">Green</span></li>
+                                                <li class="list-group-item">pH Min: <span class="badge">{{plant['ph_minimum']}}</span></li>
+                                                <li class="list-group-item">pH Max: <span class="badge">{{plant['ph_maximum']}}</span></li>
+                                                <li class="list-group-item">Salinity Tolerance: <span class="badge">{{plant['salinity_tolerance']}}</span></li>
+                                                <li class="list-group-item">Precipitation Min: <span class="badge">{{plant['precipitation_maximum']}}</span></li>
+                                                <li class="list-group-item">Precipitation Max: <span class="badge">{{plant['precipitation_maximum']}}</span></li>
+                                                <li class="list-group-item">Drought Tolerance: <span class="badge">{{plant['draught_tolerance']}}</span></li>
+                                                <li class="list-group-item">Temperature Min(F): <span class="badge">{{plant['temperature_minimum']}}</span></li>
+                                                <li class="list-group-item">Shade Tolerance: <span class="badge">{{plant['shade_tolerence']}}</span></li>
+                                                <li class="list-group-item">Height Mature(Ft): <span class="badge">{{plant['height_mature_feet']}}</span></li>
+                                                <li class="list-group-item">Growth Rate: <span class="badge">{{plant['growth_rate']}}</span></li>
+                                                <li class="list-group-item">Growth </br> Period: <span class="badge">{{plant['active_growth_period']}}</span></li>
+                                                <li class="list-group-item">Lifespan: <span class="badge">{{plant['lifespan']}}</span></li>
+                                                <li class="list-group-item">Flower Conspicuous: <span class="badge">{{plant['flower_conspicuous']}}</span></li>
+                                                <li class="list-group-item">Bloom Period: <span class="badge">{{plant['bloom_period']}}</span></li>
+                                                <li class="list-group-item">Fruit/Nut/Seed Product:<span class="badge">{{plant['berry_nut_seed_product']}}</span></li>
+                                                <li class="list-group-item">Fruit/Nut/Seed</br> Conspicuous: <span class="badge">{{plant['fruit_conspicuous']}}</span></li>
+                                                <li class="list-group-item">Fruit/Nut/Seed </br> Abundance: <span class="badge">{{plant['fruit_seed_abundance']}}</span></li>
+                                                <li class="list-group-item">Fruit/Nut/Seed Begin: <span class="badge">{{plant['fruit_seed_period_begin']}}</span></li>
+                                                <li class="list-group-item">Fruit/Nut/Seed End: <span class="badge">{{plant['fruit_seed_period_end']}}</span></li>
+                                                <li class="list-group-item">Fruit/Nut/Seed Color: <span class="badge">{{plant['fruit_color']}}</span></li>
+                                                <li class="list-group-item">Foliage Color: <span class="badge">{{plant['foliage_color']}}</span></li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <button id="punica_granatum_add_btn" class="btn btn-primary add_plant_btn" data-toggle="modal" data-target="#add_plant_device_modal">Add Plant to Device</button>
-                                </div>
-                            </div>
-                            <!-- end widget content -->
-                        </div>
-                        <!-- end widget div -->
-                    </div>
-                </article>
-                <article class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                    <div class="jarviswidget" id="taraxacum_officinale_wid" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-                        <header>
-                            <h2><strong>Dandelion:</strong> <i>Taraxacum Officinale</i></h2>
+                                    <button id="{{plant['identifier']+'_add_btn'}}" class="btn btn-primary add_plant_btn" data-toggle="modal" data-target="#add_plant_device_modal">Link Plant to Device</button>
 
-                        </header>
-                        <!-- widget div-->
-                        <div>
-                            <!-- widget content -->
-                            <div class="widget-body">
-                                <img src="http://tacticalintelligence.net/wp-content/uploads/2010/04/dandelion.jpg">
-                                <div class="panel-group" role="tablist">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="collapseListGroupHeading_taraxacum_officinale">
-                                            <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_taraxacum_officinale" aria-expanded="false" aria-controls="collapseListGroup_taraxacum_officinale">
-                                                    Basic Info Plant Info
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseListGroup_taraxacum_officinale" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_taraxacum_officinale">
-                                            <ul class="list-group">
-                                                <li class="list-group-item">pH Minimum: <span class="badge">4.8</span></li>
-                                                <li class="list-group-item">pH Maximum: <span class="badge">7.5</span></li>
-                                                <li class="list-group-item">Salinity Tolerance: <span class="badge">None</span></li>
-                                                <li class="list-group-item">Precipitation Minimum: <span class="badge">12.0</span></li>
-                                                <li class="list-group-item">Precipitation Maximum: <span class="badge">55.0</span></li>
-                                                <li class="list-group-item">Drought Tolerance: <span class="badge">Medium</span></li>
-                                                <li class="list-group-item">Temperature Minimum (F): <span class="badge">-38.0</span></li>
-                                                <li class="list-group-item">Shade Tolerance: <span class="badge">Intermediate</span></li>
-                                                <li class="list-group-item">Height Mature (Feet): <span class="badge">0.5</span></li>
-                                                <li class="list-group-item">Growth Rate: <span class="badge">Rapid</span></li>
-                                                <li class="list-group-item">Growth Period: <span class="badge">Spring and Fall</span></li>
-                                                <li class="list-group-item">Lifespan: <span class="badge">Short</span></li>
-                                                <li class="list-group-item">Flower Conspicuous: <span class="badge">Yes</span></li>
-                                                <li class="list-group-item">Bloom Period: <span class="badge">Early Spring</span></li>
-                                                <li class="list-group-item">Foliage Color: <span class="badge">Green</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <button id="taraxacum_officinale_add_btn" class="btn btn-primary add_plant_btn" data-toggle="modal" data-target="#add_plant_device_modal">Add Plant to Device</button>
-                                </div>
-                            </div>
-                            <!-- end widget content -->
-                        </div>
-                        <!-- end widget div -->
-                    </div>
-                </article>
-                <!-- WIDGET END -->
-            </div>
-        </section>
-        <!-- end widget grid -->
-        <!--link to device modal-->
+                                            <!--link to device modal-->
         <div id="add_plant_device_modal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
@@ -465,25 +408,31 @@
                         <h4 class="modal-title">Link Device To Plant</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Mario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                    {% for device in my_devices %}
+                        {% if loop.index%2 == 1%}
+                            <div class="row">
+                        {% endif %}
+                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
                                 <header>
                                     <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                    <h2><strong>Mario:</strong> <i>Arduino</i></h2>
+                                    <h2><strong>{{device[0]}}:</strong> <i>{{device[1]}}</i></h2>
                                 </header>
 
                                 <!-- widget div-->
                                 <div>
                                     <!-- widget content -->
                                     <div class="widget-body">
-                                        <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                        {% if device[1] == "Arduino" %}
+                                            <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                        {% elif device[1] == "Raspberry Pi" %}
+                                            <img src="../../static/img/raspberry_pi2.png">
+                                        {% endif %}
                                         <!--Anubhav!!!! NOT SURE IF THIS IS THE ACTION YOU WANT, FEEL FREE TO FUCK WITH IT!-->
-                                        <form>
-                                            <!--this is super important but can be all the same-->
-                                            <input class="plant_device_input" name="plant_type" type="hidden" value="">
-                                            <button id="Mario_link_btn" name="device" value="Mario" type="submit" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                        </form>
-
+                                        <form action ="{{'/add_grows/'+plant['identifier']+'/'+device[0]+'/'+cur|string}}" method = "post">
+                                            <button id="link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span>
+                                            Link
+                                            </button>
+                                            </form>
                                     </div>
                                     <!-- end widget content -->
 
@@ -491,80 +440,40 @@
                                 <!-- end widget div -->
 
                             </div>
-                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Luigi_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                    <h2><strong>Luigi:</strong> <i>Arduino</i></h2>
-                                </header>
-
-                                <!-- widget div-->
-                                <div>
-                                    <!-- widget content -->
-                                    <div class="widget-body">
-                                        <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                        <form>
-                                            <input class="plant_device_input" name="plant_type" type="hidden" value="">
-                                            <button id="Luigi_link_btn" name="device" value="Luigi" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                        </form>
-                                    </div>
-                                    <!-- end widget content -->
-
+                                {% if loop.index%2 == 0 %}
+                                        </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if (my_devices|length)%2 !=0 %}
                                 </div>
-                                <!-- end widget div -->
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Wario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                    <h2><strong>Wario:</strong> <i>Arduino</i></h2>
-                                </header>
-
-                                <!-- widget div-->
-                                <div>
-                                    <!-- widget content -->
-                                    <div class="widget-body">
-                                        <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                        <form>
-                                            <input class="plant_device_input" name="plant_type" type="hidden" value="">
-                                            <button id="Wario_link_btn" name="device" value="Wario" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                        </form>
-                                    </div>
-                                    <!-- end widget content -->
-
-                                </div>
-                                <!-- end widget div -->
-
-                            </div>
-                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Toad_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                    <h2><strong>Toad:</strong> <i>Raspberry Pi</i></h2>
-                                </header>
-
-                                <!-- widget div-->
-                                <div>
-                                    <!-- widget content -->
-                                    <div class="widget-body">
-                                        <img src="../../static/img/raspberry_pi2.png">
-                                        <form>
-                                            <input class="plant_device_input" name="plant_type" type="hidden" value="">
-                                            <button id="Toad_link_btn" name="device" value="Toad" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                        </form>
-                                    </div>
-                                    <!-- end widget content -->
-
-                                </div>
-                                <!-- end widget div -->
-
-                            </div>
-                        </div>
+                            {%endif%}
                     </div>
                 </div>
             </div>
         </div>
         <!--end link to device modal-->
+
+                                </div>
+                            </div>
+                            <!-- end widget content -->
+                        </div>
+                        <!-- end widget div -->
+                    </div>
+                </article>
+                {% endfor %}
+                <!-- WIDGET END -->
+            </div>
+        </section>
+        <!-- end widget grid -->
+    <ul class="pagination">
+    {% for i in range(1, pages+1) %}
+        {% if i == cur %}
+            <li class="active"><a href="{{'/plant_profile/'+i|string}}">{{i}}</a></li>
+        {%else%}
+            <li><a href="{{'/plant_profiles/'+i|string}}">{{i}}</a></li>
+        {%endif%}
+    {% endfor %}
+    </ul>
     </div>
     <!-- END MAIN CONTENT -->
 </div>
