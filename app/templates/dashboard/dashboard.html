@@ -195,7 +195,7 @@ Use search to find needed section.
 
         <!-- logout button -->
         <div id="logout" class="btn-header transparent pull-right">
-            <span> <a href="/login" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
+            <span> <a href="/logout" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
         </div>
         <!-- end logout button -->
 
@@ -248,56 +248,10 @@ Use search to find needed section.
                         <a href="{{'/grows/'+grow[0]}}">{{grow[0]}}</a>
                     </li>
                     {% endfor %}
-                    <li>
-                        <a href="add_grow.html">Add Grow <span class="pull-right fa fa-fw fa-plus"></span></a>
-                    </li>
                 </ul>
             </li>
             <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-flask"></i> <span class="menu-item-parent">Experiments</span></a>
-                <ul>
-                    <li>
-                        <a href="table.html">Salinity Test</a>
-                    </li>
-                    <li>
-                        <a href="datatables.html">pH Test</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Plant Profiles</span></a>
-                <ul>
-                    <li>
-                        <a href="form-elements.html">Smart Form Elements</a>
-                    </li>
-                    <li>
-                        <a href="form-templates.html">Smart Form Layouts</a>
-                    </li>
-                    <li>
-                        <a href="validation.html">Smart Form Validation</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-forms.html">Bootstrap Form Elements</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-validator.html">Bootstrap Form Validation</a>
-                    </li>
-                    <li>
-                        <a href="plugins.html">Form Plugins</a>
-                    </li>
-                    <li>
-                        <a href="wizard.html">Wizards</a>
-                    </li>
-                    <li>
-                        <a href="other-editors.html">Bootstrap Editors</a>
-                    </li>
-                    <li>
-                        <a href="dropzone.html">Dropzone </a>
-                    </li>
-                    <li>
-                        <a href="image-editor.html">Image Cropping <span class="badge pull-right inbox-badge bg-color-yellow">new</span></a>
-                    </li>
-                </ul>
+                <a href="/plant_profiles"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Plant Profiles</span></a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">Documentation</span></a>
@@ -748,22 +702,7 @@ you can add as many as you like
 <div id="shortcut">
     <ul>
         <li>
-            <a href="inbox.html" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
-        </li>
-        <li>
-            <a href="calendar.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
-        </li>
-        <li>
-            <a href="gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
-        </li>
-        <li>
-            <a href="invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
-        </li>
-        <li>
-            <a href="gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
-        </li>
-        <li>
-            <a href="profile.html" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
+            <a href="/edit_profile" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
         </li>
     </ul>
 </div>

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for, redirect
 from app import db, login_manager, pubnub
 from flask.ext.login import login_required, current_user
 from app.auth.models import User
@@ -20,15 +20,12 @@ def list_devices():
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name']))
-	return render_template('devices/devices.html' , title='Your Devices', my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
+	return render_template('devices/devices.html' , my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
 
 @mod_devices.route('/add_device/<new_device_id>', methods=['POST'])
 @login_required
 def add_device(new_device_id):
 	username = current_user.get_id()
-	UUID = str(uuid.uuid4())
-	device_list = []
-	grows_list = []
 	existing_device = db.devices.find_one({'device_name' :
                                            request.form['device_name']})
 	if not existing_device:
@@ -69,23 +66,11 @@ def add_device(new_device_id):
 				actuators['phDowner_pump'] = request.form['phDowner_pump_pin']
 			new_device = {'username' : username, 'device_id': new_device_id, 'device_name' : request.form['device_name'], 'type' : request.form['device_type'], 'kit' : request.form['kit'], 'sensors' : sensors, 'actuators': actuators}
 		db.devices.insert_one(new_device)
-	devices = db.devices.find({'username': current_user.get_id()})
-	for device in devices:
-		device_list.append((device['device_name'], device['type'], \
-	device['sensors'], device['actuators'], device['kit'], device['device_id']))
-	grows = db.grows.find({'username' : current_user.get_id()})
-	for grow in grows:
-		grows_list.append((grow['grow_name'], grow['device_name']))
-	return render_template('devices/devices.html' , title='Your Devices', \
-		my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
+	return redirect(url_for('devices.list_devices'))
 
 @mod_devices.route('/edit_device/<device_id>', methods=['POST'])
 @login_required
 def edit_device(device_id):
-	username = current_user.get_id()
-	UUID = str(uuid.uuid4())
-	device_list = []
-	grows_list = []
 	sensors =[]
 	if request.form['Lux'] == 'on':
 		sensors.append("Lux")
@@ -124,18 +109,4 @@ def edit_device(device_id):
       },
       upsert=True
       )
-	devices = db.devices.find({'username': current_user.get_id()})
-	for device in devices:
-		device_list.append((device['device_name'], device['type'], \
-	device['sensors'], device['actuators'], device['kit'], device['device_id']))
-	grows = db.grows.find({'username' : current_user.get_id()})
-	for grow in grows:
-		grows_list.append((grow['grow_name'], grow['device_name']))
-	return render_template('devices/devices.html' , title='Your Devices', \
-		my_devices=device_list, my_grows=grows_list, username=username, uuid=UUID)
-
-
-@mod_devices.route('/delete_device', methods=['POST'])
-@login_required
-def remove_device():
-	pass
+	return redirect(url_for('devices.list_devices'))
