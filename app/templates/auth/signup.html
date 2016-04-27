@@ -121,7 +121,7 @@
 					</div>
 					<div id="login-box" class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
 						<div class="well no-padding">
-							<form id="signup-form" method="post" action="NO_IDEA_WHERE_TO_SEND" class="smart-form client-form">
+							<form id="signup-form" method="post" action="/signup" class="smart-form client-form", method=['POST']>
 								<header>
 									Create an Account
 								</header>
@@ -129,9 +129,9 @@
 								<fieldset>
 									
 									<section>
-										<label class="label">Name</label>
+										<label class="label">username</label>
 										<label class="input"> <i class="icon-append fa fa-user"></i>
-											<input type="text" id="name" name="name">
+											<input type="text" id="username" name="username">
 											<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Enter your name</b></label>
 									</section>
 
@@ -257,7 +257,7 @@
 				$("#signup-form").validate({
 					// Rules for form validation
 					rules : {
-						name : {
+						username : {
 							required : true,
 							minlength: 2
 						},
