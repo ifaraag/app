@@ -41,6 +41,7 @@ def signup():
         else:
             new_user = {'username' : request.form['username'],
                         'email' : request.form['email'],
+                        'zip' : request.form['zip'],
                         'password' : generate_password_hash(request.form['password'])}
             db.users.insert_one(new_user)
             user = db.users.find_one({'username': request.form['username']})

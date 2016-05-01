@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect
 from pymongo import MongoClient
 from flask_login import LoginManager
 from pubnub import Pubnub
+import datetime
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -19,19 +20,40 @@ pubnub = Pubnub(publish_key=app.config['PUBNUB_PUBLISH_KEY'], \
 		auth_key=app.config['PUBNUB_AUTH_KEY'])
 
 def _callback(message):
-    # print(message)
-    pass
+    print(message)
+
+def _error(message):
+	print(message)
 
 def sub_callback(message, channel):
+	# print(channel)
+	utc_datetime = datetime.datetime.utcnow()
+	message['year'] = utc_datetime.year
+	message['month'] = utc_datetime.month
+	message['day'] = utc_datetime.day
+	message['hour'] = utc_datetime.hour
+	message['min'] = utc_datetime.minute
+	message['sec'] = utc_datetime.second
+	message['TDS'] = message['EC'].split(",")[1]
+	message['PS'] = message['EC'].split(",")[2]
+	message['EC'] = message['EC'].split(",")[0]
+
+	result = db.grows.update_one(
+      { "grow_name" : 'Avi'},
+      {
+      '$push': {'data':message}
+      },
+      upsert=True
+      )
+
 	db.data.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
-pubnub.grant(channel_group='hydrobase', auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0, callback=_callback, error=_callback)
+pubnub.grant(channel_group='hydrobase', auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0, callback=_callback, error=_error)
 
 # Subscribe to the channel group 'hydrobase' that contains the channels for all users to get the data 
 # coming in from different devices and put that into the DB
-pubnub.subscribe_group(channel_groups=app.config['PUBNUB_CHANNEL_GRP'], callback=sub_callback, error=_callback)
-
+pubnub.subscribe_group(channel_groups=app.config['PUBNUB_CHANNEL_GRP'], callback=sub_callback, error=_error)
 
 from app.views import mod_app
 from app.auth.views import mod_auth

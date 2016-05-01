@@ -16,7 +16,7 @@ def list_grow(current_grow):
 	grows = db.grows.find({'grow_name' : current_grow})
 	for grow in grows:
 		assoc_device_name = grow['device_name']
-		grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators']))
+		grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls']))
 	devices = db.devices.find({'device_name': assoc_device_name })
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
@@ -28,7 +28,7 @@ def list_grow(current_grow):
 				device['sensors'], device['actuators'], device['kit'], device['device_id']))
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
-		user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators']))
+		user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators'], grow['controls']))
 	
 	return render_template('grows/grows.html',
                        		username=username, current_grow=current_grow, current_device=assoc_device_name, \
