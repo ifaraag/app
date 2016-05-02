@@ -427,7 +427,7 @@ Use search to find needed section.
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id=" {{ 'collapseListGroupHeading_sensors' + device[0]}}">
                                                 <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="{{ '#collapseListGroup_sensors_'+ device[0]}}" aria-expanded="false" aria-controls="collapseListGroup3">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="{{'#collapseListGroup_sensors_'+ device[0]}}" aria-expanded="false" aria-controls="{{'#collapseListGroup_sensors_'+ device[0]}}">
                                                     Sensors
                                                 </a>
                                                 </h4>
@@ -435,7 +435,7 @@ Use search to find needed section.
                                             <div id="{{ 'collapseListGroup_sensors_'+device[0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors">
                                                 <ul class="list-group">
                                                 {% for sensor in device[2] %}
-                                                    <li class="list-group-item">{{sensor}}</li>
+                                                    <li class="list-group-item">{{sensor.replace('_', ' ')}}</li>
                                                 {% endfor %}
                                                 </ul>
                                             </div>
@@ -453,7 +453,7 @@ Use search to find needed section.
                                             <div id="{{ 'collapseListGroup_actuators_' + device[0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators">
                                                 <ul class="list-group">
                                                     {% for key, value in device[3].items() %}
-                                                        <li class="list-group-item">{{key}}<span class="pull-right">Pin: {{value}}</span></li>
+                                                        <li class="list-group-item">{{key.replace('_', ' ')}}<span class="pull-right">Pin: {{value}}</span></li>
                                                     {% endfor %}
                                                 </ul>
                                             </div>
@@ -469,12 +469,12 @@ Use search to find needed section.
                                                     <h4 class="modal-title">Edit {{device[0]}}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form class="smart-form" id="edit_device_form" action="{{'/edit_device/'+device[5]}}" method="POST">
+                                                    <form class="smart-form edit_device_form" id="{{device[0]}}_edit_device_form" action="{{'/edit_device/'+device[5]}}" method="POST">
                                                         <fieldset>
                                                             <section>
                                                                 <label class="label">Device Name</label>
                                                                 <label class="input">
-                                                                    <input name="device_name" value="{{device[0]}}" type="text" placeholder="{{device[0]}}" class="input-sm" disabled>
+                                                                    <input name="device_name" value="{{device[0]}}" type="text" placeholder="{{device[0]}}" class="input-sm">
                                                                 </label>
                                                             </section>
                                                         </fieldset>
@@ -486,71 +486,95 @@ Use search to find needed section.
                                                                 <section>
                                                                     <label class="label"><h4>Sensors</h4></label>
                                                                     <div class="row">
-                                                                        <div class="col col-6">
-                                                                            {% for sensor in device[2] %}
+                                                                            {%if device[2]|length>4%}
+                                                                            <div class="col col-6">
+                                                                                {% for sensor in device[2][0:4] %}
                                                                                 <label class="checkbox">
-                                                                                    <input type="checkbox" name="{{sensor}}" id="{{sensor + '_checkbox'}}" checked="checked">
-                                                                                    <input type="hidden" name="{{sensor}}" id="{{sensor + '_checkbox_hidden'}}" value="off">
-                                                                                    <i></i>{{sensor}}
-                                                                                </label>  
-                                                                            {% endfor %}
-                                                                            {% if 'Lux' not in device[2] %}
+                                                                                    <input type="checkbox" name="{{sensor}}" id="{{device[0]+'_'+sensor + '_checkbox'}}" checked="checked">
+                                                                                    <input type="hidden" name="{{sensor}}" id="{{device[0] + '_' + sensor + '_checkbox_hidden'}}" value="off">
+                                                                                    <i></i>{{sensor.replace('_', ' ')}}
+                                                                                </label>
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                            <div class="col col-6">
+                                                                                {% for sensor in device[2][4:] %}
                                                                                 <label class="checkbox">
-                                                                                    <input type="checkbox" name="Lux" id="lux_checkbox">
-                                                                                    <input type="hidden" name="Lux" id="lux_checkbox_hidden" value="off">
-                                                                                    <i></i>Lux
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'Water_Temp' not in device[2] %}
+                                                                                    <input type="checkbox" name="{{sensor}}" id="{{device[0]+'_'+sensor + '_checkbox'}}" checked="checked">
+                                                                                    <input type="hidden" name="{{sensor}}" id="{{device[0] + '_' + sensor + '_checkbox_hidden'}}" value="off">
+                                                                                    <i></i>{{sensor.replace('_', ' ')}}
+                                                                                </label>
+                                                                                {% endfor %}
+                                                                                {% for sensor in ['Lux', 'Water_Temp', 'Air_Temp', 'Humidity', 'pH', 'EC', 'TDS', 'PS'] %}
+                                                                                    {%if sensor not in device[2]%}
+                                                                                        <label class="checkbox">
+                                                                                            <input type="checkbox" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox">
+                                                                                            <input type="hidden" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox_hidden" value="off">
+                                                                                            <i></i>{{sensor}}
+                                                                                        </label>
+                                                                                    {%endif%}
+                                                                                {%endfor%}
+                                                                            </div>
+                                                                            {%endif%}
+                                                                            {%if device[2]|length == 4%}
+                                                                            <div class="col col-6">
+                                                                                {% for sensor in device[2] %}
                                                                                 <label class="checkbox">
-                                                                                    <input type="checkbox" name="Water_Temp" id="waterTemp_checkbox">
-                                                                                    <input type="hidden" name="Water Temperature" id="waterTemp_checkbox_hidden" value="off">
-                                                                                    <i></i>Water Temperature
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'Air_Temp' not in device[2] %}
-                                                                                <label class="checkbox">
-                                                                                    <input type="checkbox" name="Air_Temp" id="airTemp_checkbox">
-                                                                                    <input type="hidden" name="Air Temperature" id="airTemp_checkbox_hidden" value="off">
-                                                                                    <i></i>Air Temperature
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'Humidity' not in device[2] %}
-                                                                                <label class="checkbox">
-                                                                                    <input type="checkbox" name="Humidity" id="humidity_checkbox">
-                                                                                    <input type="hidden" name="Humidity" id="humidity_checkbox_hidden" value="off">
-                                                                                    <i></i>Humidity
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'pH' not in device[2] %}
-                                                                                <label class="checkbox">
-                                                                                    <input type="checkbox" name="pH" id="ph_checkbox">
-                                                                                    <input type="hidden" name="pH" id="ph_checkbox_hidden" value="off">
-                                                                                    <i></i>pH
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'EC' not in device[2] %}
-                                                                                <label class="checkbox">
-                                                                                    <input type="checkbox" name="EC" id="ec_checkbox">
-                                                                                    <input type="hidden" name="EC" id="ec_checkbox_hidden" value="off">
-                                                                                    <i></i>Electrical Conductivity
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'TDS' not in device[2] %}
-                                                                                <label class="checkbox">
-                                                                                    <input type="checkbox" name="TDS" id="tds_checkbox">
-                                                                                    <input type="hidden" name="TDS" id="tds_checkbox_hidden" value="off">
-                                                                                    <i></i>Total Dissolved Solids
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                            {% if 'PS' not in device[2] %}
-                                                                                <label class="checkbox">
-                                                                                    <input type="checkbox" name="PS" id="ps_checkbox">
-                                                                                    <input type="hidden" name="PS" id="ps_checkbox_hidden" value="off">
-                                                                                    <i></i>Practical Salinity
-                                                                                </label>  
-                                                                            {% endif %}
-                                                                        </div>
+                                                                                    <input type="checkbox" name="{{sensor}}" id="{{device[0]+'_'+sensor + '_checkbox'}}" checked="checked">
+                                                                                    <input type="hidden" name="{{sensor}}" id="{{device[0] + '_' + sensor + '_checkbox_hidden'}}" value="off">
+                                                                                    <i></i>{{sensor.replace('_', ' ')}}
+                                                                                </label>
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                            <div class="col col-6">
+                                                                                {% for sensor in ['Lux', 'Water_Temp', 'Air_Temp', 'Humidity', 'pH', 'EC', 'TDS', 'PS'] %}
+                                                                                    {%if sensor not in device[2]%}
+                                                                                    <label class="checkbox">
+                                                                                        <input type="checkbox" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox">
+                                                                                        <input type="hidden" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox_hidden" value="off">
+                                                                                        <i></i>{{sensor}}
+                                                                                    </label>
+                                                                                    {%endif%}
+                                                                                {%endfor%}
+                                                                            </div>
+                                                                            {%endif%}
+                                                                            {%if device[2]|length<4%}
+                                                                                <div class="col col-6">
+                                                                                    {% for sensor in device[2] %}
+                                                                                    <label class="checkbox">
+                                                                                        <input type="checkbox" name="{{sensor}}" id="{{device[0]+'_'+sensor + '_checkbox'}}" checked="checked">
+                                                                                        <input type="hidden" name="{{sensor}}" id="{{device[0] + '_' + sensor + '_checkbox_hidden'}}" value="off">
+                                                                                        <i></i>{{sensor.replace('_', ' ')}}
+                                                                                    </label>
+                                                                                    {% endfor %}
+                                                                                    {%set count = (device[2]|length)%}
+                                                                                        {% for sensor in ['Lux', 'Water_Temp', 'Air_Temp', 'Humidity', 'pH', 'EC', 'TDS', 'PS'] %}
+                                                                                            {%set count = count+1%}
+                                                                                            {%if sensor not in device[2] and count < 4%}
+                                                                                                <label class="checkbox">
+                                                                                                    <input type="checkbox" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox">
+                                                                                                    <input type="hidden" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox_hidden" value="off">
+                                                                                                    <i></i>{{sensor}}
+                                                                                                </label>
+                                                                                            {%endif%}
+                                                                                            {%if sensor not in device[2] and count == 4%}
+                                                                                                <label class="checkbox">
+                                                                                                    <input type="checkbox" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox">
+                                                                                                    <input type="hidden" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox_hidden" value="off">
+                                                                                                    <i></i>{{sensor}}
+                                                                                                </label>
+                                                                                            </div>
+                                                                                            <div class="col col-6">
+                                                                                            {%endif%}
+                                                                                            {%if sensor not in device[2] and count > 4%}
+                                                                                                <label class="checkbox">
+                                                                                                    <input type="checkbox" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox">
+                                                                                                    <input type="hidden" name="{{sensor}}" id="{{device[0] + '_'+sensor}}_checkbox_hidden" value="off">
+                                                                                                    <i></i>{{sensor}}
+                                                                                                </label>
+                                                                                            {%endif%}
+                                                                                        {%endfor%}
+                                                                                </div>
+                                                                            {%endif%}
                                                                     </div>
                                                                 </section>
                                                             </fieldset>
@@ -561,7 +585,7 @@ Use search to find needed section.
                                                                     {% for key, value in device[3].items() %}
                                                                         <div class="col col-6">
                                                                             <section>
-                                                                                <label class="label">{{key}}</label>
+                                                                                <label class="label">{{key[0].capitalize()+key[1:].replace('_', ' ')}}</label>
                                                                                 <label class="input">
                                                                                     <input id="{{key + '_pin'}}" name="{{key + '_pin'}}" type="text" class="input-xs" data-mask="99" value="{{value}}" placeholder="Pin #">
                                                                                 </label>
@@ -677,7 +701,7 @@ Use search to find needed section.
                         <section>
                             <label class="label">Device Name</label>
                             <label class="input">
-                                <input name="device_name" type="text" class="input-sm">
+                                <input name="device_name" id="" type="text" class="input-sm">
                             </label>
                         </section>
                         <section>
@@ -702,12 +726,13 @@ Use search to find needed section.
                             <section>
                                 <label class="label">Device Type</label>
                                 <label class="input">
-                                    <select name="device_type">
-                                          <option value="Arduino">Arduino</option>
-                                          <option value="Photon">Photon</option>
-                                          <option value="Raspberry Pi">Raspberry Pi</option>
-                                          <option value="Other">Other</option>
-                                    </select>
+                                    <input type="text" list="device_type" name="device_type">
+                                    <datalist id="device_type">
+                                        <option value="Arduino">Arduino</option>
+                                        <option value="Photon">Photon</option>
+                                        <option value="Raspberry Pi">Raspberry Pi</option>
+                                        <option value="Other">Other</option>
+                                    </datalist>
                                 </label>
                             </section>
                         </fieldset>
@@ -1714,6 +1739,43 @@ you can add as many as you like
             $('#setUp_options').fadeOut(500, "easeInOutQuint", baseIn);
         });
         // End "Set Up" Controls
+
+        //Set up Name Validation
+        jQuery.validator.addMethod("whiteSpace", function(value, element) {
+            // allow any non-whitespace characters as the host part
+            return this.optional( element ) || !(/[^a-zA-Z0-9]/gi.test(value));
+        }, 'Please do not use any white spaces or special characters.');
+
+
+        $('#new_device_form').validate({
+            rules:{
+                device_name: {
+                    required: true,
+                    whiteSpace: true
+                }
+            },
+
+            errorPlacement : function(error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+        {% for device in my_devices%}
+        $('#{{device[0]}}_edit_device_form').validate({
+            rules:{
+                device_name: {
+                    required: true,
+                    whiteSpace: true
+                }
+            },
+
+            errorPlacement : function(error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+        {% endfor %}
+
+
     });
 
 </script>
