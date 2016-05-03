@@ -1424,7 +1424,7 @@ you can add as many as you like
 
         $('#new_grow_form_submit').click(function(){
             if ((($('#if_this_condition_'+actuator_condition_number).val() != "") && ($('#is_condition_'+actuator_condition_number).val() != "") && ($('#to_this_condition_'+actuator_condition_number).val() != "") && ($('#do_this_condition_'+actuator_condition_number).val() != "")) == true || (($('#startdate_activity_'+actuator_control_number).val() != "") &&  ($('#finishdate_activity_'+actuator_control_number).val() != ""))){
-                console.log("working")
+               $('#new_grow_form').submit();
             } else {
                 alert('really????');
             }
