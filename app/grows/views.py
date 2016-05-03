@@ -17,10 +17,13 @@ def list_grow(current_grow):
 	for grow in grows:
 		assoc_device_name = grow['device_name']
 		grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls']))
-	devices = db.devices.find({'device_name': assoc_device_name })
-	for device in devices:
-		device_list.append((device['device_name'], device['type'], \
-				device['sensors'], device['actuators'], device['kit'], device['device_id']))
+	if assoc_device_name == "":
+		device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
+	else:
+		devices = db.devices.find({'device_name': assoc_device_name })
+		for device in devices:
+			device_list.append((device['device_name'], device['type'], \
+					device['sensors'], device['actuators'], device['kit'], device['device_id']))
 
 	devices = db.devices.find({'username': current_user.get_id()})
 	for device in devices:
@@ -43,7 +46,7 @@ def link(current_grow, link_device):
 	result = db.grows.update_one(
       { "grow_name" : current_grow},
       {
-      '$set': {'device_name' : link_device, 'device_id' : device_id, 'sensors':[], 'actuators' : {}}
+      '$set': {'device_name' : link_device, 'device_id' : device_id, 'sensors': [], 'actuators' : {}, 'controls' : {} }
       },
       upsert=True
       )
@@ -91,22 +94,32 @@ def edit_grow(current_grow):
       )
 	return redirect(url_for('grows.list_grow', current_grow=current_grow))
 
-@mod_grows.route('/add_grows/<grow>/<link_device>', methods=['POST'])
-@mod_grows.route('/add_grows/<grow>/<link_device>/<num>', methods=['POST'])
+@mod_grows.route('/add_grows/', methods=['POST'])
+@mod_grows.route('/add_grows/<num>', methods=['POST'])
 @login_required
-def add_grow(grow, link_device, num=1):
+def add_grow(num=1):
 	username = current_user.get_id()
-	existing_grow = db.grows.find_one({'grow_name' : grow})
+	existing_grow = db.grows.find_one({'grow_name' : request.form['grow_name']})
 	if not existing_grow:
-		devices = db.devices.find({'device_name': link_device })
+		devices = db.devices.find({'device_name': request.form['device']})
 		for device in devices:
 			device_id = device['device_id']
-		new_grow = {"grow_name" : grow, "device_name" : link_device, "device_id":device_id, \
-						"username":username, "sensors":[], "actuators":{}}
+			sensors = device['sensors']
+			actuators = device['actuators']
+		new_grow = {"grow_name" : request.form['grow_name'], "device_name" : request.form['device'], "device_id":device_id, \
+						"username":username, "sensors":sensors, "actuators":actuators, "controls":{}}
 		db.grows.insert_one(new_grow)
-		return redirect(url_for('grows.list_grow', current_grow=grow))
+		return redirect(url_for('grows.list_grow', current_grow=request.form['grow_name']))
 	else:
 		return redirect(url_for('plant_profiles.list_plant_profiles', num=num))
+
+@mod_grows.route('/delete_grow/<grow_name>', methods=['POST'])
+@login_required
+def delete_grow(grow_name):
+	username = current_user.get_id()
+
+	device = db.grows.delete_one({'grow_name' : grow_name})
+	return redirect(url_for('plant_profiles.list_plant_profiles'))
 
 
 
