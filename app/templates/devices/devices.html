@@ -640,8 +640,21 @@ Use search to find needed section.
                                                                         </div>
                                                                     {% endif %}
                                                                     </section>
+                                                                    <div class="col col-12 device_info">
+                                                                        <label class="label">Publish Key</label>
+                                                                        <pre class="device_keys">char pubkey[] = "pub-c-5bef0e0e-e177-4a94-b06f-ce3c1355e5cd";</pre>
+                                                                        <label class="label">Subscribe Key</label>
+                                                                        <pre class="device_keys">char subkey[] = "sub-c-3c8b80da-de67-11e5-abb9-0619f8945a4f";</pre>
+                                                                        <label class="label">Authorization Key</label>
+                                                                        <pre class="device_keys">char authkey[] = "40ed6434-1991-4f7a-8034-20a072abde43";</pre>
+                                                                        <label class="label">Channel</label>
+                                                                        <pre class="device_keys">char channel[] = "{{username}}";</pre>
+                                                                        <label class="label">Device ID</label>
+                                                                        <pre class="device_keys">char deviceid[] = "{{device[5]}}";</pre>
+                                                                    </div>
                                                             </fieldset>
                                                         </section>
+
                                                         <div class="modal-footer">
                                                             <button style="margin-top: 20px; margin-left: 0px; padding: 6px 12px; width: 100%" type="submit" class="btn btn-primary">Save Edits</button>
                                                             <button style="margin-top: 20px; margin-left: 0px; padding: 6px 12px; width: 100%" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
