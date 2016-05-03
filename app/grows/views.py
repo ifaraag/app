@@ -46,7 +46,7 @@ def link(current_grow, link_device):
 	result = db.grows.update_one(
       { "grow_name" : current_grow},
       {
-      '$set': {'device_name' : link_device, 'device_id' : device_id, 'sensors': [], 'actuators' : {}, 'controls' : {} }
+      '$set': {'device_name' : link_device, 'device_id' : device_id, 'sensors': [], 'actuators' : {}, 'controls' : {"time":[], "condition" :[]} }
       },
       upsert=True
       )
