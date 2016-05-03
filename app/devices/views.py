@@ -71,6 +71,7 @@ def add_device(new_device_id):
 @mod_devices.route('/edit_device/<device_id>', methods=['POST'])
 @login_required
 def edit_device(device_id):
+	new_name = request.form['device_name']
 	sensors =[]
 	if request.form['Lux'] == 'on':
 		sensors.append("Lux")
@@ -88,7 +89,6 @@ def edit_device(device_id):
 		sensors.append("TDS")
 	if request.form['PS'] == 'on':
 		sensors.append("PS")
-	print(sensors)
 	actuators = {}
 	if request.form['light_1_pin'] != "":
 		actuators['light_1'] = request.form['light_1_pin']
@@ -105,8 +105,52 @@ def edit_device(device_id):
 	result = db.devices.update_one(
       { "device_id" : device_id },
       {
-      '$set': {'sensors' : sensors, 'actuators' : actuators}
+      '$set': {'device_name': new_name, 'sensors' : sensors, 'actuators' : actuators}
       },
       upsert=True
       )
+	grows = db.grows.find({'device_id' : device_id})
+	for grow in grows:
+		sensors = grow['sensors']
+		actuators = grows['actuators']
+	result = db.grows.update_many(
+      { "device_id" : device_id},
+      {
+      '$set': {'device_name': new_name, 'sensors' : [], 'actuators' : {}, 'controls':{}}
+      },
+      upsert=True
+      )
+
 	return redirect(url_for('devices.list_devices'))
+
+@mod_devices.route('/delete_device/<device_id>', methods=['POST'])
+@login_required
+def delete_device(device_id):
+	username = current_user.get_id()
+	result = db.grows.update_many(
+      { "device_id" : device_id },
+      {
+      '$set': {'device_name': "", 'device_id':"", 'sensors' : [], 'actuators' : {}, 'controls':{}}
+      },
+      upsert=True
+      )
+
+	device = db.devices.delete_one({'device_id' : device_id})
+	return redirect(url_for('devices.list_devices'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
