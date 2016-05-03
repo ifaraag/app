@@ -943,3 +943,11 @@ div.grow_add_button_div button{
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.device_info{
+    padding: 0px 15px;
+}
+
+.device_keys{
+    margin-bottom: 20px;
+}
