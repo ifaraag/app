@@ -74,10 +74,17 @@ def edit_grow(current_grow):
 	grows = db.grows.find({'grow_name':current_grow})
 	for grow in grows:
 		device_id = device['device_id']
+		g_controls = grow['controls']
+		for time_control in g_controls["time"]:
+			if time_control["actuator"] not in actuators.keys() or time_control["sensor"] not in sensors:
+				g_controls["time"].remove(time_control)
+		for condition_control in g_controls["condition"]:
+			if condition_control["actuator"] not in actuators.keys() or condition_control["sensor"] not in sensors:
+				g_controls["condition"].remove(condition_control)
 	result = db.grows.update_one(
       { "grow_name" : current_grow},
       {
-      '$set': {'sensors':sensors, 'actuators' : actuators}
+      '$set': {'sensors':sensors, 'actuators' : actuators, 'controls':g_controls}
       },
       upsert=True
       )
