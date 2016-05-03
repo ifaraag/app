@@ -643,9 +643,13 @@ Use search to find needed section.
                                                             </fieldset>
                                                         </section>
                                                         <div class="modal-footer">
-                                                            <button style="margin-top: 20px" type="submit" class="btn btn-primary btn-xs">Save Edits</button>
-                                                            <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
+                                                            <button style="margin-top: 20px; margin-left: 0px; padding: 6px 12px; width: 100%" type="submit" class="btn btn-primary">Save Edits</button>
+                                                            <button style="margin-top: 20px; margin-left: 0px; padding: 6px 12px; width: 100%" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                         </div>
+                                                    </form>
+                                                    <form action="delete_device" method="POST">
+                                                        <button style="margin-top: 20px; width: 100%" type="submit" class="btn btn-danger">Delete Device</button>
+                                                        <input type="hidden" name="{{device[5]}}_delete" value="true">
                                                     </form>
                                                 </div>
                                             </div>
