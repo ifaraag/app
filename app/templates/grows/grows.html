@@ -62,15 +62,11 @@
 
     <script>
         //Create Variables for other functions
-        //var chart;
-        //var graph;
-
         var pHchartData = [];
         var ecChartData = [];
         var luxChartData = [];
-        var waterTempData = [];
-        var airTempData = [];
-        var humidityData = [];
+        var tempChartData = [];
+        var humidityChartData = [];
 
         //Random Value Generator Function
         function get_rando_value (min, max){
@@ -140,7 +136,7 @@
                         {
                             "date": new Date('March 15, 2016'+ hour + min + ':00'),
                             "ec_value": get_rando_value(0, 1500),
-                            "tds": get_rando_value(0, 800),
+                            "tds": get_rando_value(0, 1200),
                             "ps": get_rando_value(0,1)
 
                         }
@@ -180,7 +176,7 @@
                 );
             }
         }
-        function fill_waterTempData (){
+        function fill_tempData (){
             var temp_hour = 0;
             var temp_min = 0;
             var temp_value = 0;
@@ -205,43 +201,11 @@
                 }
                 temp_value += 1;
 
-                waterTempData.push(
+                tempChartData.push(
                         {
                             "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "value": get_rando_value(32, 100)
-                        }
-                );
-            }
-        }
-        function fill_airTempData (){
-            var temp_hour = 0;
-            var temp_min = 0;
-            var temp_value = 0;
-            for (i = 0; i < 95; i++){
-                if (temp_min == 0 || temp_min == 15 || temp_min == 30){
-                    temp_min += 15;
-                } else if (temp_min == 45) {
-                    temp_min = 0;
-                    temp_hour += 1;
-                }
-                if (temp_hour < 10){
-                    var hour = " 0" + temp_hour;
-                }
-                else {
-                    var hour = " " + temp_hour;
-                }
-                if (temp_min == 0){
-                    var min = ":0" + temp_min;
-                }
-                else {
-                    var min = ":" + temp_min;
-                }
-                temp_value += 1;
-
-                airTempData.push(
-                        {
-                            "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "value": get_rando_value(32, 100)
+                            "waterTemp": get_rando_value(32, 120),
+                            "airTemp": get_rando_value(32,120)
                         }
                 );
             }
@@ -271,7 +235,7 @@
                 }
                 temp_value += 1;
 
-                humidityData.push(
+                humidityChartData.push(
                         {
                             "date": new Date('March 15, 2016'+ hour + min + ':00'),
                             "value": get_rando_value(0, 100)
@@ -284,8 +248,7 @@
         fill_phData();
         fill_ecData();
         fill_luxData();
-        fill_waterTempData();
-        fill_airTempData();
+        fill_tempData();
         fill_humidityData();
 
         //Create pH Graph
@@ -300,9 +263,7 @@
             // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
             ph_chart.addListener("dataUpdated", zoomChart);
             function zoomChart() {
-                // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-                //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                ph_chart.zoomToIndexes(0,30);
+                ph_chart.zoomToIndexes(pHchartData.length - 8,pHchartData.length);
             }
 
             // AXES
@@ -311,9 +272,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -321,16 +279,26 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "pH Value";
+            valueAxis.guides = [{
+                "above": 'true',
+                "fillAlpha": 0.2,
+                "fillColor": "#c6e0b4",
+                "lineAlpha": 0.5,
+                "lineColor": "#757575",
+                "toValue": 8,
+                "value": 6
+            }];
             ph_chart.addValueAxis(valueAxis);
 
             // GRAPH
             var ph_graph = new AmCharts.AmGraph();
             ph_graph.type = "line"; // this line makes the graph smoothed line.
-            ph_graph.fillAlphas = 0.2;
-            ph_graph.lineColor = "#FF9E3A";
-            ph_graph.negativeBase = "6.5";
-            ph_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
-            ph_graph.negativeFillAlphas = 0;
+            //ph_graph.fillAlphas = 0.2;
+            ph_graph.lineColor = "#485A78";
+            //ph_graph.negativeBase = "7";
+            ph_graph.negativeLineColor = "#C84B69"; // this line makes the graph to change color when it drops below 0
+            //ph_graph.negativeFillAlphas = 0.2;
             ph_graph.bullet = "round";
             ph_graph.bulletSize = 8;
             ph_graph.bulletBorderColor = "#FFFFFF";
@@ -339,7 +307,7 @@
             ph_graph.lineThickness = 2;
             ph_graph.valueField = "value";
             ph_graph.selectedBackgroundColor = "#FFF";
-            ph_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            ph_graph.balloonText = "[[category]]<br><b>[[value]]</b>";
             ph_chart.addGraph(ph_graph);
 
             // CURSOR
@@ -383,8 +351,7 @@
             var categoryAxis = ec_overview_chart.categoryAxis;
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is daily, so we set minPeriod to DD
-            categoryAxis.autoGridCount = true;
-            //categoryAxis.gridCount = 50;
+            categoryAxis.dashLength = 3;
             categoryAxis.gridAlpha = 0.1;
             categoryAxis.gridColor = "#000";
             categoryAxis.axisColor = "#000";
@@ -393,8 +360,9 @@
             // ec value axis
             var ecAxis = new AmCharts.ValueAxis();
             ecAxis.title = "EC Value";
-            ecAxis.gridAlpha = 0;
+            ecAxis.gridAlpha = 0.2;
             ecAxis.axisAlpha = 0;
+            ecAxis.dashLength = 3;
             ec_overview_chart.addValueAxis(ecAxis);
 
             // tds value axis
@@ -413,18 +381,44 @@
             psAxis.gridAlpha = 0;
             psAxis.axisAlpha = 0;
             psAxis.title = "TDS & PS";
-            psAxis.offset = 30;
+            psAxis.offset = 35;
             psAxis.position = "right";
             ec_overview_chart.addValueAxis(psAxis);
 
             // GRAPHS
+            // ps graph
+            var psGraph = new AmCharts.AmGraph();
+            psGraph.id = "ps_overview_graph";
+            psGraph.title = "Practical Salinity";
+            psGraph.valueField = "ps";
+            psGraph.type = "step";
+            psGraph.valueAxis = psAxis; // indicate which axis should be used
+            psGraph.negativeBase = "0.5";
+            psGraph.negativeLineColor = "#0FFF99";
+            psGraph.negativeLineAlpha = 0;
+            psGraph.negativeFillColor = "#0FFF99";
+            psGraph.negativeFillAlphas = 0.05;
+            psGraph.lineColor = "#FF8048";
+            psGraph.lineAlpha = 0;
+            psGraph.fillColors = "#FF8048";
+            psGraph.fillAlphas = 0.7;
+            psGraph.balloonText = "PS: [[value]]";
+            psGraph.lineThickness = 1;
+            psGraph.legendValueText = "[[value]]";
+            psGraph.bullet = "square";
+            //psGraph.bulletBorderColor = "#ff5755";
+            //psGraph.bulletBorderThickness = 1;
+            //psGraph.bulletBorderAlpha = 1;
+            psGraph.animationPlayed = true;
+            ec_overview_chart.addGraph(psGraph);
+
             // EC graph
             var ecGraph = new AmCharts.AmGraph();
             ecGraph.valueField = "ec_value";
             ecGraph.title = "ec_value";
             ecGraph.type = "smoothedLine";
             ecGraph.bullet = "round";
-            ecGraph.bulletSize = 10;
+            ecGraph.bulletSize = 5;
             //ecGraph.fillAlphas = 0.1;
             ecGraph.valueAxis = ecAxis; // indicate which axis should be used
             ecGraph.balloonText = "EC: [[value]] &mu;S";
@@ -440,52 +434,26 @@
             tdsGraph.id = "tds_overview_graph";
             //tdsGraph.classNameField = "bulletClass";
             tdsGraph.title = "Total Disolved Solids";
-            tdsGraph.type = "column";
+            tdsGraph.type = "line";
             tdsGraph.valueAxis = tdsAxis; // indicate which axis should be used
             tdsGraph.lineColor = "#40BF9E";
-            tdsGraph.fillColors = "#40BF9E";
-            tdsGraph.fillAlphas = 0.7;
+            tdsGraph.lineThickness = 3;
+            tdsGraph.lineAlpha = 1;
+            //tdsGraph.fillColors = "#40BF9E";
+            //tdsGraph.fillAlphas = 0.7;
             tdsGraph.columnWidth = 4;
-            //tdsGraph.lineThickness = 2;
             tdsGraph.legendValueText = " ";
-            //tdsGraph.descriptionField = "townName";
-            //tdsGraph.bullet = "round";
-            //tdsGraph.bulletSize = 10; // indicate which field should be used for bullet size
-            //tdsGraph.bulletBorderColor = "#359E83";
-            //tdsGraph.bulletBorderAlpha = 1;
-            //tdsGraph.bulletBorderThickness = 2;
-            //tdsGraph.bulletColor = "#40BF9E";
-            //tdsGraph.labelText = "[[value]]"; // not all data points has townName2 specified, that's why labels are displayed only near some of the bullets.
+            tdsGraph.bullet = "round";
+            tdsGraph.bulletSize = 10; // indicate which field should be used for bullet size
+            tdsGraph.bulletBorderColor = "#FFFFFF";
+            tdsGraph.bulletBorderAlpha = 1;
+            tdsGraph.bulletBorderThickness = 2;
             tdsGraph.labelPosition = "right";
             tdsGraph.balloonText = "TDS:[[value]] ppm";
             tdsGraph.showBalloon = true;
+            tdsGraph.legendValueText = "[[value]]";
             tdsGraph.animationPlayed = true;
             ec_overview_chart.addGraph(tdsGraph);
-
-            // ps graph
-            var psGraph = new AmCharts.AmGraph();
-            psGraph.id = "ps_overview_graph";
-            psGraph.title = "Practical Salinity";
-            psGraph.valueField = "ps";
-            psGraph.type = "line";
-            psGraph.valueAxis = psAxis; // indicate which axis should be used
-            psGraph.negativeBase = "0.5";
-            psGraph.negativeLineColor = "#0FFF99";
-            psGraph.negativeFillColor = "#0FFF99";
-            psGraph.negativeFillAlphas = 0;
-            psGraph.lineColor = "#FF8048";
-            psGraph.fillColors = "#FF8048"
-            psGraph.fillAlphas = 0.7;
-            psGraph.balloonText = "PS: [[value]]";
-            psGraph.lineThickness = 1;
-            psGraph.legendValueText = "[[value]]";
-            psGraph.bullet = "square";
-            //psGraph.bulletBorderColor = "#ff5755";
-            psGraph.bulletBorderThickness = 1;
-            psGraph.bulletBorderAlpha = 1;
-            psGraph.dashLengthField = "dashLength";
-            psGraph.animationPlayed = true;
-            ec_overview_chart.addGraph(psGraph);
 
             // CURSOR
             var chartCursor = new AmCharts.ChartCursor();
@@ -529,9 +497,7 @@
             // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
             ec_chart.addListener("dataUpdated", zoomChart);
             function zoomChart() {
-                // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-                //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                ec_chart.zoomToIndexes(0,30);
+                ec_chart.zoomToIndexes(ecChartData.length - 8,ecChartData.length);
             }
             // AXES
             // category
@@ -539,9 +505,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -549,14 +512,24 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.offset = 15;
+            valueAxis.title = "EC Value (μ Siemens)";
+            valueAxis.guides = [{
+                "fillAlpha": 0.2,
+                "fillColor": "#3D73B5",
+                "lineAlpha": 0.5,
+                "lineColor": "#757575",
+                "toValue": 1050,
+                "value": 400
+            }];
             ec_chart.addValueAxis(valueAxis);
 
             // GRAPH
             var ec_graph = new AmCharts.AmGraph();
-            ec_graph.type = "smoothedLine"; // this line makes the graph smoothed line.
-            ec_graph.lineColor = "#FF9E3A";
-            ec_graph.negativeBase = "1000";
-            ec_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
+            ec_graph.type = "line"; // this line makes the graph smoothed line.
+            ec_graph.lineColor = "#3D73B5";
+            ec_graph.negativeBase = "200";
+            ec_graph.negativeLineColor = "#E56F62"; // this line makes the graph to change color when it drops below 0
             ec_graph.bullet = "round";
             ec_graph.bulletSize = 8;
             ec_graph.bulletBorderColor = "#FFFFFF";
@@ -565,7 +538,7 @@
             ec_graph.lineThickness = 2;
             ec_graph.valueField = "ec_value";
             ec_graph.selectedBackgroundColor = "#FFF";
-            ec_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            ec_graph.balloonText = "[[category]]<br><b>[[value]] μS</b>";
             ec_chart.addGraph(ec_graph);
 
             // CURSOR
@@ -596,9 +569,7 @@
             // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
             tds_chart.addListener("dataUpdated", zoomChart);
             function zoomChart() {
-                // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-                //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                tds_chart.zoomToIndexes(0,30);
+                tds_chart.zoomToIndexes(ecChartData.length - 8,ecChartData.length);
             }
 
             // AXES
@@ -607,9 +578,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -617,14 +585,25 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "Total Disolved Solids (PPM)";
+            valueAxis.offset = 15;
+            valueAxis.guides = [{
+                "fillAlpha": 0.2,
+                "fillColor": "#40BF9E",
+                "lineAlpha": 0.5,
+                "lineColor": "#757575",
+                "toValue": 600,
+                "value": 300
+            }];
             tds_chart.addValueAxis(valueAxis);
 
             // GRAPH
             var tds_graph = new AmCharts.AmGraph();
             tds_graph.type = "line"; // this line makes the graph smoothed line.
-            tds_graph.lineColor = "#FF9E3A";
-            tds_graph.negativeBase = "1000";
-            tds_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
+            tds_graph.lineColor = "#40BF9E";
+            tds_graph.lineThickness = 2;
+            tds_graph.negativeBase = "200";
+            tds_graph.negativeLineColor = "#E56F62"; // this line makes the graph to change color when it drops below 0
             tds_graph.bullet = "round";
             tds_graph.bulletSize = 8;
             tds_graph.bulletBorderColor = "#FFFFFF";
@@ -633,7 +612,7 @@
             tds_graph.lineThickness = 2;
             tds_graph.valueField = "tds";
             tds_graph.selectedBackgroundColor = "#FFF";
-            tds_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            tds_graph.balloonText = "[[category]]<br><b>[[value]] ppm</b>";
             tds_chart.addGraph(tds_graph);
 
             // CURSOR
@@ -666,7 +645,7 @@
             function zoomChart() {
                 // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
                 //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                ps_chart.zoomToIndexes(0,30);
+                ps_chart.zoomToIndexes(ecChartData.length - 8,ecChartData.length);
             }
 
             // AXES
@@ -675,9 +654,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -685,24 +661,31 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "Practical Salinity";
             ps_chart.addValueAxis(valueAxis);
 
             // GRAPH
-            ps_graph = new AmCharts.AmGraph();
-            ps_graph.type = "line"; // this line makes the graph smoothed line.
-            ps_graph.lineColor = "#FF9E3A";
-            ps_graph.negativeBase = "1000";
-            ps_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
-            ps_graph.bullet = "round";
-            ps_graph.bulletSize = 8;
-            ps_graph.bulletBorderColor = "#FFFFFF";
-            ps_graph.bulletBorderAlpha = 1;
-            ps_graph.bulletBorderThickness = 2;
-            ps_graph.lineThickness = 2;
-            ps_graph.valueField = "ps";
-            ps_graph.selectedBackgroundColor = "#FFF";
-            ps_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
-            ps_chart.addGraph(ps_graph);
+            var ps_Graph = new AmCharts.AmGraph();
+            ps_Graph.id = "ps_overview_graph";
+            ps_Graph.title = "Practical Salinity";
+            ps_Graph.valueField = "ps";
+            ps_Graph.type = "step";
+            ps_Graph.valueAxis = valueAxis; // indicate which axis should be used
+            ps_Graph.negativeBase = "0.5";
+            ps_Graph.negativeLineColor = "#0FFF99";
+            ps_Graph.negativeLineAlpha = 0;
+            ps_Graph.negativeFillColor = "#0FFF99";
+            ps_Graph.negativeFillAlphas = 0.05;
+            ps_Graph.lineColor = "#FF8048";
+            ps_Graph.lineAlpha = 0;
+            ps_Graph.fillColors = "#FF8048";
+            ps_Graph.fillAlphas = 0.7;
+            ps_Graph.balloonText = "PS: [[value]]";
+            ps_Graph.lineThickness = 1;
+            ps_Graph.legendValueText = "[[value]]";
+            ps_Graph.bullet = "square";
+            ps_Graph.animationPlayed = true;
+            ps_chart.addGraph(ps_Graph);
 
             // CURSOR
             var chartCursor = new AmCharts.ChartCursor();
@@ -734,7 +717,7 @@
             function zoomChart() {
                 // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
                 //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                lux_chart.zoomToIndexes(0,30);
+                lux_chart.zoomToIndexes(luxChartData.length - 8,luxChartData.length);
             }
 
             // AXES
@@ -743,9 +726,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -753,6 +733,15 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "Ambient Light Level (Lux)";
+            //valueAxis.guides = [{
+            //    "fillAlpha": 0.2,
+            //    "fillColor": "#FF9E3A",
+            //    "lineAlpha": 0.5,
+            //    "lineColor": "#757575",
+            //    "toValue": 800,
+            //    "value": 500
+            //}];
             lux_chart.addValueAxis(valueAxis);
 
             // GRAPH
@@ -769,7 +758,7 @@
             lux_graph.lineThickness = 2;
             lux_graph.valueField = "value";
             lux_graph.selectedBackgroundColor = "#FFF";
-            lux_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            lux_graph.balloonText = "[[category]]<br><b>[[value]] lux</b>";
             lux_chart.addGraph(lux_graph);
 
             // CURSOR
@@ -788,21 +777,150 @@
             lux_chart.write("lux_chartDiv");
         });
 
+        //Create Temp_Overview Graph
+        AmCharts.ready(function () {
+            // SERIAL CHART
+            var temp_overview_chart = new AmCharts.AmSerialChart();
+            //chart.addClassNames = true;
+            temp_overview_chart.dataProvider = tempChartData;
+            temp_overview_chart.categoryField = "date";
+            //chart.dataDateFormat = "YYYY-MM-DD";
+            //chart.startDuration = 1;
+            //chart.color = "#000";
+            temp_overview_chart.marginLeft = 0;
+
+            // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
+            temp_overview_chart.addListener("dataUpdated", zoomChart);
+            function zoomChart() {
+                temp_overview_chart.zoomToIndexes(tempChartData.length - 8,tempChartData.length);
+            }
+
+            // AXES
+            // category
+            var categoryAxis = temp_overview_chart.categoryAxis;
+            categoryAxis.parseDates = true; // as our data is date-based
+            categoryAxis.minPeriod = "mm";
+            categoryAxis.dashLength = 3;
+            categoryAxis.autoGridCount = true;
+            categoryAxis.gridAlpha = 0.1;
+            categoryAxis.gridColor = "#000";
+            categoryAxis.axisColor = "#000";
+
+            // as we have data of different units, we create two different value axes
+            // waterTemp value axis
+            var tempValueAxis = new AmCharts.ValueAxis();
+            tempValueAxis.title = "Temperature (F°)";
+            tempValueAxis.gridAlpha = 0.2;
+            tempValueAxis.axisAlpha = 0;
+            tempValueAxis.dashLength = 3;
+            tempValueAxis.guides = [
+                {
+                    "fillAlpha": 0.2,
+                    "fillColor": "#3D73B5",
+                    "lineAlpha": 0.5,
+                    "lineColor": "#757575",
+                    "toValue": 75, //end value for guide
+                    "value": 65 //start value for guide
+                },
+                {
+                    "fillAlpha": 0.2,
+                    "fillColor": "#41A6A8",
+                    "lineAlpha": 0.5,
+                    "lineColor": "#757575",
+                    "toValue": 80, //end value for guide
+                    "value": 70 //start value for guide
+                }
+            ];
+            temp_overview_chart.addValueAxis(tempValueAxis);
+
+            // GRAPHS
+            // waterTemp graph
+            var waterTempGraph = new AmCharts.AmGraph();
+            waterTempGraph.valueField = "waterTemp";
+            waterTempGraph.title = "Water Temperature";
+            waterTempGraph.type = "line";
+            waterTempGraph.bullet = "round";
+            waterTempGraph.bulletSize = 10;
+            //waterTempGraph.fillAlphas = 0.1;
+            waterTempGraph.valueAxis = tempValueAxis; // indicate which axis should be used
+            waterTempGraph.balloonText = "Water Temp: [[value]] F°";
+            waterTempGraph.legendValueText = " ";
+            //waterTempGraph.legendPeriodValueText = "total: [[value.sum]] &mu;S";
+            waterTempGraph.lineColor = "#3D73B5";
+            waterTempGraph.alphaField = "alpha";
+            temp_overview_chart.addGraph(waterTempGraph);
+
+            // airTemp graph
+            var airTempGraph = new AmCharts.AmGraph();
+            airTempGraph.valueField = "airTemp";
+            airTempGraph.id = "airTemp_overview_graph";
+            //tdsGraph.classNameField = "bulletClass";
+            airTempGraph.title = "Air Temperature";
+            airTempGraph.type = "line";
+            airTempGraph.valueAxis = tempValueAxis; // indicate which axis should be used
+            airTempGraph.lineColor = "#40BF9E";
+            //tdsGraph.fillColors = "#40BF9E";
+            //tdsGraph.fillAlphas = 0.7;
+            airTempGraph.columnWidth = 4;
+            //tdsGraph.lineThickness = 2;
+            airTempGraph.legendValueText = " ";
+            //tdsGraph.descriptionField = "townName";
+            airTempGraph.bullet = "round";
+            airTempGraph.bulletSize = 10; // indicate which field should be used for bullet size
+            airTempGraph.bulletBorderColor = "#359E83";
+            //tdsGraph.bulletBorderAlpha = 1;
+            //tdsGraph.bulletBorderThickness = 2;
+            //tdsGraph.bulletColor = "#40BF9E";
+            //tdsGraph.labelText = "[[value]]"; // not all data points has townName2 specified, that's why labels are displayed only near some of the bullets.
+            airTempGraph.labelPosition = "right";
+            airTempGraph.balloonText = "Air Temp:[[value]] F°";
+            airTempGraph.showBalloon = true;
+            airTempGraph.animationPlayed = true;
+            temp_overview_chart.addGraph(airTempGraph);
+
+            // CURSOR
+            var chartCursor = new AmCharts.ChartCursor();
+            chartCursor.zoomable = true;
+            chartCursor.categoryBalloonDateFormat = undefined;
+            chartCursor.cursorAlpha = 0;
+            chartCursor.valueBalloonsEnabled = false;
+            chartCursor.valueLineBalloonEnabled = true;
+            chartCursor.valueLineEnabled = true;
+            chartCursor.valueLineAlpha = 0.5;
+            chartCursor.cursorColor = "#41A6A8";
+            temp_overview_chart.addChartCursor(chartCursor);
+
+            // LEGEND
+            var legend = new AmCharts.AmLegend();
+            legend.bulletType = "round";
+            legend.equalWidths = false;
+            legend.valueWidth = 120;
+            legend.useGraphSettings = true;
+            legend.color = "#000";
+            temp_overview_chart.addLegend(legend);
+
+            // SCROLLBAR
+            var chartScrollbar = new AmCharts.ChartScrollbar();
+            temp_overview_chart.addChartScrollbar(chartScrollbar);
+
+            // WRITE
+            temp_overview_chart.write("temp_overview_chartDiv");
+
+        });
+
         //Create AirTemp Graph
         AmCharts.ready(function () {
             // SERIAL CHART
             var airTemp_chart = new AmCharts.AmSerialChart();
 
-            airTemp_chart.dataProvider = airTempData;
+            airTemp_chart.dataProvider = tempChartData;
             airTemp_chart.marginLeft = 10;
             airTemp_chart.categoryField = "date";
 
             // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
             airTemp_chart.addListener("dataUpdated", zoomChart);
             function zoomChart() {
-                // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-                //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                airTemp_chart.zoomToIndexes(0,30);
+                airTemp_chart.zoomToIndexes(tempChartData.length - 8,tempChartData.length);
             }
 
             // AXES
@@ -811,8 +929,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
             //categoryAxis.offset = 83;
 
             // value
@@ -821,12 +937,21 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "Temperature (F°)";
+            valueAxis.guides = [{
+                "fillAlpha": 0.2,
+                "fillColor": "#41A6A8",
+                "lineAlpha": 0.5,
+                "lineColor": "#757575",
+                "toValue": 80,
+                "value": 65
+            }];
             airTemp_chart.addValueAxis(valueAxis);
 
             // GRAPH
             airTemp_graph = new AmCharts.AmGraph();
             airTemp_graph.type = "line"; // this line makes the graph smoothed line.
-            airTemp_graph.lineColor = "#FF9E3A";
+            airTemp_graph.lineColor = "#40BF9E";
             airTemp_graph.negativeBase = "50";
             airTemp_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
             airTemp_graph.bullet = "round";
@@ -835,9 +960,9 @@
             airTemp_graph.bulletBorderAlpha = 1;
             airTemp_graph.bulletBorderThickness = 2;
             airTemp_graph.lineThickness = 2;
-            airTemp_graph.valueField = "value";
+            airTemp_graph.valueField = "airTemp";
             airTemp_graph.selectedBackgroundColor = "#FFF";
-            airTemp_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            airTemp_graph.balloonText = "[[category]]<br><b>[[value]] F°</b>";
             airTemp_chart.addGraph(airTemp_graph);
 
             // CURSOR
@@ -861,7 +986,7 @@
             // SERIAL CHART
             var waterTemp_chart = new AmCharts.AmSerialChart();
 
-            waterTemp_chart.dataProvider = waterTempData;
+            waterTemp_chart.dataProvider = tempChartData;
             waterTemp_chart.marginLeft = 10;
             waterTemp_chart.categoryField = "date";
 
@@ -870,7 +995,7 @@
             function zoomChart() {
                 // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
                 //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                waterTemp_chart.zoomToIndexes(0,30);
+                waterTemp_chart.zoomToIndexes(tempChartData.length - 8,tempChartData.length);
             }
 
             // AXES
@@ -879,9 +1004,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -889,12 +1011,21 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "Temperature (F°)";
+            valueAxis.guides = [{
+                "fillAlpha": 0.2,
+                "fillColor": "#3D73B5",
+                "lineAlpha": 0.5,
+                "lineColor": "#757575",
+                "toValue": 75,
+                "value": 65
+            }];
             waterTemp_chart.addValueAxis(valueAxis);
 
             // GRAPH
             waterTemp_graph = new AmCharts.AmGraph();
             waterTemp_graph.type = "line"; // this line makes the graph smoothed line.
-            waterTemp_graph.lineColor = "#FF9E3A";
+            waterTemp_graph.lineColor = "#3D73B5";
             waterTemp_graph.negativeBase = "50";
             waterTemp_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
             waterTemp_graph.bullet = "round";
@@ -903,9 +1034,9 @@
             waterTemp_graph.bulletBorderAlpha = 1;
             waterTemp_graph.bulletBorderThickness = 2;
             waterTemp_graph.lineThickness = 2;
-            waterTemp_graph.valueField = "value";
+            waterTemp_graph.valueField = "waterTemp";
             waterTemp_graph.selectedBackgroundColor = "#FFF";
-            waterTemp_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            waterTemp_graph.balloonText = "[[category]]<br><b>[[value]] F°</b>";
             waterTemp_chart.addGraph(waterTemp_graph);
 
             // CURSOR
@@ -929,7 +1060,7 @@
             // SERIAL CHART
             var humidity_chart = new AmCharts.AmSerialChart();
 
-            humidity_chart.dataProvider = humidityData;
+            humidity_chart.dataProvider = humidityChartData;
             humidity_chart.marginLeft = 10;
             humidity_chart.categoryField = "date";
 
@@ -938,7 +1069,7 @@
             function zoomChart() {
                 // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
                 //ph_chart.zoomToDates(new Date(1972, 0), new Date(1984, 0));
-                humidity_chart.zoomToIndexes(humidityData.length - 12,humidityData.length);
+                humidity_chart.zoomToIndexes(humidityChartData.length - 8,humidityChartData.length);
             }
 
             // AXES
@@ -947,9 +1078,6 @@
             categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
             categoryAxis.minPeriod = "mm"; // our data is yearly, so we set minPeriod to YYYY
             categoryAxis.dashLength = 3;
-            categoryAxis.minorGridEnabled = true;
-            categoryAxis.minorGridAlpha = 0.1;
-            //categoryAxis.offset = 83;
 
             // value
             var valueAxis = new AmCharts.ValueAxis();
@@ -957,14 +1085,15 @@
             valueAxis.inside = true;
             valueAxis.dashLength = 3;
             valueAxis.labelOffset = -30;
+            valueAxis.title = "Relative Humidity (%)"
             humidity_chart.addValueAxis(valueAxis);
 
             // GRAPH
             humidity_graph = new AmCharts.AmGraph();
             humidity_graph.type = "line"; // this line makes the graph smoothed line.
-            humidity_graph.lineColor = "#FF9E3A";
-            humidity_graph.negativeBase = "50";
-            humidity_graph.negativeLineColor = "#41A6A8"; // this line makes the graph to change color when it drops below 0
+            humidity_graph.lineColor = "#7BE9FF";
+            humidity_graph.negativeBase = "10";
+            humidity_graph.negativeLineColor = "#E5BA9F"; // this line makes the graph to change color when it drops below 0
             humidity_graph.bullet = "round";
             humidity_graph.bulletSize = 8;
             humidity_graph.bulletBorderColor = "#FFFFFF";
@@ -973,7 +1102,7 @@
             humidity_graph.lineThickness = 2;
             humidity_graph.valueField = "value";
             humidity_graph.selectedBackgroundColor = "#FFF";
-            humidity_graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>";
+            humidity_graph.balloonText = "[[category]]<br><b>[[value]] %</b>";
             humidity_chart.addGraph(humidity_graph);
 
             // CURSOR
@@ -991,10 +1120,6 @@
             // WRITE
             humidity_chart.write("humidity_chartDiv");
         });
-
-
-
-        // this method is called when chart is first inited as we listen for "dataUpdated" event
 
     </script>
 </head>
@@ -1334,14 +1459,14 @@
                                         {% endif %}
                                        <div class="panel-group" role="tablist">
                                            <div class="panel panel-default">
-                                               <div class="panel-heading" role="tab" id="collapseListGroupHeading_sensors_Mario">
+                                               <div class="panel-heading" role="tab" id="collapseListGroupHeading_sensors_{{device[0][0]}}">
                                                    <h4 class="panel-title">
-                                                       <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_sensors_Mario" aria-expanded="false" aria-controls="collapseListGroup3">
+                                                       <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_sensors_{{device[0][0]}}" aria-expanded="false" aria-controls="collapseListGroup3">
                                                            Sensors
                                                        </a>
                                                    </h4>
                                                </div>
-                                               <div id="collapseListGroup_sensors_Mario" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors_Mario">
+                                               <div id="collapseListGroup_sensors_{{device[0][0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors_{{device[0][0]}}">
                                                    <ul class="list-group">
                                                         {% for sensor in grow[0][2] %}
                                                            <li class="list-group-item">{{sensor}} <span class="badge bg-color-greenLight">Active</span></li> 
@@ -1352,14 +1477,14 @@
                                        </div>
                                        <div class="panel-group" role="tablist">
                                            <div class="panel panel-default">
-                                               <div class="panel-heading" role="tab" id="collapseListGroupHeading_actuators_Mario">
+                                               <div class="panel-heading" role="tab" id="collapseListGroupHeading_actuators_{{device[0][0]}}">
                                                    <h4 class="panel-title">
-                                                       <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_actuators_Mario" aria-expanded="false" aria-controls="collapseListGroup_actuators_Mario">
+                                                       <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup_actuators_{{device[0][0]}}" aria-expanded="false" aria-controls="collapseListGroup_actuators_{{device[0][0]}}">
                                                            Actuators
                                                        </a>
                                                    </h4>
                                                </div>
-                                               <div id="collapseListGroup_actuators_Mario" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators_Mario">
+                                               <div id="collapseListGroup_actuators_{{device[0][0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators_{{device[0][0]}}">
                                                    <ul class="list-group">
                                                    {% for key, value in grow[0][3].items() %}
                                                        <li class="list-group-item">{{key}} <span class="badge bg-color-greenDark txt-color-white">#{{value}}</span></li>
@@ -1368,7 +1493,7 @@
                                                </div>
                                            </div>
                                        </div>
-                                       <button id="Mario_edit_btn" class="btn btn-primary edit-btn" data-toggle="modal" data-target="#device_modal"><span class="fa fa-lg fa-pencil"></span> Edit</button>
+                                       <button id="{{device[0][0]}}_edit_btn" class="bryan btn btn-primary edit-btn" data-toggle="modal" data-target="#device_modal"><span class="fa fa-lg fa-pencil"></span> Edit</button>
                                        <form action="{{'/delete_grow/'+current_grow}}" method="POST">
                                             <button style="margin-top: 5px; width: 100%" type="submit" class="btn btn-danger">Delete Grow</button>
                                             <input type="hidden" name="grow_delete" value="true">
@@ -1450,7 +1575,7 @@
                                                             <div class="row">
                                                         {% endif %}
                                                         
-                                                           <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-Mario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                                                           <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-{{device[0]}}_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
                                                                <header>
                                                                    <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
                                                                    <h2><strong>{{device[0]}}:</strong> <i>{{device[1]}}</i></h2>
@@ -1467,9 +1592,9 @@
                                                                         {% endif %}
                                                                         <form action ="{{'/link/'+current_grow+'/'+device[0]}}" method = "post">
                                                                         {% if device[0] == current_device %}
-                                                                       <button id="Mario_link_btn" class="btn btn-primary edit-btn" disabled><span class="fa fa-lg fa-link"></span> Link
+                                                                       <button id="{{device[0]}}_link_btn" class="btn btn-primary edit-btn" disabled><span class="fa fa-lg fa-link"></span> Link
                                                                         {% else %}
-                                                                        <button id="Mario_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span>
+                                                                        <button id="{{device[0]}}_link_btn" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span>
                                                                         Link
                                                                         {% endif %}
                                                                         </button>
@@ -1546,7 +1671,7 @@
                                                     <form id="grow_controls" class="smart-form">
                                                         <fieldset>
                                                             <section id="actuator_controls">
-                                                                <class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
+                                                                <label class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
                                                                 <label for="actuator_control_1_actuator" class="label" >Time Based Activity 1: </label>
                                                                 <label for="actuator_control_1_actuator" class="label">Actuator:</label>
                                                                 <label id="actuator_control_1_actuator" class="select actuator_select">
@@ -1975,486 +2100,417 @@
 <!-- END MAIN PANEL -->
 
 <!-- Add Device Button -->
-<a class="add_device"  data-toggle="modal" data-target="#add_new_grow_modal"><img src="../../static/img/flat_plus.png"></a>
+<a class="add_device"  data-toggle="modal" data-target="#add_plant_device_modal"><img src="../../static/img/flat_plus.png"></a>
 <!-- End of Button Device Button -->
 
 <!--link to plant modal-->
-        <div id="add_new_grow_modal" class="modal fade switch" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Create Grow From Plant Profile</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="smart-form" id="new_grow_form">
-                            <fieldset>
-                                <section>
-                                    <label class="label">Grow Name</label>
-                                    <label class="input">
-                                        <input name="grow_name" id="grow_name" type="text">
-                                    </label>
-                                    <input type="text" name="plant_type" id="add_grow_plant_type" value="" hidden="hidden">
-                                </section>
-                                <section>
-                                    <label class="label">Do You Want To Help Us With An Experiment?</label>
-                                    <div class="inline-group">
-                                        <label class="radio">
-                                            <input type="radio" name="experiment" value="true" id="experiment_yes">
-                                            <i></i>Yes
-                                        </label>
-                                        <label class="radio">
-                                            <input type="radio" name="experiment" value="false" id="experiment_no">
-                                            <i></i>No
-                                        </label>
-                                    </div>
-                                </section>
-                                <section id="default_profile_radio">
-                                    <label class="label">Do You Want To Use The Defaul Profile?</label>
-                                    <div class="inline-group">
-                                        <label class="radio">
-                                            <input type="radio" name="default_profile" value="true" id="default_profile_yes">
-                                            <i></i>Yes
-                                        </label>
-                                        <label class="radio">
-                                            <input type="radio" name="default_profile" value="false" id="default_profile_no">
-                                            <i></i>No
-                                        </label>
-                                    </div>
-                                </section>
-                            </fieldset>
-                            <section id="grow_options">
-                                <header>
-                                    Grow Set Up
-                                </header>
-                                <fieldset name="grow_mods" id="grow_mods">
-                                    <section>
-                                        <label class="label"><strong>pH Range</strong></label>
-                                        <div class="inline-group">
-                                                <label class="radio">
-                                                    <input type="radio" name="pH" value="pH_below_default">
-                                                    <i></i>.25 Below Default ()
-                                                </label>
-                                                <label class="radio">
-                                                    <input type="radio" name="pH" value="pH_above_default">
-                                                    <i></i>.25 Below Default ()
-                                                </label>
-                                        </div>
-                                    </section>
-                                    <section>
-                                        <label class="label"><strong>EC Range</strong></label>
-                                        <div class="inline-group">
-                                            <label class="radio">
-                                                <input type="radio" name="ec" value="ec_below_default">
-                                                <i></i>.25 Below Default ()
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="ec" value="ec_above_default">
-                                                <i></i>.25 Below Default ()
-                                            </label>
-                                        </div>
-                                    </section>
-                                    <section>
-                                        <label class="label"><strong>Lights</strong></label>
-                                        <div class="inline-group">
-                                            <label class="radio">
-                                                <input type="radio" name="lights" value="lights_24on">
-                                                <i></i>24H On
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="lights" value="18H_on">
-                                                <i></i>18H On 6H Off
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="lights" value="12H_on">
-                                                <i></i>12H On 12H Off
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="lights" value="6H_on">
-                                                <i></i>6H On 18H Off
-                                            </label>
-                                        </div>
-                                    </section>
-                                    <section>
-                                        <label class="label"><strong>Water Cycle</strong></label>
-                                        <div class="inline-group">
-                                            <label class="radio">
-                                                <input type="radio" name="water" value="5min_on">
-                                                <i></i>5Min On 5Min Off
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="water" value="15min_on">
-                                                <i></i>15Min On 15Min Off
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="water" value="30min_on">
-                                                <i></i>30Min on 30Min off
-                                            </label>
-                                        </div>
-                                    </section>
-                                </fieldset>
-                            </section>
+<div id="add_plant_device_modal" class="modal fade switch" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Link Device To Plant</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Mario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
+                            <h2><strong>Mario:</strong> <i>Arduino</i></h2>
+                        </header>
 
-
-
-                            <!--start of conditional controls-->
-                            <section id="user_controls">
-                                <fieldset id="actuator_controls">
-                                    <label class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
-                                    <section id="actuator_control1">
-                                        <label for="actuator_control_1_actuator" class="label" >Time Based Activity 1: </label>
-                                        <label for="actuator_control_1_actuator" class="label">Actuator:</label>
-                                        <label id="actuator_control_1_actuator" class="select actuator_select">
-                                            <select name="actuator_control_1_actuator">
-                                                <option value="">Choose an Actuator</option>
-                                                <option value="Light_1">Light #1</option>
-                                                <option value="Light_2">Light #2</option>
-                                                <option value="Water_Pump_1">Water Pump #1</option>
-                                                <option value="Nutrient_Pump_1">Nutrient Pump #1</option>
-                                            </select><i></i>
-                                        </label>
-                                        <label for="actuator_control_1_time_int" class="label">Every: </label>
-                                        <section class="col col-6">
-                                            <label id="actuator_control_1_time_int" class="select">
-                                                <select name="time_int">
-                                                    <option value="">Choose a Time</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
-                                                    <option value="7">7</option>
-                                                    <option value="8">8</option>
-                                                    <option value="9">9</option>
-                                                    <option value="10">10</option>
-                                                    <option value="11">11</option>
-                                                    <option value="12">12</option>
-                                                    <option value="12">13</option>
-                                                    <option value="12">14</option>
-                                                    <option value="12">15</option>
-                                                    <option value="12">30</option>
-                                                    <option value="12">45</option>
-                                                </select> <i></i>
-                                            </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label id="actuator_control_1_time_hour_min" class="select">
-                                                <select name="time_hour_min">
-                                                    <option value="">Choose Hour/Min</option>
-                                                    <option value="hours">Hours</option>
-                                                    <option value="min">Minutes</option>
-                                                </select> <i></i>
-                                            </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="input"> <i class="icon-append fa fa-calendar"></i>
-                                                <input type="text" name="startdate_activity_1" id="startdate_activity_1" placeholder="Start date">
-                                            </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="input"> <i class="icon-append fa fa-calendar"></i>
-                                                <input type="text" name="finishdate_activity_1" id="finishdate_activity_1" placeholder="Finish date">
-                                            </label>
-                                        </section>
-                                    </section>
-                                </fieldset>
-                                <hr>
-                                <fieldset name="grow_conditions">
-                                    <label class="label"><strong>What To Do If...(Conditions):</strong></label>
-                                    <section id="actuator_conditions">
-                                        <section class="col col-3">
-                                            <label class="label">If This</label>
-                                            <label class="select">
-                                                <select id="if_this_condition_1" name="if_this_condition_1" class="input-sm">
-                                                    <option value="">Choose</option>
-                                                    <option value="pH">pH</option>
-                                                    <option value="TDS">TDS</option>
-                                                </select> <i></i>
-                                            </label>
-                                        </section>
-                                        <section class="col col-3">
-                                            <label class="label">Is</label>
-                                            <label class="select">
-                                                <select id="is_condition_1" name="is_condition_1" class="input-sm">
-                                                    <option value="">Choose</option>
-                                                    <option value=">">Greater Than</option>
-                                                    <option value=">=">Greater Than Or Equal To</option>
-                                                    <option value="<">Less Than</option>
-                                                    <option value="<=">Less Than Or Equal To</option>
-                                                    <option value="=">Equals</option>
-                                                </select> <i></i> </label>
-                                        </section>
-                                        <section class="col col-3">
-                                            <label class="label">To This</label>
-                                            <label class="select">
-                                                <select id="to_this_condition_1" name="to_this_condition_1" class="input-sm">
-                                                    <option value="">Choose</option>
-                                                    <option value="0">0</option>
-                                                    <option value="0.25">0.25</option>
-                                                    <option value="0.5">0.5</option>
-                                                    <option value="0.75">0.75</option>
-                                                    <option value="1.0">1.0</option>
-                                                    <option value="1.25">1.25</option>
-                                                    <option value="1.5">1.5</option>
-                                                    <option value="1.75">1.75</option>
-                                                    <option value="2.0">2.0</option>
-                                                    <option value="2.25">2.25</option>
-                                                    <option value="2.5">2.5</option>
-                                                    <option value="2.75">2.75</option>
-                                                    <option value="3.0">3.0</option>
-                                                    <option value="3.25">3.25</option>
-                                                    <option value="3.5">3.5</option>
-                                                    <option value="3.75">3.75</option>
-                                                    <option value="4.0">4.0</option>
-                                                    <option value="4.25">4.25</option>
-                                                    <option value="4.5">4.5</option>
-                                                    <option value="4.75">4.75</option>
-                                                    <option value="5.0">5.0</option>
-                                                    <option value="5.25">5.25</option>
-                                                    <option value="5.5">5.5</option>
-                                                    <option value="5.75">5.75</option>
-                                                    <option value="6.0">6.0</option>
-                                                    <option value="6.25">6.25</option>
-                                                    <option value="6.5">6.5</option>
-                                                    <option value="6.75">6.75</option>
-                                                    <option value="7.0">7.0</option>
-                                                    <option value="7.25">7.25</option>
-                                                    <option value="7.5">7.5</option>
-                                                    <option value="7.75">7.75</option>
-                                                    <option value="8.0">8.0</option>
-                                                    <option value="8.25">8.25</option>
-                                                    <option value="8.5">8.5</option>
-                                                    <option value="8.75">8.75</option>
-                                                    <option value="9.0">9.0</option>
-                                                    <option value="9.25">9.25</option>
-                                                    <option value="9.5">9.5</option>
-                                                    <option value="9.75">9.75</option>
-                                                    <option value="10.0">10.0</option>
-                                                    <option value="10.25">10.25</option>
-                                                    <option value="10.5">10.5</option>
-                                                    <option value="10.75">10.75</option>
-                                                    <option value="11.0">11.0</option>
-                                                    <option value="11.25">11.25</option>
-                                                    <option value="11.5">11.5</option>
-                                                    <option value="11.75">11.75</option>
-                                                    <option value="12.0">12.0</option>
-                                                    <option value="12.25">12.25</option>
-                                                    <option value="12.5">12.5</option>
-                                                    <option value="12.75">12.75</option>
-                                                    <option value="13.0">13.0</option>
-                                                    <option value="13.25">13.25</option>
-                                                    <option value="13.5">13.5</option>
-                                                    <option value="13.75">13.75</option>
-                                                    <option value="14.0">14.0</option>
-                                                    <option value="15">15</option>
-                                                    <option value="25">25</option>
-                                                    <option value="35">35</option>
-                                                    <option value="45">45</option>
-                                                    <option value="55">55</option>
-                                                    <option value="65">65</option>
-                                                    <option value="75">75</option>
-                                                    <option value="85">85</option>
-                                                    <option value="95">95</option>
-                                                    <option value="105">105</option>
-                                                    <option value="115">115</option>
-                                                    <option value="125">125</option>
-                                                    <option value="135">135</option>
-                                                    <option value="145">145</option>
-                                                    <option value="155">155</option>
-                                                    <option value="165">165</option>
-                                                    <option value="175">175</option>
-                                                    <option value="185">185</option>
-                                                    <option value="195">195</option>
-                                                    <option value="205">205</option>
-                                                    <option value="215">215</option>
-                                                    <option value="225">225</option>
-                                                    <option value="235">235</option>
-                                                    <option value="245">245</option>
-                                                    <option value="255">255</option>
-                                                    <option value="265">265</option>
-                                                    <option value="275">275</option>
-                                                    <option value="285">285</option>
-                                                    <option value="295">295</option>
-                                                    <option value="305">305</option>
-                                                    <option value="315">315</option>
-                                                    <option value="325">325</option>
-                                                    <option value="335">335</option>
-                                                    <option value="345">345</option>
-                                                    <option value="355">355</option>
-                                                    <option value="365">365</option>
-                                                    <option value="375">375</option>
-                                                    <option value="385">385</option>
-                                                    <option value="395">395</option>
-                                                    <option value="405">405</option>
-                                                    <option value="415">415</option>
-                                                    <option value="425">425</option>
-                                                    <option value="435">435</option>
-                                                    <option value="445">445</option>
-                                                    <option value="455">455</option>
-                                                    <option value="465">465</option>
-                                                    <option value="475">475</option>
-                                                    <option value="485">485</option>
-                                                    <option value="495">495</option>
-                                                    <option value="505">505</option>
-                                                    <option value="515">515</option>
-                                                    <option value="525">525</option>
-                                                    <option value="535">535</option>
-                                                    <option value="545">545</option>
-                                                    <option value="555">555</option>
-                                                    <option value="565">565</option>
-                                                    <option value="575">575</option>
-                                                    <option value="585">585</option>
-                                                    <option value="595">595</option>
-                                                    <option value="605">605</option>
-                                                    <option value="615">615</option>
-                                                    <option value="625">625</option>
-                                                    <option value="635">635</option>
-                                                    <option value="645">645</option>
-                                                    <option value="655">655</option>
-                                                    <option value="665">665</option>
-                                                    <option value="675">675</option>
-                                                    <option value="685">685</option>
-                                                    <option value="695">695</option>
-                                                    <option value="705">705</option>
-                                                    <option value="715">715</option>
-                                                    <option value="725">725</option>
-                                                    <option value="735">735</option>
-                                                    <option value="745">745</option>
-                                                    <option value="755">755</option>
-                                                    <option value="765">765</option>
-                                                    <option value="775">775</option>
-                                                    <option value="785">785</option>
-                                                    <option value="795">795</option>
-                                                    <option value="805">805</option>
-                                                    <option value="815">815</option>
-                                                    <option value="825">825</option>
-                                                    <option value="835">835</option>
-                                                    <option value="845">845</option>
-                                                    <option value="855">855</option>
-                                                    <option value="865">865</option>
-                                                    <option value="875">875</option>
-                                                    <option value="885">885</option>
-                                                    <option value="895">895</option>
-                                                    <option value="905">905</option>
-                                                    <option value="915">915</option>
-                                                    <option value="925">925</option>
-                                                    <option value="935">935</option>
-                                                    <option value="945">945</option>
-                                                    <option value="955">955</option>
-                                                    <option value="965">965</option>
-                                                    <option value="975">975</option>
-                                                    <option value="985">985</option>
-                                                    <option value="995">995</option>
-                                                    <option value="1005">1005</option>
-                                                    <option value="1015">1015</option>
-                                                    <option value="1025">1025</option>
-                                                    <option value="1035">1035</option>
-                                                    <option value="1045">1045</option>
-                                                    <option value="1055">1055</option>
-                                                    <option value="1065">1065</option>
-                                                    <option value="1075">1075</option>
-                                                    <option value="1085">1085</option>
-                                                    <option value="1095">1095</option>
-                                                    <option value="1105">1105</option>
-                                                    <option value="1115">1115</option>
-                                                    <option value="1125">1125</option>
-                                                    <option value="1135">1135</option>
-                                                    <option value="1145">1145</option>
-                                                    <option value="1155">1155</option>
-                                                    <option value="1165">1165</option>
-                                                    <option value="1175">1175</option>
-                                                    <option value="1185">1185</option>
-                                                    <option value="1200">1200</option>
-                                                </select> <i></i> </label>
-                                        </section>
-                                        <section class="col col-3">
-                                            <label class="label">Then Do</label>
-                                            <label class="select">
-                                                <select id="do_this_condition_1" name="do_this_condition_1" class="input-sm">
-                                                    <option value="">Choose</option>
-                                                    <option value="pH_Upper_On">pH Upper On</option>
-                                                    <option value="pH_Upper_Off">pH Upper Off</option>
-                                                    <option value="pH_Downer_On">pH Downer On</option>
-                                                    <option value="pH_Downer_Off">pH Downer Off</option>
-                                                    <option value="nutrient_On">Nutrient Pump On</option>
-                                                    <option value="nutrient_On">Nutrient Pump Off</option>
-                                                </select> <i></i> </label>
-                                        </section>
-                                    </section>
-                                </fieldset>
-                                <hr class="last_hr">
-
-                                <!--end of conditioncontrols-->
-                                <div class="grow_add_button_div">
-                                    <button id="add_control" class="btn btn-primary">Add Control</button>
-                                    <button id="add_condition" class="btn btn-primary">Add Condition</button>
-                                </div>
-                            </section>
-
-                            <div class="modal-footer">
-                                <button style="margin-top: 20px" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".device_modal">Next</button>
-                                <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
+                        <!-- widget div-->
+                        <div>
+                            <!-- widget content -->
+                            <div class="widget-body">
+                                <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                <button id="Mario_new_grow_link_btn" name="device" value="Mario" type="submit" class="btn btn-primary edit-btn device_link_btn"><span class="fa fa-lg fa-link"></span> Link</button>
                             </div>
-                        </form>
+                            <!-- end widget content -->
+
+                        </div>
+                        <!-- end widget div -->
+
+                    </div>
+                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Luigi_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
+                            <h2><strong>Luigi:</strong> <i>Arduino</i></h2>
+                        </header>
+
+                        <!-- widget div-->
+                        <div>
+                            <!-- widget content -->
+                            <div class="widget-body">
+                                <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                <button id="Luigi_new_grow_link_btn" name="device" value="Luigi" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
+                            </div>
+                            <!-- end widget content -->
+
+                        </div>
+                        <!-- end widget div -->
+
                     </div>
                 </div>
+                <div class="row">
+                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Wario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
+                            <h2><strong>Wario:</strong> <i>Arduino</i></h2>
+                        </header>
 
+                        <!-- widget div-->
+                        <div>
+                            <!-- widget content -->
+                            <div class="widget-body">
+                                <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                <button id="Wario_new_grow_link_btn" name="device" value="Wario" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
+                            </div>
+                            <!-- end widget content -->
+
+                        </div>
+                        <!-- end widget div -->
+
+                    </div>
+                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Toad_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
+                            <h2><strong>Toad:</strong> <i>Raspberry Pi</i></h2>
+                        </header>
+
+                        <!-- widget div-->
+                        <div>
+                            <!-- widget content -->
+                            <div class="widget-body">
+                                <img src="../../static/img/raspberry_pi2.png">
+                                <button id="Toad_new_grow_link_btn" name="device" value="Toad" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
+                            </div>
+                            <!-- end widget content -->
+
+                        </div>
+                        <!-- end widget div -->
+
+                    </div>
+                </div>
             </div>
         </div>
-        <!--end plant modal -->
-        
-        <!--link to device modal-->
-        <div id="add_plant_device_modal" class="modal fade device_modal " role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Link Device To Plant</h4>
-                    </div>
-                    <div class="modal-body">
-                    {% for device in my_devices %}
-                        {% if loop.index%2 == 1%}
-                            <div class="row">
-                        {% endif %}
-                            <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="wid-id-link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                                    <h2><strong>{{device[0]}}:</strong> <i>{{device[1]}}</i></h2>
-                                </header>
-
-                                <!-- widget div-->
-                                <div>
-                                    <!-- widget content -->
-                                    <div class="widget-body">
-                                        {% if device[1] == "Arduino" %}
-                                            <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                        {% elif device[1] == "Raspberry Pi" %}
-                                            <img src="../../static/img/raspberry_pi2.png">
-                                        {% endif %}
-                                        <!--Anubhav!!!! NOT SURE IF THIS IS THE ACTION YOU WANT, FEEL FREE TO FUCK WITH IT!-->
-                                        <form class="device_link_forms" action="/add_grows/" method="POST">
-                                            <button id="{{device[0]+'_link_btn'}}" name="device" value="{{device[0]}}" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                        </form>
-                                    </div>
-                                    <!-- end widget content -->
-
-                                </div>
-                                <!-- end widget div -->
-
-                            </div>
-                                {% if loop.index%2 == 0 %}
-                                        </div>
-                                {% endif %}
-                            {% endfor %}
-                            {% if (my_devices|length)%2 !=0 %}
-                                </div>
-                            {%endif%}
-                    </div>
+    </div>
+</div>
+<div id="add_new_grow_modal" class="modal fade switch" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Set Grow Controls</h4>
+            </div>
+            <div class="modal-body">
+                <form name="new_grow_controls" id="new_grow_controls" class="smart-form">
+                    <section>
+                        <label class="label">Grow Name</label>
+                        <label class="input">
+                            <input name="new_grow_name" id="new_grow_name" type="text">
+                        </label>
+                    </section>
+                    <fieldset name="new_actuator_controls">
+                        <label class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
+                        <section id="new_grow_actuator_controls">
+                            <label class="label" >Time Based Activity 1: </label>
+                            <label for="new_grow_actuator_control_1_actuator" class="label">Actuator:</label>
+                            <label class="select actuator_select">
+                                <select id="new_grow_actuator_control_1_actuator" name="actuator_control_1_actuator">
+                                    <option value="">Choose an Actuator</option>
+                                    <option value="Light_1">Light #1</option>
+                                    <option value="Light_2">Light #2</option>
+                                    <option value="Water_Pump_1">Water Pump #1</option>
+                                    <option value="Nutrient_Pump_1">Nutrient Pump #1</option>
+                                </select><i></i>
+                            </label>
+                            <label class="label">Every: </label>
+                            <section class="col col-6">
+                                <label class="select">
+                                    <select id="new_grow_actuator_control_1_time_int" name="actuator_control_1_time_int">
+                                        <option value="">Choose a Time</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="12">13</option>
+                                        <option value="12">14</option>
+                                        <option value="12">15</option>
+                                        <option value="12">30</option>
+                                        <option value="12">45</option>
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="select">
+                                    <select id="new_grow_actuator_control_1_time_hour_min" name="time_hour_min">
+                                        <option value="">Choose Hour/Min</option>
+                                        <option value="hours">Hours</option>
+                                        <option value="min">Minutes</option>
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="input"> <i class="icon-append fa fa-calendar"></i>
+                                    <input type="text" name="startdate_activity_1" id="new_grow_startdate_activity_1" placeholder="Start date">
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label class="input"> <i class="icon-append fa fa-calendar"></i>
+                                    <input type="text" name="finishdate_activity_1" id="new_grow_finishdate_activity_1" placeholder="Finish date">
+                                </label>
+                            </section>
+                        </section>
+                    </fieldset>
+                    <hr>
+                    <fieldset name="grow_conditions">
+                        <label class="label"><strong>What To Do If...(Conditions):</strong></label>
+                        <section id="new_grow_actuator_conditions">
+                            <section class="col col-3">
+                                <label class="label">If This</label>
+                                <label class="select">
+                                    <select id="new_grow_if_this_condition_1" name="if_this_condition_1" class="input-sm">
+                                        <option value="">Choose</option>
+                                        <option value="pH">pH</option>
+                                        <option value="TDS">TDS</option>
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                            <section class="col col-3">
+                                <label class="label">Is</label>
+                                <label class="select">
+                                    <select id="new_grow_is_condition_1" name="is_condition_1" class="input-sm">
+                                        <option value="">Choose</option>
+                                        <option value=">">Greater Than</option>
+                                        <option value=">=">Greater Than Or Equal To</option>
+                                        <option value="<">Less Than</option>
+                                        <option value="<=">Less Than Or Equal To</option>
+                                        <option value="=">Equals</option>
+                                    </select> <i></i> </label>
+                            </section>
+                            <section class="col col-3">
+                                <label class="label">To This</label>
+                                <label class="select">
+                                    <select id="new_grow_to_this_condition_1" name="to_this_condition_1" class="input-sm">
+                                        <option value="">Choose</option>
+                                        <option value="0">0</option>
+                                        <option value="0.25">0.25</option>
+                                        <option value="0.5">0.5</option>
+                                        <option value="0.75">0.75</option>
+                                        <option value="1.0">1.0</option>
+                                        <option value="1.25">1.25</option>
+                                        <option value="1.5">1.5</option>
+                                        <option value="1.75">1.75</option>
+                                        <option value="2.0">2.0</option>
+                                        <option value="2.25">2.25</option>
+                                        <option value="2.5">2.5</option>
+                                        <option value="2.75">2.75</option>
+                                        <option value="3.0">3.0</option>
+                                        <option value="3.25">3.25</option>
+                                        <option value="3.5">3.5</option>
+                                        <option value="3.75">3.75</option>
+                                        <option value="4.0">4.0</option>
+                                        <option value="4.25">4.25</option>
+                                        <option value="4.5">4.5</option>
+                                        <option value="4.75">4.75</option>
+                                        <option value="5.0">5.0</option>
+                                        <option value="5.25">5.25</option>
+                                        <option value="5.5">5.5</option>
+                                        <option value="5.75">5.75</option>
+                                        <option value="6.0">6.0</option>
+                                        <option value="6.25">6.25</option>
+                                        <option value="6.5">6.5</option>
+                                        <option value="6.75">6.75</option>
+                                        <option value="7.0">7.0</option>
+                                        <option value="7.25">7.25</option>
+                                        <option value="7.5">7.5</option>
+                                        <option value="7.75">7.75</option>
+                                        <option value="8.0">8.0</option>
+                                        <option value="8.25">8.25</option>
+                                        <option value="8.5">8.5</option>
+                                        <option value="8.75">8.75</option>
+                                        <option value="9.0">9.0</option>
+                                        <option value="9.25">9.25</option>
+                                        <option value="9.5">9.5</option>
+                                        <option value="9.75">9.75</option>
+                                        <option value="10.0">10.0</option>
+                                        <option value="10.25">10.25</option>
+                                        <option value="10.5">10.5</option>
+                                        <option value="10.75">10.75</option>
+                                        <option value="11.0">11.0</option>
+                                        <option value="11.25">11.25</option>
+                                        <option value="11.5">11.5</option>
+                                        <option value="11.75">11.75</option>
+                                        <option value="12.0">12.0</option>
+                                        <option value="12.25">12.25</option>
+                                        <option value="12.5">12.5</option>
+                                        <option value="12.75">12.75</option>
+                                        <option value="13.0">13.0</option>
+                                        <option value="13.25">13.25</option>
+                                        <option value="13.5">13.5</option>
+                                        <option value="13.75">13.75</option>
+                                        <option value="14.0">14.0</option>
+                                        <option value="15">15</option>
+                                        <option value="25">25</option>
+                                        <option value="35">35</option>
+                                        <option value="45">45</option>
+                                        <option value="55">55</option>
+                                        <option value="65">65</option>
+                                        <option value="75">75</option>
+                                        <option value="85">85</option>
+                                        <option value="95">95</option>
+                                        <option value="105">105</option>
+                                        <option value="115">115</option>
+                                        <option value="125">125</option>
+                                        <option value="135">135</option>
+                                        <option value="145">145</option>
+                                        <option value="155">155</option>
+                                        <option value="165">165</option>
+                                        <option value="175">175</option>
+                                        <option value="185">185</option>
+                                        <option value="195">195</option>
+                                        <option value="205">205</option>
+                                        <option value="215">215</option>
+                                        <option value="225">225</option>
+                                        <option value="235">235</option>
+                                        <option value="245">245</option>
+                                        <option value="255">255</option>
+                                        <option value="265">265</option>
+                                        <option value="275">275</option>
+                                        <option value="285">285</option>
+                                        <option value="295">295</option>
+                                        <option value="305">305</option>
+                                        <option value="315">315</option>
+                                        <option value="325">325</option>
+                                        <option value="335">335</option>
+                                        <option value="345">345</option>
+                                        <option value="355">355</option>
+                                        <option value="365">365</option>
+                                        <option value="375">375</option>
+                                        <option value="385">385</option>
+                                        <option value="395">395</option>
+                                        <option value="405">405</option>
+                                        <option value="415">415</option>
+                                        <option value="425">425</option>
+                                        <option value="435">435</option>
+                                        <option value="445">445</option>
+                                        <option value="455">455</option>
+                                        <option value="465">465</option>
+                                        <option value="475">475</option>
+                                        <option value="485">485</option>
+                                        <option value="495">495</option>
+                                        <option value="505">505</option>
+                                        <option value="515">515</option>
+                                        <option value="525">525</option>
+                                        <option value="535">535</option>
+                                        <option value="545">545</option>
+                                        <option value="555">555</option>
+                                        <option value="565">565</option>
+                                        <option value="575">575</option>
+                                        <option value="585">585</option>
+                                        <option value="595">595</option>
+                                        <option value="605">605</option>
+                                        <option value="615">615</option>
+                                        <option value="625">625</option>
+                                        <option value="635">635</option>
+                                        <option value="645">645</option>
+                                        <option value="655">655</option>
+                                        <option value="665">665</option>
+                                        <option value="675">675</option>
+                                        <option value="685">685</option>
+                                        <option value="695">695</option>
+                                        <option value="705">705</option>
+                                        <option value="715">715</option>
+                                        <option value="725">725</option>
+                                        <option value="735">735</option>
+                                        <option value="745">745</option>
+                                        <option value="755">755</option>
+                                        <option value="765">765</option>
+                                        <option value="775">775</option>
+                                        <option value="785">785</option>
+                                        <option value="795">795</option>
+                                        <option value="805">805</option>
+                                        <option value="815">815</option>
+                                        <option value="825">825</option>
+                                        <option value="835">835</option>
+                                        <option value="845">845</option>
+                                        <option value="855">855</option>
+                                        <option value="865">865</option>
+                                        <option value="875">875</option>
+                                        <option value="885">885</option>
+                                        <option value="895">895</option>
+                                        <option value="905">905</option>
+                                        <option value="915">915</option>
+                                        <option value="925">925</option>
+                                        <option value="935">935</option>
+                                        <option value="945">945</option>
+                                        <option value="955">955</option>
+                                        <option value="965">965</option>
+                                        <option value="975">975</option>
+                                        <option value="985">985</option>
+                                        <option value="995">995</option>
+                                        <option value="1005">1005</option>
+                                        <option value="1015">1015</option>
+                                        <option value="1025">1025</option>
+                                        <option value="1035">1035</option>
+                                        <option value="1045">1045</option>
+                                        <option value="1055">1055</option>
+                                        <option value="1065">1065</option>
+                                        <option value="1075">1075</option>
+                                        <option value="1085">1085</option>
+                                        <option value="1095">1095</option>
+                                        <option value="1105">1105</option>
+                                        <option value="1115">1115</option>
+                                        <option value="1125">1125</option>
+                                        <option value="1135">1135</option>
+                                        <option value="1145">1145</option>
+                                        <option value="1155">1155</option>
+                                        <option value="1165">1165</option>
+                                        <option value="1175">1175</option>
+                                        <option value="1185">1185</option>
+                                        <option value="1200">1200</option>
+                                    </select> <i></i> </label>
+                            </section>
+                            <section class="col col-3">
+                                <label class="label">Then Do</label>
+                                <label class="select">
+                                    <select id="new_grow_do_this_condition_1" name="do_this_condition_1" class="input-sm">
+                                        <option value="">Choose</option>
+                                        <option value="pH_Upper_On">pH Upper On</option>
+                                        <option value="pH_Upper_Off">pH Upper Off</option>
+                                        <option value="pH_Downer_On">pH Downer On</option>
+                                        <option value="pH_Downer_Off">pH Downer Off</option>
+                                        <option value="nutrient_On">Nutrient Pump On</option>
+                                        <option value="nutrient_On">Nutrient Pump Off</option>
+                                    </select> <i></i> </label>
+                            </section>
+                        </section>
+                    </fieldset>
+                    <hr class="last_hr">
+                </form>
+                <div class="grow_add_button_div">
+                    <button id="new_grow_add_control" class="btn btn-primary">Add Control</button>
+                    <button id="new_grow_add_condition" class="btn btn-primary">Add Condition</button>
+                </div>
+                <div class="modal-footer">
+                    <button style="margin-top: 20px" type="button" id="new_grow_external_submit" class="btn btn-primary btn-xs">Submit</button>
+                    <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
         </div>
         <!--end link to device modal-->
 <!-- PAGE FOOTER -->
@@ -2463,45 +2519,6 @@
         <div class="col-xs-12 col-sm-12 text-right hidden-xs">
             <div class="txt-color-white inline-block">
                 <i class="txt-color-blueLight hidden-mobile">You Look Great Today </i>
-                <div class="btn-group dropup">
-                    <button class="btn btn-xs dropdown-toggle bg-color-blue txt-color-white" data-toggle="dropdown">
-                        <i class="fa fa-link"></i> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right text-left">
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Download Progress</p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-success" style="width: 50%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Server Load</p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-success" style="width: 20%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Memory Load <span class="text-danger">*critical*</span></p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-danger" style="width: 70%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <button class="btn btn-block btn-default">refresh</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -2663,10 +2680,10 @@ you can add as many as you like
         $('#edit_add_control').click(function() {
             console.log('this is the condition number before it goes up: '+edit_actuator_control_number);
             if (($('#edit_actuator_control_'+edit_actuator_control_number+'_actuator').val() != "") &&
-                ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_int').val() != "") &&
-                ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_hour_min').val() != "") &&
-                ($('#edit_startdate_activity_'+edit_actuator_control_number).val() != "") &&
-                ($('#edit_finishdate_activity_'+edit_actuator_control_number).val() != "")){
+                    ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_int').val() != "") &&
+                    ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_hour_min').val() != "") &&
+                    ($('#edit_startdate_activity_'+edit_actuator_control_number).val() != "") &&
+                    ($('#edit_finishdate_activity_'+edit_actuator_control_number).val() != "")){
                 edit_actuator_control_number += 1;
                 $('#edit_actuator_controls').append('' +
                         '<label for="actuator_control_'+ edit_actuator_control_number +'_actuator" class="label" >Time Based Activity ' + edit_actuator_control_number +': </label>' +
@@ -2751,9 +2768,9 @@ you can add as many as you like
 
         $('#edit_add_condition').click(function() {
             if (($('#edit_if_this_condition_'+edit_actuator_condition_number).val() != "") &&
-                ($('#edit_is_condition_'+edit_actuator_condition_number).val() != "") &&
-                ($('#to_this_condition_'+edit_actuator_condition_number).val() != "") &&
-                ($('#do_this_condition_'+edit_actuator_condition_number).val() != "")){
+                    ($('#edit_is_condition_'+edit_actuator_condition_number).val() != "") &&
+                    ($('#to_this_condition_'+edit_actuator_condition_number).val() != "") &&
+                    ($('#do_this_condition_'+edit_actuator_condition_number).val() != "")){
                 edit_actuator_condition_number += 1;
                 $('#edit_actuator_conditions').append('' +
                         '<section id="actuator_conditions">'+
@@ -3003,16 +3020,16 @@ you can add as many as you like
 
         $('#external_edit_control_submit').click(function() {
             if (($('#edit_if_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
-                ($('#edit_is_condition_'+new_grow_actuator_condition_number).val() != "") &&
-                ($('#edit_to_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
-                ($('#edit_do_this_condition_'+new_grow_actuator_condition_number).val() != "")
-                ||
-                ($('#edit_actuator_control_'+edit_actuator_control_number+'_actuator').val() != "") &&
-                ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_int').val() != "") &&
-                ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_hour_min').val() != "") &&
-                ($('#edit_startdate_activity_'+edit_actuator_control_number).val() != "") &&
-                ($('#edit_finishdate_activity_'+edit_actuator_control_number).val() != "")){
-                    $('#edit_grow_controls').submit();
+                    ($('#edit_is_condition_'+new_grow_actuator_condition_number).val() != "") &&
+                    ($('#edit_to_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
+                    ($('#edit_do_this_condition_'+new_grow_actuator_condition_number).val() != "")
+                    ||
+                    ($('#edit_actuator_control_'+edit_actuator_control_number+'_actuator').val() != "") &&
+                    ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_int').val() != "") &&
+                    ($('#edit_actuator_control_'+edit_actuator_control_number+'_time_hour_min').val() != "") &&
+                    ($('#edit_startdate_activity_'+edit_actuator_control_number).val() != "") &&
+                    ($('#edit_finishdate_activity_'+edit_actuator_control_number).val() != "")){
+                $('#edit_grow_controls').submit();
             }
         });
         /* ======END OF DYNAMIC CONTROL FOR EDITS ======*/
@@ -3021,10 +3038,10 @@ you can add as many as you like
         /* ======START OF DYNAMIC CONTROL FOR NEW GROWS ======*/
         $('#new_grow_add_control').click(function() {
             if (($('#new_grow_actuator_control_'+ new_grow_actuator_control_number +'_actuator').val() != "") &&
-                ($('#new_grow_actuator_control_'+ new_grow_actuator_control_number +'_time_int').val() != "") &&
-                ($('#new_grow_actuator_control_'+ new_grow_actuator_control_number +'_time_hour_min').val() != "") &&
-                ($('#new_grow_startdate_activity_'+ new_grow_actuator_control_number).val() != "") &&
-                ($('#new_grow_finishdate_activity_'+ new_grow_actuator_control_number).val() != "")
+                    ($('#new_grow_actuator_control_'+ new_grow_actuator_control_number +'_time_int').val() != "") &&
+                    ($('#new_grow_actuator_control_'+ new_grow_actuator_control_number +'_time_hour_min').val() != "") &&
+                    ($('#new_grow_startdate_activity_'+ new_grow_actuator_control_number).val() != "") &&
+                    ($('#new_grow_finishdate_activity_'+ new_grow_actuator_control_number).val() != "")
             ){
                 new_grow_actuator_control_number += 1;
                 console.log("this is actually working: " + new_grow_actuator_control_number);
@@ -3111,9 +3128,9 @@ you can add as many as you like
         //dynamically add conditions
         $('#new_grow_add_condition').click(function() {
             if (($('#new_grow_if_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
-                ($('#new_grow_is_condition_'+new_grow_actuator_condition_number).val() != "") &&
-                ($('#new_grow_to_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
-                ($('#new_grow_do_this_condition_'+new_grow_actuator_condition_number).val() != "")){
+                    ($('#new_grow_is_condition_'+new_grow_actuator_condition_number).val() != "") &&
+                    ($('#new_grow_to_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
+                    ($('#new_grow_do_this_condition_'+new_grow_actuator_condition_number).val() != "")){
                 new_grow_actuator_condition_number += 1;
                 $('#new_grow_actuator_conditions').append('' +
                         '<section id="new_grow_actuator_conditions">'+
@@ -3363,7 +3380,19 @@ you can add as many as you like
             }
         });
 
-        $('#new_grow_external_next').click(function() {
+        $('.device_link_btn').click(function(){
+            var deviceName = $(this).attr('id').slice(0,-18);
+            $('#new_grow_controls').append(
+                    '<input type="hidden" name="device" value="'+deviceName+'">'
+            );
+            $('#add_plant_device_modal').modal('hide');
+
+            setTimeout(function(){
+                $('#add_new_grow_modal').modal('show');
+            }, 700);
+        });
+
+        $('#new_grow_external_submit').click(function() {
             if (($('#new_grow_if_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
                     ($('#new_grow_is_condition_'+new_grow_actuator_condition_number).val() != "") &&
                     ($('#new_grow_to_this_condition_'+new_grow_actuator_condition_number).val() != "") &&
@@ -3378,22 +3407,37 @@ you can add as many as you like
             };
         });
 
-        $('#new_grow_controls').submit(function(event){
-            event.preventDefault();
-            var plantData = $(this).serializeArray();
-            console.log(plantData);
-            for(i=0; i<plantData.length; i++){
-                $('.device_link_forms').append(
-                        '<input hidden="hidden" name="'+plantData[i]['name']+'" value="'+plantData[i]['value']+'" '+'>'
-                );
+
+        jQuery.validator.addMethod("whiteSpace", function(value, element) {
+            // allow any non-whitespace characters as the host part
+            return this.optional( element ) || !(/[^a-zA-Z0-9]/gi.test(value));
+        }, 'Please do not use any white spaces or special characters.');
+
+        $('#new_grow_controls').validate({
+            rules:{
+                new_grow_name: {
+                    required: true,
+                    whiteSpace: true
+                }
+            },
+
+            errorPlacement : function(error, element) {
+                error.insertAfter(element.parent());
             }
         });
+
+        //$('#new_grow_controls').submit(function(event){
+        //    event.preventDefault();
+        //    var plantData = $(this).serializeArray();
+        //    console.log(plantData);
+        //    for(i=0; i<plantData.length; i++){
+        //        $('.device_link_forms').append(
+        //                '<input hidden="hidden" name="'+plantData[i]['name']+'" value="'+plantData[i]['value']+'" '+'>'
+        //        );
+        //    }
+        //});
+
         /* ======END OF DYNAMIC CONTROL FOR GROWS ======*/
-
-        $('').click(function () {
-            //code for closing modal
-        })
-
 
     });
 
