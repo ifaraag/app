@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, request, url_for, redirect
 from app import db, login_manager, pubnub
 from flask.ext.login import login_required, current_user
+import datetime
 
 mod_grows = Blueprint('grows', __name__)
 
 @mod_grows.route('/grows/<current_grow>', methods=['GET'])
 @login_required
 def list_grow(current_grow):
+	utc_datetime = datetime.datetime.utcnow()
 	user_devices = []
 	user_grows = []
 	device_list = []
@@ -47,6 +49,12 @@ def link(current_grow, link_device):
       { "grow_name" : current_grow},
       {
       '$set': {'device_name' : link_device, 'device_id' : device_id, 'sensors': [], 'actuators' : {}, 'controls' : {"time":[], "condition" :[]} }
+      },
+      upsert=True
+      )
+	result = db.data.update_one({ "grow_name" : current_grow},
+      {
+      '$set': {'device_name' : link_device, 'device_id' : device_id}
       },
       upsert=True
       )
@@ -105,6 +113,7 @@ def add_grow(num=1):
 		new_grow = {"grow_name" : request.form['grow_name'], "device_name" : request.form['device'], "device_id":device_id, \
 						"username":username, "sensors":sensors, "actuators":actuators, "controls":{}}
 		db.grows.insert_one(new_grow)
+		db.data.insert_one({"device_name": request.form['device'], "device_id": device_id, "grow_name" : request.form['grow_name']})
 		return redirect(url_for('grows.list_grow', current_grow=request.form['grow_name']))
 	else:
 		return redirect(url_for('plant_profiles.list_plant_profiles', num=num))

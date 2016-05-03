@@ -26,7 +26,7 @@ def _error(message):
 	print(message)
 
 def sub_callback(message, channel):
-	# print(channel)
+	# print(channel) 
 	utc_datetime = datetime.datetime.utcnow()
 	message['year'] = utc_datetime.year
 	message['month'] = utc_datetime.month
@@ -38,15 +38,15 @@ def sub_callback(message, channel):
 	message['PS'] = message['EC'].split(",")[2]
 	message['EC'] = message['EC'].split(",")[0]
 
-	result = db.grows.update_one(
-      { "grow_name" : 'Avi'},
+	device = message['sender']['name'].split("--")[1]
+	result = db.data.update_many(
+      { "device_name" : device},
       {
       '$push': {'data':message}
       },
       upsert=True
       )
-
-	db.data.insert_one(message)
+	# db.backup.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
 pubnub.grant(channel_group='hydrobase', auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0, callback=_callback, error=_error)
@@ -72,5 +72,8 @@ app.register_blueprint(mod_plant_profiles)
 @app.errorhandler(404)
 def not_found(error):
     return redirect('https://github.com/404'), 404
+
+def notifications(username):
+	notifications  = db.notifications.find({"username" : username}).limit(10)
 
 

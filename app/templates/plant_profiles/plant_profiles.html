@@ -360,7 +360,7 @@
                         <div>
                             <!-- widget content -->
                             <div class="widget-body">
-                                <img src="../../static/img/plant_photos/tree_tomato.jpg">
+                                <img src="{{'../../static/img/plant_photos/'+plant['identifier']+'.jpg'}}" onerror="this.src='../../static/img/plant_photos/plant.jpg'">
                                 <div class="panel-group" role="tablist">
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="{{'collapseListGroupHeading_'+plant['identifier']}}">
