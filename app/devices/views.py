@@ -88,7 +88,6 @@ def edit_device(device_id):
 		sensors.append("TDS")
 	if request.form['PS'] == 'on':
 		sensors.append("PS")
-	print(sensors)
 	actuators = {}
 	if request.form['light_1_pin'] != "":
 		actuators['light_1'] = request.form['light_1_pin']
@@ -105,8 +104,65 @@ def edit_device(device_id):
 	result = db.devices.update_one(
       { "device_id" : device_id },
       {
-      '$set': {'sensors' : sensors, 'actuators' : actuators}
+      '$set': {'device_name': request.form['device_name'], 'sensors' : sensors, 'actuators' : actuators}
       },
       upsert=True
       )
+	grows = db.grows.find({'device_id' : device_id})
+	for grow in grows:
+		g_sensors = grow['sensors']
+		g_actuators = grow['actuators']
+		g_controls = grow['controls']
+		for s in g_sensors:
+			if s not in sensors:
+				g_sensors.remove(s)
+		for key in g_actuators.keys():
+			if key not in actuators.keys():
+				g_actuators.pop(key, None)
+		for time_control in g_controls["time"]:
+			if time_control["actuator"] not in actuators.keys() or time_control["sensor"] not in sensors:
+				g_controls["time"].remove(time_control)
+		for condition_control in g_controls["condition"]:
+			if condition_control["actuator"] not in actuators.keys() or condition_control["sensor"] not in sensors:
+				g_controls["condition"].remove(condition_control)
+		result = db.grows.update_one(
+	      { "grow_name" : grow['grow_name']},
+	      {
+	      '$set': {'device_name': request.form['device_name'], 'sensors' : g_sensors, 'actuators' : g_actuators, 'controls': g_controls }
+	      },
+	      upsert=True
+	      )
+
 	return redirect(url_for('devices.list_devices'))
+
+@mod_devices.route('/delete_device/<device_id>', methods=['POST'])
+@login_required
+def delete_device(device_id):
+	username = current_user.get_id()
+	result = db.grows.update_many(
+      { "device_id" : device_id },
+      {
+      '$set': {'device_name': "", 'device_id':"", 'sensors' : [], 'actuators' : {}, 'controls':{}}
+      },
+      upsert=True
+      )
+
+	device = db.devices.delete_one({'device_id' : device_id})
+	return redirect(url_for('devices.list_devices'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

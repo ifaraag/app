@@ -220,7 +220,7 @@ Use search to find needed section.
 				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
 
 					<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
-                        <img src="https://lh5.googleusercontent.com/-EBEhQJH7Mf4/AAAAAAAAAAI/AAAAAAAAAAA/rLS_4zv52UA/s128-c-k/photo.jpg" alt="me" class="online" />
+                        <img src="{{'../../static/img/users/'+username+'.jpeg'}}" alt="me" class="online" />
 						<span>
 							{{username}}
 						</span>
@@ -647,9 +647,9 @@ Use search to find needed section.
                                                             <button style="margin-top: 20px; margin-left: 0px; padding: 6px 12px; width: 100%" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                         </div>
                                                     </form>
-                                                    <form action="delete_device" method="POST">
+                                                    <form action="{{'/delete_device/'+device[5]}}" method="POST">
                                                         <button style="margin-top: 20px; width: 100%" type="submit" class="btn btn-danger">Delete Device</button>
-                                                        <input type="hidden" name="{{device[5]}}_delete" value="true">
+                                                        <input type="hidden" name="device_delete" value="true">
                                                     </form>
                                                 </div>
                                             </div>

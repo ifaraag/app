@@ -31,13 +31,12 @@ def login():
 @mod_auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignupForm(request.form)
-    if request.method == 'POST' and form.validate():
+    error = None
+    if request.method == 'POST':
         existing_user = db.users.find_one({'username' :
                                            request.form['username']})
         if existing_user:
-            form.username.errors.append('Username already exists')
-            return render_template('auth/signup.html', form=form,
-                                   title='Sign Up for Hydrobase')
+            error = 'Username already exists'
         else:
             new_user = {'username' : request.form['username'],
                         'email' : request.form['email'],
@@ -49,7 +48,7 @@ def signup():
             pubnub.grant(channel=user['username'], auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0)
             return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/signup.html', form=form,
-                           title='Sign Up for Hydrobase')
+                           title='Sign Up for Hydrobase', error=error)
 
 # @mod_auth.route('/googlelogin', methods=['GET', 'POST'])
 
