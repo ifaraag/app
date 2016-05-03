@@ -396,7 +396,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <button id="{{plant['identifier']+'_add_btn'}}" class="btn btn-primary add_plant_btn" data-toggle="modal" data-target="#add_new_grow_modal">Add Plant to Device</button>
+                                    <button id="{{plant['identifier']+'_add_btn'}}" class="btn btn-primary add_plant_btn" data-toggle="modal" data-target="#add_plant_device_modal">Add Plant to Device</button>
                                      </div>
                             </div>
                             <!-- end widget content -->
@@ -824,12 +824,11 @@
                                     <button id="add_condition" class="btn btn-primary">Add Condition</button>
                                 </div>
                             </section>
-
-                            <div class="modal-footer">
-                                <button style="margin-top: 20px" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".device_modal">Next</button>
-                                <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
-                            </div>
                         </form>
+                        <div class="modal-footer">
+                            <button style="margin-top: 20px" class="btn btn-primary btn-xs" id="new_grow_form_submit">Submit</button>
+                            <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
 
@@ -838,7 +837,7 @@
         <!--end plant modal -->
         
         <!--link to device modal-->
-        <div id="add_plant_device_modal" class="modal fade device_modal " role="dialog">
+        <div id="add_plant_device_modal" class="modal fade device_modal switch" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -867,9 +866,7 @@
                                             <img src="../../static/img/raspberry_pi2.png">
                                         {% endif %}
                                         <!--Anubhav!!!! NOT SURE IF THIS IS THE ACTION YOU WANT, FEEL FREE TO FUCK WITH IT!-->
-                                        <form class="device_link_forms" action="{{'/add_grows/'+cur|string}}" method="POST">
-                                            <button id="{{device[0]+'_link_btn'}}" name="device" value="{{device[0]}}" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                                        </form>
+                                        <button id="{{device[0]+'_link_btn'}}" class="btn btn-primary edit-btn device_link_btn"><span class="fa fa-lg fa-link"></span> Link</button>
                                     </div>
                                     <!-- end widget content -->
 
@@ -884,11 +881,12 @@
                             {% if (my_devices|length)%2 !=0 %}
                                 </div>
                             {%endif%}
-                    </div>
                 </div>
             </div>
         </div>
-        <!--end link to device modal-->
+            <!--end link to device modal-->
+        </div>
+
 
                                
     <ul class="pagination">
@@ -910,45 +908,6 @@
         <div class="col-xs-12 col-sm-12 text-right hidden-xs">
             <div class="txt-color-white inline-block">
                 <i class="txt-color-blueLight hidden-mobile">You Look Great Today </i>
-                <div class="btn-group dropup">
-                    <button class="btn btn-xs dropdown-toggle bg-color-blue txt-color-white" data-toggle="dropdown">
-                        <i class="fa fa-link"></i> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right text-left">
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Download Progress</p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-success" style="width: 50%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Server Load</p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-success" style="width: 20%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Memory Load <span class="text-danger">*critical*</span></p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-danger" style="width: 70%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <button class="btn btn-block btn-default">refresh</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -1083,18 +1042,30 @@ you can add as many as you like
             $('#user_controls').fadeOut(500, "easeInOutQuint");
         });
 
+        $('.device_link_btn').click(function(){
+            var deviceName = $(this).attr('id').slice(0,-9);
+            $('#new_grow_form').append(
+                    '<input type="hidden" name="device_name" value="'+deviceName+'">'
+            );
+            $('#add_plant_device_modal').modal('hide');
 
-        //Plant Set Up Data
-        $('#new_grow_form').submit(function(event){
-            event.preventDefault();
-            var plantData = $(this).serializeArray();
-            console.log(plantData);
-            for(i=0; i<plantData.length; i++){
-                $('.device_link_forms').append(
-                        '<input hidden="hidden" name="'+plantData[i]['name']+'" value="'+plantData[i]['value']+'" '+'>'
-                );
-            }
+            setTimeout(function(){
+                $('#add_new_grow_modal').modal('show');
+            }, 700);
         });
+
+
+        //Plant Set Up Data---> no long used because we are switching order
+        //$('#new_grow_form').submit(function(event){
+        //    event.preventDefault();
+        //    var plantData = $(this).serializeArray();
+        //    console.log(plantData);
+        //    for(i=0; i<plantData.length; i++){
+        //        $('.device_link_forms').append(
+        //                '<input hidden="hidden" name="'+plantData[i]['name']+'" value="'+plantData[i]['value']+'" '+'>'
+        //        );
+        //    }
+        //});
 
         //For dynamically adding Chron events to form
         var actuator_control_number = 1;
@@ -1183,7 +1154,7 @@ you can add as many as you like
 
         //dynamically add conditions
         $('#add_condition').click(function() {
-            if (($('#if_this_condition_'+actuator_control_number).val() != "") && ($('#is_condition_'+actuator_control_number).val() != "") && ($('#to_this_condition_'+actuator_control_number).val() != "") && ($('#do_this_condition_'+actuator_control_number).val() != "")){
+            if (($('#if_this_condition_'+actuator_condition_number).val() != "") && ($('#is_condition_'+actuator_condition_number).val() != "") && ($('#to_this_condition_'+actuator_condition_number).val() != "") && ($('#do_this_condition_'+actuator_condition_number).val() != "")){
                 actuator_condition_number += 1;
                 $('#actuator_conditions').append('' +
                         '<section id="actuator_conditions">'+
@@ -1429,6 +1400,33 @@ you can add as many as you like
             nextText : '<i class="fa fa-chevron-right"></i>',
             onSelect : function(selectedDate) {
                 $('#startdate_activity_1').datepicker('option', 'maxDate', selectedDate);
+            }
+        });
+
+        //Set up Name Validation
+        jQuery.validator.addMethod("whiteSpace", function(value, element) {
+            // allow any non-whitespace characters as the host part
+            return this.optional( element ) || !(/[^a-zA-Z0-9]/gi.test(value));
+        }, 'Please do not use any white spaces or special characters.');
+
+        $('#new_grow_form').validate({
+            rules:{
+                grow_name: {
+                    required: true,
+                    whiteSpace: true
+                }
+            },
+
+            errorPlacement : function(error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+        $('#new_grow_form_submit').click(function(){
+            if ((($('#if_this_condition_'+actuator_condition_number).val() != "") && ($('#is_condition_'+actuator_condition_number).val() != "") && ($('#to_this_condition_'+actuator_condition_number).val() != "") && ($('#do_this_condition_'+actuator_condition_number).val() != "")) == true || (($('#startdate_activity_'+actuator_control_number).val() != "") &&  ($('#finishdate_activity_'+actuator_control_number).val() != ""))){
+                console.log("working")
+            } else {
+                alert('really????');
             }
         });
 
