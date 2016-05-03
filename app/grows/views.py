@@ -55,33 +55,22 @@ def link(current_grow, link_device):
 @mod_grows.route('/edit_grows/<current_grow>', methods=['POST'])
 @login_required
 def edit_grow(current_grow):
-	sensors =[]
-	if request.form['Lux'] == 'on':
-		sensors.append("Lux")
-	if request.form['Water_Temp'] == 'on':
-		sensors.append("Water_Temp")
-	if request.form['Air_Temp'] == 'on':
-		sensors.append("Air_Temp")
-	if request.form['Humidity'] == 'on':
-		sensors.append("Humidity")
-	if request.form['pH'] == 'on':
-		sensors.append("pH")
-	if request.form['EC'] == 'on':
-		sensors.append("EC")
-	if request.form['TDS'] == 'on':
-		sensors.append("TDS")
-	if request.form['PS'] == 'on':
-		sensors.append("PS")
 	grows = db.grows.find({'grow_name':current_grow})
 	for grow in grows:
 		device_id = grow['device_id']
 	devices = db.devices.find({'device_id':device_id})
 	for device in devices:
-		act_pins = device['actuators']
+		d_actuators = device['actuators']
+		d_sensors = device['sensors']
+	sensors =[]
+	for sensor in d_sensors:
+		if request.form[sensor] == 'on':
+			sensors.append(sensor)
+	
 	actuators ={}
-	for key in act_pins.keys():
+	for key in d_actuators.keys():
 		if request.form[key] == "on":
-			actuators[key] = act_pins[key]
+			actuators[key] = d_actuators[key]
 	grows = db.grows.find({'grow_name':current_grow})
 	for grow in grows:
 		device_id = device['device_id']
