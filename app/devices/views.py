@@ -108,6 +108,7 @@ def edit_device(device_id):
       },
       upsert=True
       )
+
 	grows = db.grows.find({'device_id' : device_id})
 	for grow in grows:
 		g_sensors = grow['sensors']
@@ -148,6 +149,12 @@ def delete_device(device_id):
       )
 
 	device = db.devices.delete_one({'device_id' : device_id})
+	result = db.data.update_many({ "device_id" : device_id},
+      {
+      '$set': {'device_name' : "", 'device_id' : ""}
+      },
+      upsert=True
+      )
 	return redirect(url_for('devices.list_devices'))
 
 
