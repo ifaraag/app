@@ -1073,10 +1073,10 @@ you can add as many as you like
         $('#add_control').click(function(event) {
             event.preventDefault();
             console.log("batman");
-            console.log("actuator: "+$('#actuator_control_'+actuator_control_number+'_actuator').val());
+            console.log("actuator: "+$('#actuator_control_'+actuator_control_number+'_actuator_id').val());
             console.log("time_int : "+$('#time_int_'+actuator_control_number).val());
             console.log("time hour: "+$('#time_hour_min_'+actuator_control_number).val());
-            if (($('#startdate_activity_'+actuator_control_number).val() != "") &&  ($('#finishdate_activity_'+actuator_control_number).val() != "") && ($('#actuator_control_'+actuator_control_number+'_actuator').val() != "") && ($('#time_int_'+actuator_control_number).val() != "") && ($('#time_hour_min_'+actuator_control_number).val() != "")){
+            if (($('#startdate_activity_'+actuator_control_number).val() != "") &&  ($('#finishdate_activity_'+actuator_control_number).val() != "") && ($('#actuator_control_'+actuator_control_number+'_actuator_id').val() != "") && ($('#time_int_'+actuator_control_number).val() != "") && ($('#time_hour_min_'+actuator_control_number).val() != "")){
                 actuator_control_number += 1;
                 $('#actuator_controls').append('' +
                         '<label for="actuator_control_'+ actuator_control_number +'_actuator" class="label" >Time Based Activity ' + actuator_control_number +': </label>' +
