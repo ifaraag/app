@@ -880,7 +880,7 @@ Use search to find needed section.
                         <div>
                             <!-- widget content -->
                             <div class="widget-body">
-                                <pre style="height: 200px">{{username}}
+                                <pre style="height: 200px">
 /**********************************************************************************
  ***********************************************************************************
  * Start Temp-Humid Set-Up
@@ -935,17 +935,17 @@ aJsonObject *createMessage()
   aJsonObject *msg = aJson.createObject();
 
   aJsonObject *sender = aJson.createObject();
-  aJson.addStringToObject(sender, "name", "Arduino--Mario");
+  aJson.addStringToObject(sender, "device_id", "{{uuid}}");
   aJson.addItemToObject(msg, "sender", sender);
   return msg;
 }
 
-/* Process message like: { "pwm": { "8": 0, "9": 128 } } */
+/* Process message like: { "pwm": { "8": 0, "9": 255 } } */
 void processActuatorInfo(aJsonObject *item)
 {
-  aJsonObject *actuators = aJson.getObjectItem(item, "actuators");
+  aJsonObject *actuators = aJson.getObjectItem(item, "{{uuid}}");
   if (!actuators) {
-    Serial.println("no pwm data");
+    Serial.println("not for me");
     return;
   }
 
