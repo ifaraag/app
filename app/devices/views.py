@@ -121,7 +121,7 @@ def edit_device(device_id):
 			if key not in actuators.keys():
 				g_actuators.pop(key, None)
 		for time_control in g_controls["time"]:
-			if time_control["actuator"] not in actuators.keys() or time_control["sensor"] not in sensors:
+			if time_control["actuator"] not in actuators.keys():
 				g_controls["time"].remove(time_control)
 		for condition_control in g_controls["condition"]:
 			if condition_control["actuator"] not in actuators.keys() or condition_control["sensor"] not in sensors:

@@ -38,9 +38,9 @@ def sub_callback(message, channel):
 	message['PS'] = message['EC'].split(",")[2]
 	message['EC'] = message['EC'].split(",")[0]
 
-	device = message['sender']['name'].split("--")[1]
+	device_id = message['sender']['device_id']
 	result = db.data.update_many(
-      { "device_name" : device},
+      { "device_id" : device_id},
       {
       '$push': {'data':message}
       },
