@@ -41,7 +41,7 @@ def list_grow(current_grow):
                 device['sensors'], device['actuators'], device['kit'], device['device_id']))
     grows = db.grows.find({'username' : current_user.get_id()})
     for grow in grows:
-        user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
+        user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators'], grow['controls']))
     
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, current_device=assoc_device_name, \
@@ -157,37 +157,38 @@ def add_grow(num=1):
         if request.form['experiment'] == "false" and request.form['default_profile'] == "false":
             condition_control_num = 0
             time_control_num = 0
-            for key in request.POST:
-                if key.split("-")[0] == "do_this_condition":
-                    condition_control_num+=1
-                elif key.split("-")[0] == "finishdate_activity":
-                    time_control_num+=1
 
+            for key in request.form.keys():
+                if key[:-1] == "if_this_condition_":
+                    condition_control_num+=1
+                elif key[:-1] == "time_int_":
+                    time_control_num+=1
+                if time_control_num == 1:
+                    if request.form['time_int_1'] == "":
+                        time_control_num = 0
+                if condition_control_num == 1:
+                    if request.form['if_this_condition_1'] == "":
+                        condition_control_num = 0
+            
             for i in range(time_control_num):
-                if request.form['actuator_control_'+str(i+1)+'_actuator'] in sensors:
+                if str(request.form['actuator_control_'+str(i+1)+'_actuator']) in actuators.keys():
                     new_grow_controls["time"].append({"action": "toggle",
                     "actuator": request.form['actuator_control_'+str(i+1)+'_actuator'],
-                    "unit": request.form['time_hour_min+'+str(i+1)],
-                    "value": int(request.form['time_int+'+str(i+1)]),
+                    "unit": request.form['time_hour_min_'+str(i+1)],
+                    "value": int(request.form['time_int_'+str(i+1)]),
                     "start_date" : request.form['startdate_activity_'+str(i+1)],
                     "finish_date" : request.form['finishdate_activity_'+str(i+1)]})
-
-            for i in range(conditions_control_num):
-                if request.form['if_this_condition_'+str(iH1)] == "EC":
-                    unit = "EC"
-                if request.form['if_this_condition_'+str(i+1)] == "pH":
-                    unit = "pH"
+            
+            for i in range(condition_control_num):
                 if request.form['if_this_condition_'+str(i+1)] in sensors and \
                                 request.form['do_this_condition_'+str(i+1)].split("-")[0] in actuators.keys():
                     new_grow_controls["condition"].append({"action": (request.form['do_this_condition_'+str(i+1)].split("-")[1]),
                     "actuator": request.form['do_this_condition_'+str(i+1)].split("-")[0],
                     "sensor" : request.form['if_this_condition_'+str(i+1)],
                     "operator" : request.form['is_condition_'+str(i+1)].split("%")[0],
-                    "unit": unit,
-                    "value": int(request.form['to_this_condition+'+str(i+1)])})
-                        
+                    "unit": request.form['if_this_condition_'+str(i+1)],
+                    "value": float(request.form['to_this_condition_'+str(i+1)])})
         if request.form['experiment'] == "false" and request.form['default_profile'] == "true":
-            print "here"
             if "light_1" in actuators.keys():
                 new_grow_controls["time"].append({"action": "toggle",
                     "actuator": "light_1",
@@ -244,7 +245,6 @@ def add_grow(num=1):
                     "unit": "EC",
                     "sensor" : "EC",
                     "value": ec_max})
-            print new_grow_controls
         if request.form['experiment'] == "true":
             if "light_1" in actuators.keys():
                 value = int(request.form['lights'].split("H")[0])
@@ -267,9 +267,9 @@ def add_grow(num=1):
             if "pH" in sensors:
                 if "phUpper_pump" in actuators.keys():
                     if request.form['pH'] == "pH_below_default":
-                        value_min = int(ph_min) - .25
+                        value_min = ph_min - .25
                     elif request.form['pH'] == "pH_above_default":
-                        value_min = int(ph_min) + .25
+                        value_min = ph_min + .25
                     new_grow_controls["condition"].append({"action": "on",
                     "actuator": "phUpper_pump",
                     "operator" : "<",
@@ -282,11 +282,11 @@ def add_grow(num=1):
                     "unit": "pH",
                     "sensor" : "pH",
                     "value": value_min})
-                if "phDowner" in actuators.keys():
+                if "phDowner_pump" in actuators.keys():
                     if request.form['pH'] == "pH_below_default":
-                        value_max = int(ph_max) - .25
+                        value_max = ph_max - .25
                     elif request.form['pH'] == "pH_above_default":
-                        value_max = int(ph_max) + .25
+                        value_max = ph_max + .25
                     new_grow_controls["condition"].append({"action": "on",
                     "actuator": "phDowner_pump",
                     "operator" : ">",
@@ -302,11 +302,11 @@ def add_grow(num=1):
             if "EC" in sensors:       
                 if "nutrient_pump" in actuators.keys():
                     if request.form['ec'] == "ec_below_default":
-                            value_min = ec_min - .25
-                            value_max = ec_max - .25
+                            value_min = ec_min - 100
+                            value_max = ec_max - 100
                     elif request.form['ec'] == "ec_above_default":
-                            value_min = ec_min + .25
-                            value_max = ec_max + .25
+                            value_min = ec_min + 100
+                            value_max = ec_max + 100
                         
                     new_grow_controls["condition"].append({"action": "on",
                     "actuator": "nutrient_pump",
@@ -315,7 +315,7 @@ def add_grow(num=1):
                     "sensor" : "EC",
                     "value": value_min})
                     new_grow_controls["condition"].append({"action": "off",
-                    "actuator": "phUpper_pump",
+                    "actuator": "nutrient_pump",
                     "operator" : ">",
                     "unit": "EC",
                     "sensor" : "EC",
