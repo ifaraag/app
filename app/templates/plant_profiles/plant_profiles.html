@@ -1422,6 +1422,20 @@ you can add as many as you like
             }
         });
 
+
+        $('#new_grow_form_submit').click(function(){
+            if ($('#experiment_yes').prop('checked')){
+                if (!$("input[name='pH']:checked").val() || !$("input[name='ec']:checked").val() || !$("input[name='lights']:checked").val() || !$("input[name='water']:checked").val()) {
+                    alert('really????');
+                } else {
+                    $('#new_grow_form').submit();
+
+                }
+            } else if ($('#default_profile_yes').prop('checked')){
+                $('#new_grow_form').submit();
+            }
+        });
+
         $('#new_grow_form_submit').click(function(){
             if ($('#default_profile_no').prop('checked')){
                 if ((($('#if_this_condition_'+actuator_condition_number).val() != "") && ($('#is_condition_'+actuator_condition_number).val() != "") && ($('#to_this_condition_'+actuator_condition_number).val() != "") && ($('#do_this_condition_'+actuator_condition_number).val() != "")) == true || (($('#startdate_activity_'+actuator_control_number).val() != "") &&  ($('#finishdate_activity_'+actuator_control_number).val() != ""))){
