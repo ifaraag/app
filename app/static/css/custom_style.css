@@ -956,3 +956,7 @@ div.grow_add_button_div button{
     margin-top: 10px; 
     padding: 0 12px;
 }
+
+.c3-region.regionY {
+  fill: green;
+}
