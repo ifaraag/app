@@ -951,3 +951,8 @@ div.grow_add_button_div button{
 .device_keys{
     margin-bottom: 20px;
 }
+
+.emergency_stop_div{
+    margin-top: 10px; 
+    padding: 0 12px;
+}

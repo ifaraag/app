@@ -455,6 +455,9 @@ Use search to find needed section.
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     <h4 class="modal-title">Edit {{device[0]}}</h4>
                                                 </div>
+                                                <div class="col col-12 emergency_stop_div">
+                                                    <button id="{{device[0]}}_emergency_stop" class="btn btn-warning emergency_stop" style="width:100%">Emergency Stop</button>
+                                                </div>
                                                 <div class="modal-body">
                                                     <form class="smart-form edit_device_form" id="{{device[0]}}_edit_device_form" action="{{'/edit_device/'+device[5]}}" method="POST">
                                                         <fieldset>
@@ -1779,6 +1782,10 @@ you can add as many as you like
         });
         {% endfor %}
 
+
+        $('.emergency_stop').click(function(){
+            alert("I'm batman");
+        });
 
     });
 
