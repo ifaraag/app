@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, Response
 from flask.ext.login import login_required, current_user
 from app import db
+import json
 
 # Define the blueprint: 'dashboard'
 mod_dashboard = Blueprint('dashboard', __name__)
@@ -35,3 +36,18 @@ def dashboard():
 		range_list.append({"grow_name": grow['grow_name'], "ph_min" : ph_min, "ph_max": ph_max, "ec_min": ec_min, "ec_max":ec_max})
 	return render_template('dashboard/dashboard.html', username=username, my_devices=device_list,\
 		 my_grows=grows_list, range_list=range_list)
+
+@mod_dashboard.route('/get_data', methods = ['GET'])
+@login_required
+def get_data():
+	concatenated_data ={}
+	username = current_user.get_id()
+	grows = db.grows.find({'username' : current_user.get_id()})
+	for grow in grows:
+		data_points = db.data.find({'grow_name' : grow['grow_name']})
+		for data in data_points:
+			concatenated_data[data['grow_name']] = data['data']
+	
+	js = json.dumps(concatenated_data)
+	resp = Response(js, status=200, mimetype='application/json')
+	return response

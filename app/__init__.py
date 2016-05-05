@@ -27,7 +27,7 @@ def _error(message):
 
 def sub_callback(message, channel):
 	# print(channel)
-	print message
+	# print message
 	if "CV_Data" in message.keys():
 		db.cv_data.insert_one(message)
 	else:
