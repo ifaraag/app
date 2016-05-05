@@ -28,7 +28,8 @@ def _error(message):
 def sub_callback(message, channel):
 	# print(channel)
 	if "CV_Data" in message.keys():
-		db.cv_data.insert_one(message)
+		print message
+		# db.cv_data.insert_one(message)
 	else:
 		utc_datetime = datetime.datetime.utcnow()
 		message['year'] = utc_datetime.year
@@ -43,14 +44,15 @@ def sub_callback(message, channel):
 			message['EC'] = message['EC'].split(",")[0]
 
 		device_id = message['sender']['device_id']
-		# print message
-		result = db.data.update_many(
-	      { "device_id" : device_id},
-	      {
-	      '$push': {'data':message}
-	      },
-	      upsert=True
-	      )
+		message.pop("sender", None)
+		print message
+		# result = db.data.update_many(
+	 #      { "device_id" : device_id},
+	 #      {
+	 #      '$push': {'data':message}
+	 #      },
+	 #      upsert=True
+	 #      )
 		# db.backup.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
