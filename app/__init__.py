@@ -27,8 +27,8 @@ def _error(message):
 
 def sub_callback(message, channel):
 	# print(channel)
+	print message
 	if "CV_Data" in message.keys():
-		print "CVVVVV DATA"
 		db.cv_data.insert_one(message)
 	else:
 		utc_datetime = datetime.datetime.utcnow()
@@ -38,9 +38,10 @@ def sub_callback(message, channel):
 		message['hour'] = utc_datetime.hour
 		message['min'] = utc_datetime.minute
 		message['sec'] = utc_datetime.second
-		message['TDS'] = message['EC'].split(",")[1]
-		message['PS'] = message['EC'].split(",")[2]
-		message['EC'] = message['EC'].split(",")[0]
+		if 'EC' in message.keys():
+			message['TDS'] = message['EC'].split(",")[1]
+			message['PS'] = message['EC'].split(",")[2]
+			message['EC'] = message['EC'].split(",")[0]
 
 		device_id = message['sender']['device_id']
 		result = db.data.update_many(
