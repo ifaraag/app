@@ -1739,7 +1739,7 @@
                                                                         <select id="if_this_condition_1" name="if_this_condition_1" class="input-sm">
                                                                             <option value="">Choose</option>
                                                                             <option value="pH">pH</option>
-                                                                            <option value="TDS">TDS</option>
+                                                                            <option value="EC">EC</option>
                                                                         </select> <i></i> </label>
                                                                 </section>
                                                                 <section class="col col-3">
@@ -2113,90 +2113,45 @@
                 <h4 class="modal-title">Link Device To Plant</h4>
             </div>
             <div class="modal-body">
+            {% for device in my_devices %}
+                {% if loop.index%2 == 1%}
                 <div class="row">
+                {% endif %}
                     <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Mario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
                         <header>
                             <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                            <h2><strong>Mario:</strong> <i>Arduino</i></h2>
+                            <h2><strong>{{device[0]}}:</strong> <i>{{device[1]}}</i></h2>
                         </header>
 
                         <!-- widget div-->
                         <div>
                             <!-- widget content -->
                             <div class="widget-body">
-                                <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                <button id="Mario_new_grow_link_btn" name="device" value="Mario" type="submit" class="btn btn-primary edit-btn device_link_btn"><span class="fa fa-lg fa-link"></span> Link</button>
+                                {% if device[1] == "Arduino" %}
+                                    <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
+                                {% elif device[1] == "Raspberry Pi" %}
+                                    <img src="../../static/img/raspberry_pi2.png">
+                                {% endif %}
+                                <!--Anubhav!!!! NOT SURE IF THIS IS THE ACTION YOU WANT, FEEL FREE TO FUCK WITH IT!-->
+                                <button id="{{device[0]+'_link_btn'}}" class="btn btn-primary edit-btn device_link_btn"><span class="fa fa-lg fa-link"></span> Link</button>
                             </div>
                             <!-- end widget content -->
-
                         </div>
                         <!-- end widget div -->
-
                     </div>
-                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Luigi_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                        <header>
-                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                            <h2><strong>Luigi:</strong> <i>Arduino</i></h2>
-                        </header>
-
-                        <!-- widget div-->
-                        <div>
-                            <!-- widget content -->
-                            <div class="widget-body">
-                                <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                <button id="Luigi_new_grow_link_btn" name="device" value="Luigi" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                            </div>
-                            <!-- end widget content -->
-
+                    {% if loop.index%2 == 0 %}
                         </div>
-                        <!-- end widget div -->
-
+                    {% endif %}
+                {% endfor %}
+                {% if (my_devices|length)%2 !=0 %}
                     </div>
-                </div>
-                <div class="row">
-                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Wario_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                        <header>
-                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                            <h2><strong>Wario:</strong> <i>Arduino</i></h2>
-                        </header>
-
-                        <!-- widget div-->
-                        <div>
-                            <!-- widget content -->
-                            <div class="widget-body">
-                                <img src="https://www.arduino.cc/en/uploads/Tutorial/ArduinoUNO_bb.png">
-                                <button id="Wario_new_grow_link_btn" name="device" value="Wario" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                            </div>
-                            <!-- end widget content -->
-
-                        </div>
-                        <!-- end widget div -->
-
-                    </div>
-                    <div class="jarviswidget jarviswidget-color-greenDark device_link_tile col-lg-6" id="new_grow_wid-id-Toad_link" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false">
-                        <header>
-                            <span class="widget-icon"> <i class="fa fa-code-fork"></i> </span>
-                            <h2><strong>Toad:</strong> <i>Raspberry Pi</i></h2>
-                        </header>
-
-                        <!-- widget div-->
-                        <div>
-                            <!-- widget content -->
-                            <div class="widget-body">
-                                <img src="../../static/img/raspberry_pi2.png">
-                                <button id="Toad_new_grow_link_btn" name="device" value="Toad" class="btn btn-primary edit-btn"><span class="fa fa-lg fa-link"></span> Link</button>
-                            </div>
-                            <!-- end widget content -->
-
-                        </div>
-                        <!-- end widget div -->
-
-                    </div>
+                {%endif%}
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        </div>
+        <!--end link to device modal-->
+
 <div id="add_new_grow_modal" class="modal fade switch" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -2206,7 +2161,7 @@
                 <h4 class="modal-title">Set Grow Controls</h4>
             </div>
             <div class="modal-body">
-                <form name="new_grow_controls" id="new_grow_controls" class="smart-form">
+                <form name="new_grow_controls" id="new_grow_controls" class="smart-form" action="{{'/add_custom_grows/'+current_grow}}" method="POST">
                     <section>
                         <label class="label">Grow Name</label>
                         <label class="input">
@@ -2221,16 +2176,16 @@
                             <label class="select actuator_select">
                                 <select id="new_grow_actuator_control_1_actuator" name="actuator_control_1_actuator">
                                     <option value="">Choose an Actuator</option>
-                                    <option value="Light_1">Light #1</option>
-                                    <option value="Light_2">Light #2</option>
-                                    <option value="Water_Pump_1">Water Pump #1</option>
-                                    <option value="Nutrient_Pump_1">Nutrient Pump #1</option>
+                                    <option value="light_1">Light #1</option>
+                                    <option value="light_2">Light #2</option>
+                                    <option value="water_pump">Water Pump</option>
+                                    <option value="nutrient_pump">Nutrient Pump</option>
                                 </select><i></i>
                             </label>
                             <label class="label">Every: </label>
                             <section class="col col-6">
                                 <label class="select">
-                                    <select id="new_grow_actuator_control_1_time_int" name="actuator_control_1_time_int">
+                                    <select id="new_grow_actuator_control_1_time_int" name="time_int_1">
                                         <option value="">Choose a Time</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -2254,7 +2209,7 @@
                             </section>
                             <section class="col col-6">
                                 <label class="select">
-                                    <select id="new_grow_actuator_control_1_time_hour_min" name="time_hour_min">
+                                    <select id="new_grow_actuator_control_1_time_hour_min" name="time_hour_min_1">
                                         <option value="">Choose Hour/Min</option>
                                         <option value="hours">Hours</option>
                                         <option value="min">Minutes</option>
@@ -2283,7 +2238,7 @@
                                     <select id="new_grow_if_this_condition_1" name="if_this_condition_1" class="input-sm">
                                         <option value="">Choose</option>
                                         <option value="pH">pH</option>
-                                        <option value="TDS">TDS</option>
+                                        <option value="EC">EC</option>
                                     </select> <i></i>
                                 </label>
                             </section>
@@ -2487,12 +2442,12 @@
                                 <label class="select">
                                     <select id="new_grow_do_this_condition_1" name="do_this_condition_1" class="input-sm">
                                         <option value="">Choose</option>
-                                        <option value="pH_Upper_On">pH Upper On</option>
-                                        <option value="pH_Upper_Off">pH Upper Off</option>
-                                        <option value="pH_Downer_On">pH Downer On</option>
-                                        <option value="pH_Downer_Off">pH Downer Off</option>
-                                        <option value="nutrient_On">Nutrient Pump On</option>
-                                        <option value="nutrient_On">Nutrient Pump Off</option>
+                                        <option value="phUpper_pump-on">pH Upper On</option>
+                                        <option value="phUpper_pump-off">pH Upper Off</option>
+                                        <option value="phDowner_pump-on">pH Downer On</option>
+                                        <option value="phDowner_pump-off">pH Downer Off</option>
+                                        <option value="nutrient_pump-on">Nutrient Pump On</option>
+                                        <option value="nutrient_pump-off">Nutrient Pump Off</option>
                                     </select> <i></i> </label>
                             </section>
                         </section>
@@ -2693,14 +2648,14 @@ you can add as many as you like
                         '<option value="">Choose an Actuator</option>' +
                         '<option value="Light_1">Light #1</option>' +
                         '<option value="Light_2">Light #2</option>' +
-                        '<option value="Water_Pump_1">Water Pump #1</option>' +
-                        '<option value="Nutrient_Pump_1">Nutrient Pump #1</option>' +
+                        '<option value="water_pump">Water Pump</option>' +
+                        '<option value="nutrient_pump">Nutrient Pump</option>' +
                         '</select><i></i>' +
                         '</label>' +
                         '<label for="edit_actuator_control_' + edit_actuator_control_number + '_time_int" class="label">Every: </label>' +
                         '<section class="col col-6">' +
                         '<label class="select">' +
-                        '<select id="edit_actuator_control_' + edit_actuator_control_number + '_time_int" name="actuator_control_' + edit_actuator_control_number + '_time_int">' +
+                        '<select id="edit_actuator_control_' + edit_actuator_control_number + '_time_int" name="time_int_' + edit_actuator_control_number +'">' +
                         '<option value="">Choose a Time</option>' +
                         '<option value="1">1</option>' +
                         '<option value="2">2</option>' +
@@ -2722,7 +2677,7 @@ you can add as many as you like
                         '</section>' +
                         '<section class="col col-6">' +
                         '<label class="select">' +
-                        '<select id="edit_actuator_control_' + edit_actuator_control_number + '_time_hour_min" name="time_hour_min">' +
+                        '<select id="edit_actuator_control_' + edit_actuator_control_number + '_time_hour_min" name="time_hour_min_' + edit_actuator_control_number + '">' +
                         '<option value="">Choose Hour/Min</option>' +
                         '<option value="hours">Hours</option>' +
                         '<option value="min">Minutes</option>' +
@@ -2780,7 +2735,7 @@ you can add as many as you like
                         '<select id="edit_if_this_condition_'+edit_actuator_condition_number+'" name="if_this_condition_'+edit_actuator_condition_number+'" class="input-sm">'+
                         '<option value="">Choose</option>'+
                         '<option value="pH">pH</option>'+
-                        '<option value="TDS">TDS</option>'+
+                        '<option value="EC">EC</option>'+
                         '</select> <i></i> </label>'+
                         '</section>'+
                         '<section class="col col-3">'+
@@ -3051,16 +3006,16 @@ you can add as many as you like
                         '<label class="select actuator_select">' +
                         '<select id="new_grow_actuator_control_' + new_grow_actuator_control_number + '_actuator" name="actuator_control_' + new_grow_actuator_control_number + '_actuator">' +
                         '<option value="no_actuator_chosen">Choose an Actuator</option>' +
-                        '<option value="Light_1">Light #1</option>' +
-                        '<option value="Light_2">Light #2</option>' +
-                        '<option value="Water_Pump_1">Water Pump #1</option>' +
-                        '<option value="Nutrient_Pump_1">Nutrient Pump #1</option>' +
+                        '<option value="light_1">Light #1</option>' +
+                        '<option value="light_2">Light #2</option>' +
+                        '<option value="water_pump">Water Pump</option>' +
+                        '<option value="nutrient_pump_1">Nutrient Pump</option>' +
                         '</select><i></i>' +
                         '</label>' +
                         '<label for="actuator_control_' + new_grow_actuator_control_number + '_time_int" class="label">Every: </label>' +
                         '<section class="col col-6">' +
                         '<label class="select">' +
-                        '<select id="new_grow_actuator_control_' + new_grow_actuator_control_number + '_time_int" name="actuator_control_' + new_grow_actuator_control_number + '_time_int">' +
+                        '<select id="new_grow_actuator_control_' + new_grow_actuator_control_number + '_time_int" name="time_int_' + new_grow_actuator_control_number + '">' +
                         '<option value="">Choose a Time</option>' +
                         '<option value="1">1</option>' +
                         '<option value="2">2</option>' +
@@ -3082,7 +3037,7 @@ you can add as many as you like
                         '</section>' +
                         '<section class="col col-6">' +
                         '<label class="select">' +
-                        '<select id="new_grow_actuator_control_' + new_grow_actuator_control_number + '_time_hour_min" name="time_hour_min">' +
+                        '<select id="new_grow_actuator_control_' + new_grow_actuator_control_number + '_time_hour_min" name="time_hour_min_' + new_grow_actuator_control_number +  '">' +
                         '<option value="">Choose Hour/Min</option>' +
                         '<option value="hours">Hours</option>' +
                         '<option value="min">Minutes</option>' +
@@ -3091,12 +3046,12 @@ you can add as many as you like
                         '</section>' +
                         '<section class="col col-6">' +
                         '<label class="input"> <i class="icon-append fa fa-calendar"></i>' +
-                        '<input type="text" name="new_grow_startdate_activity_'+ new_grow_actuator_control_number +'" id="new_grow_startdate_activity_' + new_grow_actuator_control_number + '" placeholder="Start date">' +
+                        '<input type="text" name="startdate_activity_'+ new_grow_actuator_control_number +'" id="new_grow_startdate_activity_' + new_grow_actuator_control_number + '" placeholder="Start date">' +
                         '</label>' +
                         '</section>' +
                         '<section class="col col-6">' +
                         '<label class="input"> <i class="icon-append fa fa-calendar"></i>' +
-                        '<input type="text" name="new_grow_finishdate_activity_'+ new_grow_actuator_control_number +'" id="new_grow_finishdate_activity_'+new_grow_actuator_control_number+'" placeholder="Finish date">' +
+                        '<input type="text" name="finishdate_activity_'+ new_grow_actuator_control_number +'" id="new_grow_finishdate_activity_'+new_grow_actuator_control_number+'" placeholder="Finish date">' +
                         '</label>' +
                         '</section>'
                 );
@@ -3137,16 +3092,16 @@ you can add as many as you like
                         '<section class="col col-3">'+
                         '<label class="label">If This</label>'+
                         '<label class="select">'+
-                        '<select id="new_grow_if_this_condition_'+new_grow_actuator_condition_number+'" name="new_grow_if_this_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
+                        '<select id="new_grow_if_this_condition_'+new_grow_actuator_condition_number+'" name="if_this_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
                         '<option value="">Choose</option>'+
                         '<option value="pH">pH</option>'+
-                        '<option value="TDS">TDS</option>'+
+                        '<option value="EC">EC</option>'+
                         '</select> <i></i> </label>'+
                         '</section>'+
                         '<section class="col col-3">'+
                         '<label class="label">Is</label>'+
                         '<label class="select">'+
-                        '<select id="new_grow_is_condition_'+new_grow_actuator_condition_number+'" name="new_grow_is_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
+                        '<select id="new_grow_is_condition_'+new_grow_actuator_condition_number+'" name="is_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
                         '<option value="">Choose</option>'+
                         '<option value=">">Greater Than</option>'+
                         '<option value=">=">Greater Than Or Equal To</option>'+
@@ -3158,7 +3113,7 @@ you can add as many as you like
                         '<section class="col col-3">'+
                         '<label class="label">To This</label>'+
                         '<label class="select">'+
-                        '<select id="new_grow_to_this_condition_'+new_grow_actuator_condition_number+'" name="new_grow_to_this_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
+                        '<select id="new_grow_to_this_condition_'+new_grow_actuator_condition_number+'" name="to_this_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
                         '<option value="">Choose</option>'+
                         '<option value="0">0</option>'+
                         '<option value="0.25">0.25</option>'+
@@ -3341,14 +3296,14 @@ you can add as many as you like
                         '<section class="col col-3">'+
                         '<label class="label">Then Do</label>'+
                         '<label class="select">'+
-                        '<select id="new_grow_do_this_condition_'+new_grow_actuator_condition_number+'" name="new_grow_do_this_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
+                        '<select id="new_grow_do_this_condition_'+new_grow_actuator_condition_number+'" name="do_this_condition_'+new_grow_actuator_condition_number+'" class="input-sm">'+
                         '<option value="">Choose</option>'+
-                        '<option value="pH_Upper_On">pH Upper On</option>'+
-                        '<option value="pH_Upper_Off">pH Upper Off</option>'+
-                        '<option value="pH_Downer_On">pH Downer On</option>'+
-                        '<option value="pH_Downer_Off">pH Downer Off</option>'+
-                        '<option value="nutrient_On">Nutrient Pump On</option>'+
-                        '<option value="nutrient_On">Nutrient Pump Off</option>'+
+                        '<option value="phUpper_pump-on">pH Upper On</option>'+
+                        '<option value="phUpper_pump-off">pH Upper Off</option>'+
+                        '<option value="phDowner_pump-on">pH Downer On</option>'+
+                        '<option value="phDowner_pump-off">pH Downer Off</option>'+
+                        '<option value="nutrient_pump-on">Nutrient Pump On</option>'+
+                        '<option value="nutrient_pump-off">Nutrient Pump Off</option>'+
                         '</select> <i></i> </label>'+
                         '</section>'+
                         '</section>'
@@ -3381,7 +3336,7 @@ you can add as many as you like
         });
 
         $('.device_link_btn').click(function(){
-            var deviceName = $(this).attr('id').slice(0,-18);
+            var deviceName = $(this).attr('id').slice(0,-9);
             $('#new_grow_controls').append(
                     '<input type="hidden" name="device" value="'+deviceName+'">'
             );

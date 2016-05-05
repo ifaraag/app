@@ -8,7 +8,7 @@ mod_plant_profiles = Blueprint('plant_profiles', __name__)
 @mod_plant_profiles.route('/plant_profiles/<num>', methods=['GET'])
 @login_required
 def list_plant_profiles(num=1):
-	num_profiles = 283
+	num_profiles = 372
 	skip = (int(num)-1) * 8
 	lim = 8
 	pages = (num_profiles/lim)+1
