@@ -30,7 +30,7 @@ def sub_callback(message, channel):
 	if "CV_Data" in message.keys():
 		print message
 		# db.cv_data.insert_one(message)
-	else:
+	elif 'sender' in message.keys():
 		utc_datetime = datetime.datetime.utcnow()
 		message['year'] = utc_datetime.year
 		message['month'] = utc_datetime.month
