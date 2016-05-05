@@ -26,27 +26,31 @@ def _error(message):
 	print(message)
 
 def sub_callback(message, channel):
-	# print(channel) 
-	utc_datetime = datetime.datetime.utcnow()
-	message['year'] = utc_datetime.year
-	message['month'] = utc_datetime.month
-	message['day'] = utc_datetime.day
-	message['hour'] = utc_datetime.hour
-	message['min'] = utc_datetime.minute
-	message['sec'] = utc_datetime.second
-	message['TDS'] = message['EC'].split(",")[1]
-	message['PS'] = message['EC'].split(",")[2]
-	message['EC'] = message['EC'].split(",")[0]
+	# print(channel)
+	if "CV_Data" in message.keys():
+		print "CVVVVV DATA"
+		db.cv_data.insert_one(message)
+	else:
+		utc_datetime = datetime.datetime.utcnow()
+		message['year'] = utc_datetime.year
+		message['month'] = utc_datetime.month
+		message['day'] = utc_datetime.day
+		message['hour'] = utc_datetime.hour
+		message['min'] = utc_datetime.minute
+		message['sec'] = utc_datetime.second
+		message['TDS'] = message['EC'].split(",")[1]
+		message['PS'] = message['EC'].split(",")[2]
+		message['EC'] = message['EC'].split(",")[0]
 
-	device_id = message['sender']['device_id']
-	result = db.data.update_many(
-      { "device_id" : device_id},
-      {
-      '$push': {'data':message}
-      },
-      upsert=True
-      )
-	# db.backup.insert_one(message)
+		device_id = message['sender']['device_id']
+		result = db.data.update_many(
+	      { "device_id" : device_id},
+	      {
+	      '$push': {'data':message}
+	      },
+	      upsert=True
+	      )
+		# db.backup.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
 pubnub.grant(channel_group='hydrobase', auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0, callback=_callback, error=_error)
