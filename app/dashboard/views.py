@@ -33,6 +33,5 @@ def dashboard():
 			if condition_control['actuator'] == 'nutrient_pump' and condition_control['action'] == 'on':
 				ec_min = condition_control['value']		
 		range_list.append({"grow_name": grow['grow_name'], "ph_min" : ph_min, "ph_max": ph_max, "ec_min": ec_min, "ec_max":ec_max})
-	print range_list
 	return render_template('dashboard/dashboard.html', username=username, my_devices=device_list,\
 		 my_grows=grows_list, range_list=range_list)
