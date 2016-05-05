@@ -27,7 +27,6 @@ def _error(message):
 
 def sub_callback(message, channel):
 	# print(channel)
-	# print message
 	if "CV_Data" in message.keys():
 		db.cv_data.insert_one(message)
 	else:
@@ -44,6 +43,7 @@ def sub_callback(message, channel):
 			message['EC'] = message['EC'].split(",")[0]
 
 		device_id = message['sender']['device_id']
+		# print message
 		result = db.data.update_many(
 	      { "device_id" : device_id},
 	      {
