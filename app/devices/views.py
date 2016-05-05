@@ -64,7 +64,9 @@ def add_device(new_device_id):
 				actuators['phUpper_pump'] = request.form['phUpper_pump_pin']
 			if request.form['phDowner_pump_pin'] != "":
 				actuators['phDowner_pump'] = request.form['phDowner_pump_pin']
-			new_device = {'username' : username, 'device_id': new_device_id, 'device_name' : request.form['device_name'], 'type' : request.form['device_type'], 'kit' : request.form['kit'], 'sensors' : sensors, 'actuators': actuators}
+			new_device = {'username' : username, 'device_id': new_device_id, \
+				'device_name' : request.form['device_name'], 'type' : request.form['device_type'], \
+					'kit' : request.form['kit'], 'emergency_stop': 'false', 'sensors' : sensors, 'actuators': actuators}
 		db.devices.insert_one(new_device)
 	return redirect(url_for('devices.list_devices'))
 
@@ -157,9 +159,18 @@ def delete_device(device_id):
       )
 	return redirect(url_for('devices.list_devices'))
 
-
-
-
+@mod_devices.route('/emergency_stop/<device_id>', methods=['POST'])
+@login_required
+def emergency_stop(device_id):
+	
+	result = db.grows.update_one(
+	      { "device_id" : device_id},
+	      {
+	      '$set': {'emergency_stop': request.form['emergency_stop_state']}
+	      },
+	      upsert=True
+	      )
+	return redirect(url_for('devices.list_devices'))
 
 
 
