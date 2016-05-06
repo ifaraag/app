@@ -31,6 +31,7 @@ def sub_callback(message, channel):
 		print message
 		# db.cv_data.insert_one(message)
 	elif 'sender' in message.keys():
+		message_array  = []
 		utc_datetime = datetime.datetime.utcnow()
 		message['year'] = utc_datetime.year
 		message['month'] = utc_datetime.month
@@ -48,10 +49,12 @@ def sub_callback(message, channel):
 		message.pop('sender', None)
 		related_grows = db.grows.find({'device_id' : device_id})
 		for grow in related_grows:
-			message['grow_name'] = grow['grow_name']
-			print message
-			# db.data.insert_one(message)
-			
+			message_temp = message.copy()
+			message_temp['grow_name'] = grow['grow_name']
+			message_array.append(message_temp)
+		
+		print message_array
+		# db.data.insert_many(message_array)
 		# db.backup.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized

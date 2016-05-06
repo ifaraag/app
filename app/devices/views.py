@@ -151,12 +151,6 @@ def delete_device(device_id):
       )
 
 	device = db.devices.delete_one({'device_id' : device_id})
-	result = db.data.update_many({ "device_id" : device_id},
-      {
-      '$set': {'device_name' : "", 'device_id' : ""}
-      },
-      upsert=True
-      )
 	return redirect(url_for('devices.list_devices'))
 
 @mod_devices.route('/emergency_stop/<device_id>', methods=['POST'])
