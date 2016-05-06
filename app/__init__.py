@@ -70,6 +70,7 @@ from app.dashboard.views import mod_dashboard
 from app.devices.views import mod_devices
 from app.grows.views import mod_grows
 from app.plant_profiles.views import mod_plant_profiles
+from app.documentation.views import mod_documentation
 
 app.register_blueprint(mod_app)
 app.register_blueprint(mod_auth)
@@ -77,6 +78,7 @@ app.register_blueprint(mod_dashboard)
 app.register_blueprint(mod_devices)
 app.register_blueprint(mod_grows)
 app.register_blueprint(mod_plant_profiles)
+app.register_blueprint(mod_documentation)
 
 @app.errorhandler(404)
 def not_found(error):
