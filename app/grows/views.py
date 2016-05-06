@@ -107,6 +107,60 @@ def edit_grow(current_grow):
       )
     return redirect(url_for('grows.list_grow', current_grow=current_grow))
 
+@mod_grows.route('/edit_grow_controls/<current_grow>', methods=['POST'])
+@login_required
+def add_grow_controls(current_grow):
+
+    username = current_user.get_id()
+    existing_grow = db.grows.find({'grow_name' : current_grow})
+    for grow in existing_grow:
+        g_actuators = grow['actuators']
+        g_controls = grow['controls']
+        g_sensors = grow['sensors']
+
+    edited_grow_controls = {"time":[], "condition" : []}
+    condition_control_num = 0
+    time_control_num = 0
+    for key in request.form.keys():
+        if key[:-1] == "if_this_condition_":
+            condition_control_num+=1
+        elif key[:-1] == "time_int_":
+            time_control_num+=1
+        if time_control_num == 1:
+            if request.form['time_int_1'] == "":
+                time_control_num = 0
+        if condition_control_num == 1:
+            if request.form['if_this_condition_1'] == "":
+                condition_control_num = 0
+    
+    for i in range(time_control_num):
+        if str(request.form['actuator_control_'+str(i+1)+'_actuator']) in g_actuators.keys():
+            edited_grow_controls["time"].append({"action": "toggle",
+            "actuator": request.form['actuator_control_'+str(i+1)+'_actuator'],
+            "unit": request.form['time_hour_min_'+str(i+1)],
+            "value": int(request.form['time_int_'+str(i+1)]),
+            "start_date" : request.form['startdate_activity_'+str(i+1)],
+            "finish_date" : request.form['finishdate_activity_'+str(i+1)]})
+    
+    for i in range(condition_control_num):
+        if request.form['if_this_condition_'+str(i+1)] in g_sensors and \
+                        request.form['do_this_condition_'+str(i+1)].split("-")[0] in g_actuators.keys():
+            edited_grow_controls["condition"].append({"action": (request.form['do_this_condition_'+str(i+1)].split("-")[1]),
+            "actuator": request.form['do_this_condition_'+str(i+1)].split("-")[0],
+            "sensor" : request.form['if_this_condition_'+str(i+1)],
+            "operator" : request.form['is_condition_'+str(i+1)].split("%")[0],
+            "unit": request.form['if_this_condition_'+str(i+1)],
+            "value": float(request.form['to_this_condition_'+str(i+1)])})
+
+    result = db.grows.update_one(
+      { "grow_name" : current_grow},
+      {
+      '$set': {'controls':edited_grow_controls}
+      },
+      upsert=True
+      )
+    return redirect(url_for('grows.list_grow', current_grow=current_grow))
+
 @mod_grows.route('/add_custom_grows/<current_grow>', methods=['POST'])
 @login_required
 def add_custom_grow(current_grow):
@@ -134,10 +188,7 @@ def add_custom_grow(current_grow):
                 if request.form['if_this_condition_1'] == "":
                     condition_control_num = 0
         
-        print time_control_num, actuators.keys()
         for i in range(time_control_num):
-            
-            print str(request.form['actuator_control_'+str(i+1)+'_actuator'])
             if str(request.form['actuator_control_'+str(i+1)+'_actuator']) in actuators.keys():
                 new_grow_controls["time"].append({"action": "toggle",
                 "actuator": request.form['actuator_control_'+str(i+1)+'_actuator'],
@@ -146,7 +197,6 @@ def add_custom_grow(current_grow):
                 "start_date" : request.form['startdate_activity_'+str(i+1)],
                 "finish_date" : request.form['finishdate_activity_'+str(i+1)]})
         
-        print "here"
         for i in range(condition_control_num):
             if request.form['if_this_condition_'+str(i+1)] in sensors and \
                             request.form['do_this_condition_'+str(i+1)].split("-")[0] in actuators.keys():
@@ -157,7 +207,6 @@ def add_custom_grow(current_grow):
                 "unit": request.form['if_this_condition_'+str(i+1)],
                 "value": float(request.form['to_this_condition_'+str(i+1)])})
 
-        print "here 22222"
         new_grow = {"grow_name" : request.form['new_grow_name'], "plant_profile": "user defined" , "experiment" :"false", "device_name" : request.form['device'], "device_id":device_id, \
                         "username":username, "sensors":sensors, "actuators":actuators, "controls": new_grow_controls }
         db.grows.insert_one(new_grow)
