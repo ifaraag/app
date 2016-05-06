@@ -862,14 +862,14 @@ you can add as many as you like
     var lux_chart = c3.generate({
         data: {
             json: [
-                {lux: 100},
-                {lux: 196},
-                {lux: 211},
-                {lux: 200},
-                {lux: 200},
-                {lux: 200},
-                {lux: 200},
-                {lux: 200},
+                {lux: 6500},
+                {lux: 4000},
+                {lux: 5000},
+                {lux: 2000},
+                {lux: 1000},
+                {lux: 800},
+                {lux: 500},
+                {lux: 300},
                 {lux: 200},
                 {lux: 200}
             ],
@@ -879,9 +879,6 @@ you can add as many as you like
             type: 'line',
             colors: {lux: '#FF9E3A'}
         },
-        regions: [
-            {axis: 'y', start: 50, end: 200, class: 'regionY'},
-        ],
         bindto: '#Lux_chartDiv'
     });
 
@@ -907,24 +904,21 @@ you can add as many as you like
                 humidity: '7BE9FF'
             }
         },
-        regions: [
-            {axis: 'y', start: 20, end: 70, class: 'regionY'},
-        ],
         bindto: '#humidity_chartDiv'
     });
     var airTemp_chart = c3.generate({
         data: {
             json: [
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77},
-                {airTemp: 77}
+                {airTemp: -200},
+                {airTemp: -200},
+                {airTemp: -100},
+                {airTemp: 0},
+                {airTemp: 10},
+                {airTemp: 15},
+                {airTemp: 30},
+                {airTemp: 45},
+                {airTemp: 200},
+                {airTemp: 150}
             ],
             keys: {
                 value: ['airTemp']
@@ -934,24 +928,21 @@ you can add as many as you like
                 airTemp: '40BF9E'
             }
         },
-        regions: [
-            {axis: 'y', start: 60, end: 90, class: 'regionY'},
-        ],
         bindto: '#airTemp_chartDiv'
     });
     var waterTemp_chart = c3.generate({
         data: {
             json: [
+                {waterTemp: 0},
+                {waterTemp: 20},
+                {waterTemp: 30},
+                {waterTemp: 50},
                 {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77},
-                {waterTemp: 77}
+                {waterTemp: 100},
+                {waterTemp: 120},
+                {waterTemp: 150},
+                {waterTemp: 212},
+                {waterTemp: 150}
             ],
             keys: {
                 value: ['waterTemp']
@@ -961,24 +952,21 @@ you can add as many as you like
                 waterTemp: '3D73B5'
             }
         },
-        regions: [
-            {axis: 'y', start: 65, end: 80, class: 'regionY'},
-        ],
         bindto: '#waterTemp_chartDiv'
     });
     var pH_chart = c3.generate({
         data: {
             json: [
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1},
-                {pH: 7.1}
+                {pH: 14},
+                {pH: 13},
+                {pH: 12},
+                {pH: 11},
+                {pH: 7},
+                {pH: 6},
+                {pH: 5},
+                {pH: 4},
+                {pH: 3},
+                {pH: 2}
             ],
             keys: {
                 value: ['pH']
@@ -988,24 +976,21 @@ you can add as many as you like
                 pH: '#7F9FD4'
             }
         },
-        regions: [
-            {axis: 'y', start: 6, end: 8, class: 'regionY'},
-        ],
         bindto: '#pH_chartDiv'
     });
     var EC_chart = c3.generate({
         data: {
             json: [
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1},
-                {EC: 7.1}
+                {EC: 0},
+                {EC: 20},
+                {EC: 50},
+                {EC: 100},
+                {EC: 200},
+                {EC: 400},
+                {EC: 600},
+                {EC: 1200},
+                {EC: 1500},
+                {EC: 2000}
             ],
             keys: {
                 value: ['EC']
@@ -1015,24 +1000,21 @@ you can add as many as you like
                 EC: '#3D73B5'
             }
         },
-        regions: [
-            {axis: 'y', start: 300, end: 800, class: 'regionY'},
-        ],
         bindto: '#ec_chartDiv'
     });
     var TDS_chart = c3.generate({
         data: {
             json: [
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1},
-                {TDS: 7.1}
+                {TDS: 0},
+                {TDS: 10},
+                {TDS: 20},
+                {TDS: 30},
+                {TDS: 100},
+                {TDS: 200},
+                {TDS: 300},
+                {TDS: 400},
+                {TDS: 1000},
+                {TDS: 2000}
             ],
             keys: {
                 value: ['TDS']
@@ -1042,9 +1024,6 @@ you can add as many as you like
                 TDS: '#40BF9E'
             }
         },
-        regions: [
-            {axis: 'y', start: 250, end: 600, class: 'regionY'},
-        ],
         bindto: '#tds_chartDiv'
     });
     var PS_chart = c3.generate({
@@ -1069,9 +1048,6 @@ you can add as many as you like
                 PS: '#FF8048'
             }
         },
-        regions: [
-            {axis: 'y', start: .1, end: .5, class: 'regionY'},
-        ],
         bindto: '#ps_chartDiv'
     });
 
@@ -1080,8 +1056,8 @@ you can add as many as you like
     pubnub.subscribe({
         channel:'admin',
         message: function (m) {
-            if (Object.keys(m) != 'actuators') {
-                console.log('lux: ' + m.lux);
+            if (Object.keys(m).indexOf('sender') == 0) {
+                /*console.log('lux: ' + m.lux);
                 console.log('humidity: ' + m.humidity);
                 console.log('airTemp: ' + m.airTemp);
                 console.log('waterTemp: ' + m.waterTemp);
@@ -1089,7 +1065,7 @@ you can add as many as you like
                 console.log('EC: ' + m.EC.split(',')[0]);
                 console.log('TDS: ' + m.EC.split(',')[1]);
                 console.log('PS: ' + m.EC.split(',')[2]);
-                console.log('pH: ' + parseFloat(m.pH));
+                console.log('pH: ' + parseFloat(m.pH));*/
                 lux_chart.flow({
                     json: [
                         m

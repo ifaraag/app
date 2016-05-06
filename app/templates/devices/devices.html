@@ -456,13 +456,13 @@ Use search to find needed section.
                                                     <h4 class="modal-title">Edit {{device[0]}}</h4>
                                                 </div>
                                                 <div class="col col-12 emergency_stop_div">
-                                                    <button id="{{device[0]}}_emergency_stop" class="btn btn-warning emergency_stop" style="width:100%">Emergency Stop</button>
+                                                    <button id="{{device[5]}}_emergency_stop" class="btn btn-warning emergency_stop" style="width:100%">Emergency Stop</button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form class="smart-form edit_device_form" id="{{device[0]}}_edit_device_form" action="{{'/edit_device/'+device[5]}}" method="POST">
                                                         <fieldset>
                                                             <section>
-                                                                <label class="label">Device Name</label>
+                                                                <label class="label">Device Name </label>
                                                                 <label class="input">
                                                                     <input name="device_name" value="{{device[0]}}" type="text" placeholder="{{device[0]}}" class="input-sm">
                                                                 </label>
@@ -1703,6 +1703,9 @@ you can add as many as you like
 <!-- MAIN APP JS FILE -->
 <script src="./../static/js/app.min.js"></script>
 
+<!--pubnub-->
+<script src="../../static/js/pubnub/pubnub-3.14.5.min.js"></script>
+
 
 
 
@@ -1725,6 +1728,19 @@ you can add as many as you like
             $this.parents('.dropdown-menu').find('li').removeClass('active');
             $this.parent().addClass('active');
         });
+
+        /*Set up PubNub Instance*/
+        var pubnub = PUBNUB.init({
+            publish_key   : 'pub-c-93c6c384-e1a0-412f-87cf-e626aaab6a00',
+            subscribe_key : 'sub-c-8ec9d89e-e4aa-11e5-a4f2-0619f8945a4f',
+            auth_key : '40ed6434-1991-4f7a-8034-20a072abde43'
+        });
+
+        //Set up device and pin list for Emergency Stop
+        var deviceDict = {}
+        {%for device in my_devices%}
+            deviceDict['{{device[5]}}'] = ["{{device[3]['light_1']}}", "{{device[3]['light_2']}}", "{{device[3]['phUpper_pump']}}", "{{device[3]['phDowner_pump']}}", "{{device[3]['water_pump']}}"];
+        {%endfor%}
 
         //"Set Up" Controls
         $('#setUp_options').fadeOut();
@@ -1784,8 +1800,34 @@ you can add as many as you like
 
 
         $('.emergency_stop').click(function(){
-            alert("I'm batman");
+            device_id = this.id.split('_')[0];
+            console.log(deviceDict[device_id]);
+            console.log(deviceDict[device_id].length);
+            var offJSON = {};
+            /*for production
+            for (i=0;i<deviceDict[device_id].length;i++){
+                offJSON[deviceDict[device_id][i]] = 0
+            }
+            */
+            for (i=0;i<2;i++){
+                offJSON[deviceDict[device_id][i]] = 0
+            }
+            for (i=2;i<deviceDict[device_id].length;i++){
+                offJSON[deviceDict[device_id][i]] = 255
+            }
+            var fullMessage = {};
+            fullMessage[device_id] = offJSON
+            console.log(offJSON);
+            pubnub.publish({
+                channel: "{{username}}",
+                message: fullMessage,
+                callback: function(m){ console.log(m) }
+            });
+            //$.post()
         });
+
+
+
 
     });
 
