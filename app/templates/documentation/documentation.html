@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+
+    <title>Grows</title>
+    <meta name="description" content="Ability to add IoT platforms">
+    <meta name="author" content="Hydrobase">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/typicons.css">
+
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/smartadmin-production-plugins.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/smartadmin-skins.min.css">
+
+    <!-- SmartAdmin RTL Support  -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/smartadmin-rtl.min.css">
+
+    <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you raddetrain your customization with each SmartAdmin update.-->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/custom_style.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/am_style.css">
+
+    <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp
+    <link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">-->
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="../../static/img/favicon/favicon_new.ico" type="image/x-icon">
+    <link rel="icon" href="../../static/img/favicon/favicon_new.ico" type="image/x-icon">
+
+    <!-- GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+    <!-- Specifying a Webpage Icon for Web Clip
+         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" href="../../static/img/splash/sptouch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../../static/img/splash/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../../static/img/splash/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../../static/img/splash/touch-icon-ipad-retina.png">
+
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Startup image for web apps -->
+    <link rel="apple-touch-startup-image" href="../../static/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+    <link rel="apple-touch-startup-image" href="../../static/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+    <link rel="apple-touch-startup-image" href="../../static/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+</head>
+
+<!-- #BODY -->
+<body class="smart-style-3 fixed-header fixed-navigation">
+
+<!-- HEADER -->
+<header id="header">
+    <div id="logo-group">
+
+        <!-- PLACE YOUR LOGO HERE -->
+        <span id="logo"><a href="/index"> <img src="../../static/img/hydrobase_logo2.png" alt="SmartAdmin"></a></span>
+        <!-- END LOGO PLACEHOLDER -->
+
+        <!-- Note: The activity badge color changes when clicked and resets the number to 0
+        Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
+        <span id="activity" class="activity-dropdown hidden-xs"> <i class="fa fa-exclamation-circle"></i> <b class="badge"> 21 </b> </span>
+
+        <!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
+        <div class="ajax-dropdown">
+
+            <!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+            <div class="btn-group btn-group-justified" data-toggle="buttons">
+                <label class="btn btn-default">
+                    <input type="radio" name="activity" id="ajax/notify/mail.html">
+                    Msgs (14) </label>
+                <label class="btn btn-default">
+                    <input type="radio" name="activity" id="ajax/notify/notifications.html">
+                    notify (3) </label>
+                <label class="btn btn-default">
+                    <input type="radio" name="activity" id="ajax/notify/tasks.html">
+                    Tasks (4) </label>
+            </div>
+
+            <!-- notification content -->
+            <div class="ajax-notifications custom-scroll">
+
+                <div class="alert alert-transparent">
+                    <h4>Click a button to show messages here</h4>
+                    This blank page message helps protect your privacy, or you can show the first message here automatically.
+                </div>
+
+                <i class="fa fa-lock fa-4x fa-border"></i>
+
+            </div>
+            <!-- end notification content -->
+
+            <!-- footer: refresh area -->
+					<span> Last updated on: 12/12/2013 9:43AM
+						<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+					</span>
+            <!-- end footer -->
+
+        </div>
+        <!-- END AJAX-DROPDOWN -->
+    </div>
+
+    <!-- pulled right: nav area -->
+    <div class="pull-right">
+
+        <!-- collapse menu button -->
+        <div id="hide-menu" class="btn-header pull-right">
+            <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+        </div>
+        <!-- end collapse menu -->
+
+        <!-- #MOBILE -->
+        <!-- Top menu profile link : this shows only when top menu is active -->
+        <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
+            <li class="">
+                <a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">
+                    <img src="../../static/img/avatars/sunny.png" alt="John Doe" class="online" />
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-cog"></i> Setting</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="profile.html" class="padding-10 padding-top-0 padding-bottom-0"> <i class="fa fa-user"></i> <u>P</u>rofile</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> Full <u>S</u>creen</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- logout button -->
+        <div id="logout" class="btn-header transparent pull-right">
+            <span> <a href="login.html" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
+        </div>
+        <!-- end logout button -->
+
+        <!-- fullscreen button -->
+        <div id="fullscreen" class="btn-header transparent pull-right">
+            <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
+        </div>
+        <!-- end fullscreen button -->
+
+    </div>
+    <!-- end pulled right: nav area -->
+
+</header>
+<!-- END HEADER -->
+
+<!-- Left panel : Navigation area -->
+<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+<aside id="left-panel">
+
+    <!-- User info -->
+    <div class="login-info">
+				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
+
+					<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+                        <img src="{{'../../static/img/users/'+username+'.jpeg'}}" alt="me" class="online" />
+						<span>
+							{{username}}
+						</span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+
+				</span>
+    </div>
+    <!-- end user info -->
+
+    <!-- NAVIGATION : This navigation is also responsive-->
+    <nav>
+        <ul>
+            <li class="active">
+                <a href="/dashboard" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+            </li>
+            <li>
+                <a href="/devices"><i class="fa fa-lg fa-fw fa-cogs"></i> <span class="menu-item-parent">Devices</span></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-lg fa-fw fa-pagelines"></i> <span class="menu-item-parent">Grows</span></a>
+                <ul>
+                    {% for grow in my_grows %}
+                    <li>
+                        <a href="{{'/grows/'+grow[0]}}">{{grow[0]}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li>
+                <a href="/plant_profiles"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Plant Profiles</span></a>
+            </li>
+            <li>
+                <a href="/documentation"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">Documentation</span></a>
+            </li>
+        </ul>
+    </nav>
+        <span class="minifyme" data-action="minifyMenu">
+            <i class="fa fa-arrow-circle-left hit"></i>
+        </span>
+
+</aside>
+<!-- END NAVIGATION -->
+
+<!-- MAIN PANEL -->
+<div id="main" role="main">
+    <!-- RIBBON -->
+    <div id="ribbon">
+
+				<span class="ribbon-button-alignment">
+					<span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true">
+						<i class="fa fa-refresh"></i>
+					</span>
+				</span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>Hydrobase</li><li>Documentation</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+        ribbon for further usability
+
+        Example below:
+
+        <span class="ribbon-button-alignment pull-right">
+        <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+        <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+        <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+        </span> -->
+
+    </div>
+    <!-- END RIBBON -->
+
+    <!-- MAIN CONTENT -->
+    <div id="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                <h1 class="page-title txt-color-blueDark"><i class="fa fa-lg fa-fw fa-file-text"></i> Documentation</h1>
+            </div>
+        </div>
+        <!-- widget grid -->
+        <section id="widget-grid">
+            <div class="row">
+               <div class="docs">
+                   <strong id="docs-internal-guid-0bca9674-7a70-56dd-341c-309283a10bb7"></strong>
+                   <p dir="ltr">
+                       Welcome to the Hydrobase documentation. This section will show you what you need to buy and will provide instructions on setting up your growing structure
+                       and electronics.
+                   </p>
+                   <h1 dir="ltr">
+                       What to buy
+                   </h1>
+                   <p dir="ltr">
+                       You can find the shopping list <a href="https://docs.google.com/spreadsheets/d/16sK6X1zmSH3A5MHdSDCrOQKZ184-5wNUwYc5dEyRNtE/edit?usp=sharing">here</a>.
+                       Notice there are tabs for structure, electronics and tools.
+                   </p>
+                   <h1 dir="ltr">
+                       Building the structure
+                   </h1>
+                   <p dir="ltr">
+                       Here is a downloadable 3D model of the final design for reference: <a href="https://skfb.ly/NLSW">https://skfb.ly/NLSW</a>
+                   </p>
+                   <iframe width="640" height="480" src="https://sketchfab.com/models/a6532d0ce4d84244b696938aa04f513b/embed" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" onmousewheel=""></iframe><p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;">
+                   <a href="https://sketchfab.com/models/a6532d0ce4d84244b696938aa04f513b?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Hydrobase Structure</a>
+                   by <a href="https://sketchfab.com/JoshuaAppleman?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">JoshuaAppleman</a>
+                   on <a href="https://sketchfab.com?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a>
+               </p>
+
+                   <br/>
+                   <h2 dir="ltr">
+                       <img
+                               src="https://lh3.googleusercontent.com/knpBTKxKI1Dad0B-dXWqp99WnQhxDbxEiXDjK2GH_vmu7I-2snZ9uiHBGFDVGJLGTG1dqR9lbWQ4-UHKAKGv9_ZQEr5KkvOpEuKUfkLfm6DGZtGbVjz7a_iWuXj-HcP4K6QP1-2X"
+                               height="720"
+                               width="706"
+                       />
+                   </h2>
+                   <h2 dir="ltr">
+                       Framing
+                   </h2>
+                   <h4 dir="ltr">
+                       What you'll need
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Tools
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Saw
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Materials
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   PVC pipe
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   PVC T connector
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   PVC cross connector
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   PVC elbow connector
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   PVC glue
+                               </p>
+                           </li>
+                       </ul>
+                   </ul>
+                   <h4 dir="ltr">
+                       Instructions
+                   </h4>
+                   <p dir="ltr">
+                       Cut PVC pipe into
+                   </p>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               4 x 5' long pieces
+                           </p>
+                       </li>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               4 x 4' long pieces
+                           </p>
+                       </li>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               8 x 1' long pieces
+                           </p>
+                       </li>
+                   </ul>
+                   <p dir="ltr">
+                       Attach pipes and connectors like so (be sure to use PVC glue or structure will not be stable):
+                   </p>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh3.googleusercontent.com/4SnM5CSqdobrt8cyKEGPe7f8iobS9ldpfXBq9fbN6_vy5FKGwu8M9pjiksmQzliyIYv6XytRZLboGurukhqntI96YiFkJ1vSbYAnWWddsp1OarJDXjVmo8aaceo6cAhfZKC-7s49"
+                               alt="C:\Users\Joshua_2\Documents\Josh\School\14-15\Semester_4\Final_Project\Documentation\Struct_01 [Converted].png"
+                               height="817"
+                               width="704"
+                       />
+                   </p>
+                   <h2 dir="ltr">
+                       Eye bolts for hanging
+                   </h2>
+                   <h4 dir="ltr">
+                       What you'll need
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Tools
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Power Drill
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Materials
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   8 - Eye bolts
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   8 - Nuts
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   8 - Washer
+                               </p>
+                           </li>
+                       </ul>
+                   </ul>
+                   <h4 dir="ltr">
+                       Instructions
+                   </h4>
+                   <p dir="ltr">
+                       Drill 8 holes, 4 on each of the 2 top PVC pipes. They should be 1/4" wide with about 12" between each hole. Drill from top to bottom. All the way through
+                       the pipe. Thread the eye bolts through the pipes with the eye hole on the bottom. Cap the top with a washer under a nut. It should look like this:
+                   </p>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh6.googleusercontent.com/adAuBLZ7HVTrYNla0tByFo4yO-hCjpmS4b1UqijQiLSdcJ-3DDxEeOpYVzFRrlsEirQrw4lVi1LeRS5xm6-8JmQu6H6QKh4B-51ny9aXv48BTaCWDXgqInsx31VXURxdZRyq0beP"
+                               height="125"
+                               width="720"
+                       />
+                   </p>
+                   <h2 dir="ltr">
+                       Drilling bucket holes
+                   </h2>
+                   <h4 dir="ltr">
+                       What you'll need
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Tools
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Power Drill
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Materials
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   3 - Buckets (5 gallon)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   1 - Bucket lid (5 gallon)
+                               </p>
+                           </li>
+                       </ul>
+                   </ul>
+                   <h4 dir="ltr">
+                       Note
+                   </h4>
+                   <p dir="ltr">
+                       Of the 3 buckets, 1 will be your nutrient solution reservoir, 2 will be for plants. When specifying drill hole locations on the bucket sides, we'll use an
+                       angle coordinate (see diagram below) and a distance from top or bottom.
+                   </p>
+                   <br/>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh4.googleusercontent.com/cNEKEVqSRrDlDuq7E9pbaeoh9rdvg4CZLDF-LWV2KlV69ij9P_shCJluUeVftKL3SkR-eSBv6ZCMbk4ycQhjgZQJ9tkLKKm7ydcvb_27BEaXao-BM4wTNdZbcEFrtVmc0h40sQMJ"
+                               alt="C:\Users\Joshua_2\Documents\Josh\School\14-15\Semester_4\Final_Project\3D_structure\bucketangle [Converted].png"
+                               height="347"
+                               width="296"
+                       />
+                   </p>
+                   <h4 dir="ltr">
+                       Drilling holes in reservoir bucket and lid
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               In the center of the plain bucket lid, drill a 1/2" hole
+                           </p>
+                       </li>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Drill 1/2" holes in bucket side at 0&#176; and 180&#176;. Make it so the bottom of the hole is just about touching the bottom of the inside of the
+                               bucket.
+                           </p>
+                       </li>
+                   </ul>
+                   <h4 dir="ltr">
+                       Drilling holes in plant buckets
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Drill 1" hole centered in the bottom of the bucket
+                           </p>
+                       </li>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Drill 1/2" hole in bucket side at 0&#176;, 3.5" from top lip of bucket.
+                           </p>
+                       </li>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Drill 1/8" holes in bucket side at 45&#176;, 135&#176;, 225&#176; and 315&#176;, .375" from top lip of bucket
+                           </p>
+                       </li>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Drill pairs of 1/8" holes spiraling around bucket side for zip ties, one on top of the other with 1/4" between.
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 45&#176;, with pair center 3.5" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 90&#176;, with pair center 3.25" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 135&#176;, with pair center 3" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 180&#176;, with pair center 2.625" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 225&#176;, with pair center 2.375" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 270&#176;, with pair center 2.125" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 315&#176;, with pair center 1.875" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 0&#176;, with pair center 1.5" from top lip of bucket
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   At 45&#176;, with pair center 1.25" from top lip of bucket
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Repeat on other plant bucket
+                           </p>
+                       </li>
+                   </ul>
+                   <h2 dir="ltr">
+                       Attaching pump tubing
+                   </h2>
+                   <h4 dir="ltr">
+                       What you'll need
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Tools
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Power Drill
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Glue Gun
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Box Cutter
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Materials
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   2 - Funnels (32mm/6.4mm)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   1 tube - Caulk (Water proof)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   12 feet - Tubing (7/16" outside, 5/16" inside)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   2 - tubing end cap
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   8 - Spray nozzles (180 Degree)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   18 - Zip ties
+                               </p>
+                           </li>
+                       </ul>
+                   </ul>
+                   <h4 dir="ltr">
+                       Instructions
+                   </h4>
+                   <p dir="ltr">
+                       Take the tubing (7/16" outside, 5/16" inside) and put the end cap on it. Bring the tube into the bucket with the end cap pointed counterclockwise. Attach
+                       the tube to the inside of the bucket by threading the zip tie into the top-most pair of 1/8" holes, around the tube, then back out again. Repeat this with
+                       the other 1/8" hole pairs to connect more of the tube until you run out of hole pairs. Then thread the tube out of the bucket, through the 1/2" hole at
+                       0&#176;. Cut the tube so that there is 7" of slack outside the bucket.
+                   </p>
+                   <p dir="ltr">
+                       End cap on tubing:
+                   </p>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh4.googleusercontent.com/Qu4aS1u21tHdpDYGq9LOU6wJQo92WIB2SBpAQncusZHxyaV7iNbFzje5v_AshRnfiXQ_dWCnKOe9zqKjBAbM_rTcDVUAlBuznRahtpCVXWK8LpwYAxcz2SPQ49eR5yzU84cG9EA2"
+                               height="246"
+                               width="309"
+                       />
+                   </p>
+                   <p dir="ltr">
+                       Zip tie from outside:
+                   </p>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh5.googleusercontent.com/0ArR4ki99fZOiqP-0kh3mOXDVQEnmA-rGQRYmvEZZEt9i8_-TJSlpfJEcyzoNpCdu6InDUlqZ39p__PUQoj9v4jXDepC1tg92XFlbJZ897fk3jDwPiE-sNNKYZgGwonMUoI2KSk_"
+                               height="281"
+                               width="308"
+                       />
+                   </p>
+                   <p dir="ltr">
+                       Zip ties from inside:
+                   </p>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh5.googleusercontent.com/zyQCnWBSPDvs7zl6vMXC_VPiiidF3ezXZoWgmawXD8lJQngN7lvLEtfJF13gmRUmF9hm0aABI4orCcR77nrxf2Rj-o_K7WO7qmFkzRYIQ4V_tly8v4LseqJ9drrlR9b_mdVJ4fxQ"
+                               height="195"
+                               width="308"
+                       />
+                   </p>
+                   <p dir="ltr">
+                       Drill 4 small 1/8" holes through the top layer, not all the way through, of the tubing inside the bucket at 0&#176;, 90&#176;, 180&#176; and 270&#176;. Put
+                       spray nozzles into each of these holes with the sprayers pointing towards the center of the bucket.
+                   </p>
+                   <p dir="ltr">
+                       Repeat this for the other plant bucket.
+                   </p>
+                   <p dir="ltr">
+                       Cut a 22" piece of tubing and thread it through the reservoir bucket lid. Leave 7" of slack outside the lid.
+                   </p>
+                   <h2 dir="ltr">
+                       Hanging the buckets
+                   </h2>
+                   <h4 dir="ltr">
+                       What you'll need
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Tools
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Box Cutter
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Materials
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Twine
+                               </p>
+                           </li>
+                       </ul>
+                   </ul>
+                   <h4 dir="ltr">
+                       Instructions
+                   </h4>
+                   <p dir="ltr">
+                       Cut 4 pieces of twine, 9' each. On each plant bucket, thread one strand into the 1/8" hole at 45&#176; and out the hole at 315&#176;. Thread the other
+                       strand through the holes at 135&#176; and 225&#176;. You should have 4' slack coming out both ends of the bucket.
+                   </p>
+                   <p dir="ltr">
+                       Place the plant buckets next to one another inside the framing, centered, with about 1' between them. Rotate the buckets so the slack tubing points towards
+                       the other bucket. Put the slack twine through the eye bolts and pull to hoist up the buckets. Get the buckets 8" above the ground, then tie the twine to
+                       the eye bolts to keep it at that height.
+                   </p>
+                   <p dir="ltr">
+                       Use the top of the eye bolts to create two X's with the twine. This will be used to hang the grow lights.
+                   </p>
+                   <br/>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh3.googleusercontent.com/x9ZfKuk7MWXMfH5BSowF65NEWEc8Slv87aHhTPqKZg6GEAHuSyFHP2ut4hib6KBu9GZhS_5skCSBPo5-ZTQSCv8ihg_3w0WkJ1s-rJtZEg3vuvi_eBaVwjBYkvPt0a_MBk2gTMeh"
+                               height="421"
+                               width="720"
+                       />
+                   </p>
+                   <br/>
+                   <br/>
+                   <h2 dir="ltr">
+                       Connecting plant buckets to reservoir
+                   </h2>
+                   <h4 dir="ltr">
+                       What you'll need
+                   </h4>
+                   <ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Tools
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Glue Gun
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   Box Cutter
+                               </p>
+                           </li>
+                       </ul>
+                       <li dir="ltr">
+                           <p dir="ltr">
+                               Materials
+                           </p>
+                       </li>
+                       <ul>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   1 tube - Caulk (Water proof)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   12 feet - Tubing (7/16" outside, 5/16" inside)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   1 - tubing T connector
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   1 - Bucket basket lid (10" wide)
+                               </p>
+                           </li>
+                           <li dir="ltr">
+                               <p dir="ltr">
+                                   1 - Bucket basket lid (6" wide)
+                               </p>
+                           </li>
+                       </ul>
+                   </ul>
+                   <h4 dir="ltr">
+                       Instructions
+                   </h4>
+                   <p dir="ltr">
+                       Use glue gun to attach top of funnels to bottom of plant buckets.
+                   </p>
+                   <p dir="ltr">
+                       Once dried, use glue gun to attach 1' pieces of tubing to bottom of funnels.
+                   </p>
+                   <br/>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh3.googleusercontent.com/dBbGp59iu9abwmbPI0xeOznszxlQP72qmJ1ghAv7ZdjjlushEFugdjfh0WokI42JKivG_UNm-M-Xn5J_tSYEBoanHEQdOr1GfsKcLEo6CCZonJLLpqx6gzKxXm432wNSKOhnqbJN"
+                               height="355"
+                               width="720"
+                       />
+                   </p>
+                   <br/>
+                   <p dir="ltr">
+                       Put the reservoir bucket on the ground between the two hanging plant buckets. Rotate the reservoir so the holes on the sides are under the adjacent plant
+                       bucket. On both sides, take the tubing attached to the funnel and push about 1/2" of it into the hole in the side of the reservoir. Use glue gun, then
+                       waterproof caulk to seal hole.
+                   </p>
+                   <p dir="ltr">
+                       Connect the slack tubing from the top of the reservoir and the sides of the plant buckets using the T connector.
+                   </p>
+                   <p dir="ltr">
+                       Place basket lids (6" and 10") on plant buckets. Close up all unsealed holes with glue gun.
+                   </p>
+                   <p dir="ltr">
+                       Final assembly:
+                   </p>
+                   <p dir="ltr">
+                       <img
+                               src="https://lh5.googleusercontent.com/LHa7PB1FX_wGqRZig7jgcATY-BsBt-NOzvqagscNXGfslpQ8_4ChnblRH6biKitVPDt7ELEds3hVvlcpa1V5brhzNnkl2HoWs4UfDXO9pcVPSY0Af_GRr3gBfi3xWh8mZs1wSzXS"
+                               height="505"
+                               width="720"
+                       />
+                   </p>
+                   <br/>
+               </div>
+            </div>
+        </section>
+        <!-- end widget grid -->
+    </div>
+    <!-- END MAIN CONTENT -->
+</div>
+<!-- END MAIN PANEL -->
+
+<!-- PAGE FOOTER -->
+<div class="page-footer">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 text-right hidden-xs">
+            <div class="txt-color-white inline-block">
+                <i class="txt-color-blueLight hidden-mobile">You Look Great Today </i>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE FOOTER -->
+
+<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+Note: These tiles are completely responsive,
+you can add as many as you like
+-->
+<div id="shortcut">
+    <ul>
+        <li>
+            <a href="profile.html" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
+        </li>
+    </ul>
+</div>
+<!-- END SHORTCUT AREA -->
+
+<!--================================================== -->
+
+<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+<script data-pace-options='{ "restartOnRequestAfter": true }' src="../../static/js/plugin/pace/pace.min.js"></script>
+
+<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    if (!window.jQuery) {
+        document.write('<script src="../../static/js/libs/jquery-2.1.1.min.js"><\/script>');
+    }
+</script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+    if (!window.jQuery.ui) {
+        document.write('<script src="../../static/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+    }
+</script>
+
+<!-- IMPORTANT: APP CONFIG -->
+<script src="../../static/js/app.config.js"></script>
+
+<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+<script src="../../static/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+<!-- BOOTSTRAP JS -->
+<script src="../../static/js/bootstrap/bootstrap.min.js"></script>
+
+<!-- CUSTOM NOTIFICATION -->
+<script src="../../static/js/notification/SmartNotification.min.js"></script>
+
+<!-- JARVIS WIDGETS -->
+<script src="../../static/js/smartwidgets/jarvis.widget.min.js"></script>
+
+<!-- JQUERY VALIDATE -->
+<script src="../../static/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+<!-- JQUERY MASKED INPUT -->
+<script src="../../static/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+<!-- JQUERY SELECT2 INPUT -->
+<script src="../../static/js/plugin/select2/select2.min.js"></script>
+
+<!-- JQUERY UI + Bootstrap Slider -->
+<script src="../../static/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+<!-- browser msie issue fix -->
+<script src="../../static/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+<!-- FastClick: For mobile devices -->
+<script src="../../static/js/plugin/fastclick/fastclick.min.js"></script>
+
+<!--[if IE 8]>
+
+<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+<![endif]-->
+
+<!-- Demo purpose only -->
+<!--<script src="js/demo.min.js"></script>-->
+
+<!-- MAIN APP JS FILE -->
+<script src="../../static/js/app.min.js"></script>
+
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+</body>
+
+</html>
