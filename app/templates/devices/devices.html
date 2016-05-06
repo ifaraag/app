@@ -455,8 +455,13 @@ Use search to find needed section.
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     <h4 class="modal-title">Edit {{device[0]}}</h4>
                                                 </div>
-                                                <div class="col col-12 emergency_stop_div">
-                                                    <button id="{{device[5]}}_emergency_stop" class="btn btn-warning emergency_stop" style="width:100%">Emergency Stop</button>
+                                                <div class="col col-12 emergency_stop_div" id="{{device[5]}}_emergency_stop_div">
+                                                    {%if device[6] == "false"%}
+                                                        <button id="{{device[5]}}_emergency_stop" class="btn btn-warning emergency_stop" style="width:100%">Emergency Stop</button>
+                                                    {%endif%}
+                                                    {%if device[6] == "true"%}
+                                                    <button id="{{device[5]}}_emergency_stop_off" class="btn btn-info emergency_stop_off" style="width:100%">Emergency Stop Off</button>
+                                                    {%endif%}
                                                 </div>
                                                 <div class="modal-body">
                                                     <form class="smart-form edit_device_form" id="{{device[0]}}_edit_device_form" action="{{'/edit_device/'+device[5]}}" method="POST">
@@ -1823,7 +1828,24 @@ you can add as many as you like
                 message: fullMessage,
                 callback: function(m){ console.log(m) }
             });
-            //$.post()
+            $.post('/emergency_stop/'+device_id, "emergency_stop_status=true");
+            $('#'+device_id+'_emergency_stop').fadeOut(500);
+            function addButton(){
+                $('<button id="'+device_id+'_emergency_stop_off" class="btn btn-info emergency_stop_off" style="width:100%">Emergency Stop Off</button>').hide().appendTo('#'+device_id+'_emergency_stop_div').fadeIn(500);
+            }
+            setTimeout(addButton, 500);
+        });
+
+        $('.emergency_stop_off').click(function(){
+            device_id = this.id.split('_')[0];
+            console.log('#'+device_id+'_emergency_stop_off');
+            $('#'+device_id+'_emergency_stop_off').fadeOut(500);
+            function addButton(){
+                $('<button id="'+device_id+'_emergency_stop" class="btn btn-warning emergency_stop" style="width:100%">Emergency Stop</button>').hide().appendTo('#'+device_id+'_emergency_stop_div').fadeIn(500);
+            }
+            setTimeout(addButton, 500);
+            //emergency_stop_div
+            $.post('/emergency_stop/'+device_id, "emergency_stop_status=false");
         });
 
 

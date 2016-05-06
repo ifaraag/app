@@ -16,7 +16,7 @@ def list_devices():
 	devices = db.devices.find({'username': current_user.get_id()})
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
-				device['sensors'], device['actuators'], device['kit'], device['device_id']))
+				device['sensors'], device['actuators'], device['kit'], device['device_id'], device['emergency_stop']))
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name']))

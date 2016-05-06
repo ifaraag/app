@@ -1408,7 +1408,13 @@
     <div id="content">
         <div class="row">
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
-                <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-pagelines"></i> {{current_grow}}</h1>
+                {%if experiment == "true" %}
+                    <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-pagelines"></i>{{current_grow}}: <span class="label label-info txt-color-white"> <h1 style="margin: 0">experiment</h1></span></h1>
+                {%endif%}
+                {%if experiment == "false" %}
+                    <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-pagelines"></i> {{current_grow}}</h1>
+                {%endif%}
+
             </div>
         </div>
         <!-- widget grid -->
@@ -1469,7 +1475,7 @@
                                                <div id="collapseListGroup_sensors_{{device[0][0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_sensors_{{device[0][0]}}">
                                                    <ul class="list-group">
                                                         {% for sensor in grow[0][2] %}
-                                                           <li class="list-group-item">{{sensor}} <span class="badge bg-color-greenLight">Active</span></li> 
+                                                           <li class="list-group-item">{{sensor.replace("_", " ")}} <span class="badge bg-color-greenLight">Active</span></li>
                                                         {% endfor %}
                                                    </ul>
                                                </div>
@@ -1487,7 +1493,7 @@
                                                <div id="collapseListGroup_actuators_{{device[0][0]}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading_actuators_{{device[0][0]}}">
                                                    <ul class="list-group">
                                                    {% for key, value in grow[0][3].items() %}
-                                                       <li class="list-group-item">{{key}} <span class="badge bg-color-greenDark txt-color-white">#{{value}}</span></li>
+                                                       <li class="list-group-item">{{key.title().replace("_", " ")}} <span class="badge bg-color-greenDark txt-color-white">#{{value}}</span></li>
                                                     {% endfor %}
                                                    </ul>
                                                </div>
@@ -1517,6 +1523,7 @@
                                                                        <label class="label"><h4>Sensors</h4></label>
                                                                        <div class="row">
                                                                         <div class="col col-6">
+                                                                            <!--bryan-->
                                                                         {% for sensor in device[0][2]%}
                                                                             <label class="checkbox">
                                                                                 {% if sensor in grow[0][2]%}
@@ -1528,6 +1535,7 @@
                                                                                    <i></i>{{sensor}}
                                                                             </label>
                                                                         {%endfor%}
+                                                                            <!--end bryan-->
                                                                         </div>
                                                                        </div>
                                                                    </section>
@@ -1634,7 +1642,7 @@
                                                <div id="collapseListGroup_time_controls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading_time_controls">
                                                    <ul class="list-group">
                                                     {% for control in grow[0][4]['time'] %}
-                                                       <li class="list-group-item"><strong>{{control['actuator']}}:</strong> <span class="pull-right">{{control['action']}} <span class="badge bg-color-time">Every <span class="badge bg-color-orange">{{control['value']}} {{control['unit']}}</span></span></span></li>
+                                                       <li class="list-group-item"><strong>{{control['actuator'].title().replace("_", " ")}}:</strong> <span class="pull-right">{{control['action']}} <span class="badge bg-color-time">Every <span class="badge bg-color-orange">{{control['value']}} {{control['unit']}}</span></span></span></li>
                                                     {% endfor %}
                                                    </ul>
                                                </div>
@@ -1652,7 +1660,7 @@
                                                <div id="collapseListGroup_condition_controls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading_condition_controls">
                                                    <ul class="list-group">
                                                    {% for control in grow[0][4]['condition'] %}
-                                                       <li class="list-group-item"><strong>{{control['actuator']}} {{control['action']}} If:</strong> <span class="badge bg-color-greenDark txt-color-white">{{control['unit']}} {{control['operator']}} {{control['value']}}</span></li>
+                                                       <li class="list-group-item"><strong>{{control['actuator'].replace("_", " ")}} {{control['action']}} If:</strong> <span class="badge bg-color-greenDark txt-color-white">{{control['unit']}} {{control['operator']}} {{control['value']}}</span></li>
                                                     {% endfor %}
                                                    </ul>
                                                </div>
@@ -1670,12 +1678,12 @@
                                                    <div class="modal-body">
                                                     <form id="grow_controls" class="smart-form">
                                                         <fieldset>
-                                                            <section id="actuator_controls">
+                                                            <section id="edit_actuator_controls">
                                                                 <label class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
-                                                                <label for="actuator_control_1_actuator" class="label" >Time Based Activity 1: </label>
-                                                                <label for="actuator_control_1_actuator" class="label">Actuator:</label>
-                                                                <label id="actuator_control_1_actuator" class="select actuator_select">
-                                                                    <select name="actuator_control_1_actuator">
+                                                                <label for="edit_actuator_control_1_actuator" class="label" >Time Based Activity 1: </label>
+                                                                <label for="edit_actuator_control_1_actuator" class="label">Actuator:</label>
+                                                                <label class="select actuator_select">
+                                                                    <select id="edit_actuator_control_1_actuator" name="actuator_control_1_actuator">
                                                                         <option value="">Choose an Actuator</option>
                                                                         <option value="Light_1">Light #1</option>
                                                                         <option value="Light_2">Light #2</option>
@@ -1683,11 +1691,11 @@
                                                                         <option value="Nutrient_Pump_1">Nutrient Pump #1</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                                <label for="actuator_control_1_time_int" class="label">Every: </label>
+                                                                <label for="edit_actuator_control_1_time_int" class="label">Every: </label>
                                                                 <section class="col col-6">
-                                                                    <label id="actuator_control_1_time_int" class="select">
-                                                                        <select name="time_int_1">
-                                                                        <option value="">Choose a Time</option>
+                                                                    <label class="select">
+                                                                        <select id="edit_actuator_control_1_time_int" name="time_int_1">
+                                                                            <option value="">Choose a Time</option>
                                                                             <option value="1">1</option>
                                                                             <option value="2">2</option>
                                                                             <option value="3">3</option>
@@ -1709,9 +1717,9 @@
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-6">
-                                                                    <label id="actuator_control_1_time_hour_min" class="select">
-                                                                        <select name="time_hour_min_1">
-                                                                        <option value="">Choose Hour/Min</option>
+                                                                    <label class="select">
+                                                                        <select id="edit_actuator_control_1_time_hour_min" name="time_hour_min_1">
+                                                                            <option value="">Choose Hour/Min</option>
                                                                             <option value="hours">Hours</option>
                                                                             <option value="min">Minutes</option>
                                                                         </select> <i></i>
@@ -1719,12 +1727,12 @@
                                                                 </section>
                                                                 <section class="col col-6">
                                                                     <label class="input"> <i class="icon-append fa fa-calendar"></i>
-                                                                        <input type="text" name="startdate_activity_1" id="startdate_activity_1" placeholder="Start date">
+                                                                        <input type="text" name="startdate_activity_1" id="edit_startdate_activity_1" placeholder="Start date">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-6">
                                                                     <label class="input"> <i class="icon-append fa fa-calendar"></i>
-                                                                        <input type="text" name="finishdate_activity_1" id="finishdate_activity_1" placeholder="Finish date">
+                                                                        <input type="text" name="finishdate_activity_1" id="edit_finishdate_activity_1" placeholder="Finish date">
                                                                     </label>
                                                                 </section>
                                                             </section>
@@ -1732,11 +1740,11 @@
                                                         <hr>
                                                         <fieldset name="condition_1">
                                                             <label class="label"><strong>What To Do If...(Conditions):</strong></label>
-                                                            <section id="actuator_conditions">
+                                                            <section id="edit_actuator_conditions">
                                                                 <section class="col col-3">
                                                                     <label class="label">If This</label>
                                                                     <label class="select">
-                                                                        <select id="if_this_condition_1" name="if_this_condition_1" class="input-sm">
+                                                                        <select id="edit_if_this_condition_1" name="if_this_condition_1" class="input-sm">
                                                                             <option value="">Choose</option>
                                                                             <option value="pH">pH</option>
                                                                             <option value="EC">EC</option>
@@ -1745,7 +1753,7 @@
                                                                 <section class="col col-3">
                                                                     <label class="label">Is</label>
                                                                     <label class="select">
-                                                                        <select id="is_condition_1" name="is_condition_1" class="input-sm">
+                                                                        <select id="edit_is_condition_1" name="is_condition_1" class="input-sm">
                                                                             <option value="">Choose</option>
                                                                             <option value=">">Greater Than</option>
                                                                             <option value=">=">Greater Than Or Equal To</option>
@@ -1757,7 +1765,7 @@
                                                                 <section class="col col-3">
                                                                     <label class="label">To This</label>
                                                                     <label class="select">
-                                                                        <select id="to_this_condition_1" name="to_this_condition_1" class="input-sm">
+                                                                        <select id="edit_to_this_condition_1" name="to_this_condition_1" class="input-sm">
                                                                             <option value="">Choose</option>
                                                                             <option value="0">0</option>
                                                                             <option value="0.25">0.25</option>
@@ -1940,7 +1948,7 @@
                                                                 <section class="col col-3">
                                                                     <label class="label">Then Do</label>
                                                                     <label class="select">
-                                                                        <select id="do_this_condition_1" name="do_this_condition_1" class="input-sm">
+                                                                        <select id="edit_do_this_condition_1" name="do_this_condition_1" class="input-sm">
                                                                             <option value="">Choose</option>
                                                                             <option value="pH_Upper_On">pH Upper On</option>
                                                                             <option value="pH_Upper_Off">pH Upper Off</option>
@@ -1955,8 +1963,8 @@
                                                         <hr class="last_hr">
                                                     </form>
                                                     <div class="grow_add_button_div">
-                                                        <button id="add_control" class="btn btn-primary">Add Control</button>
-                                                        <button id="add_condition" class="btn btn-primary">Add Condition</button>
+                                                        <button id="edit_add_control" class="btn btn-primary">Add Control</button>
+                                                        <button id="edit_add_condition" class="btn btn-primary">Add Condition</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button style="margin-top: 20px" type="button" id="external_contron_submit" class="btn btn-primary btn-xs">Save Edits</button>
@@ -2716,16 +2724,18 @@ you can add as many as you like
                 });
 
             } else {
-                alert("dude fill your shit out");
+                alert("Please fill out the form");
             }
 
         });
 
         $('#edit_add_condition').click(function() {
-            if (($('#edit_if_this_condition_'+edit_actuator_condition_number).val() != "") &&
+            if (
+                    ($('#edit_if_this_condition_'+edit_actuator_condition_number).val() != "") &&
                     ($('#edit_is_condition_'+edit_actuator_condition_number).val() != "") &&
-                    ($('#to_this_condition_'+edit_actuator_condition_number).val() != "") &&
-                    ($('#do_this_condition_'+edit_actuator_condition_number).val() != "")){
+                    ($('#edit_to_this_condition_'+edit_actuator_condition_number).val() != "") &&
+                    ($('#edit_do_this_condition_'+edit_actuator_condition_number).val() != "")
+            ){
                 edit_actuator_condition_number += 1;
                 $('#edit_actuator_conditions').append('' +
                         '<section id="actuator_conditions">'+
@@ -2949,7 +2959,7 @@ you can add as many as you like
                         '</section>'
                 );
             } else {
-                alert("dude fill your shit out");
+                alert("Please fully fill out the form");
             }
 
         });
