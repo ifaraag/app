@@ -1,3 +1,4 @@
+import flask
 from flask import Blueprint, render_template, Response
 from flask.ext.login import login_required, current_user
 from app import db
@@ -74,7 +75,7 @@ def get_data():
 	for grow in grows:
 		data_points = db.data.find({'grow_name' : grow['grow_name']})
 		for data_point in data_points:
+			data_point.pop('_id', None)
 			concatenated_data.setdefault(grow['grow_name'], []).append(data_point)
-			
-	resp = Response(concatenated_data, status=200, mimetype='application/json')
-	return resp
+
+	return flask.jsonify(**concatenated_data)
