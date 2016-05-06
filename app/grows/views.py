@@ -9,7 +9,13 @@ mod_grows = Blueprint('grows', __name__)
 @login_required
 def list_grow(current_grow):
     count = 0
-    data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
+    pHchartData = []
+    ecChartData = [];
+    luxChartData = [];
+    tempChartData = [];
+    humidityChartData = [];
+
+    # data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
     user_devices = []
     user_grows = []
     device_list = []
@@ -24,16 +30,16 @@ def list_grow(current_grow):
     data_points = db.data.find({'grow_name' : current_grow}).sort('_id',-1).limit(151200)
     for data_point in data_points:
         if count%3600 == 0:
-            data['pH'].append(data_point['pH'])
-            data['lux'].append(data_point['lux'])
-            data['EC'].append(data_point['EC'])
-            data['TDS'].append(data_point['TDS'])
-            data['PS'].append(data_point['PS'])
-            data['humidity'].append(data_point['humidity'])
-            data['airTemp'].append(data_point['airTemp'])
-            data['waterTemp'].append(data_point['waterTemp'])
+            date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
+                                hour=data_point['hour'], minute=data_point['min'], second=data_point['sec'])
+            pHchartData.append({"date" : date, "value" : data_point['pH']})
+            ecChartData.append({"date" : date, "ec_value" : data_point['EC'], "tds" : data_point['TDS'], "ps":data_point['PS']})
+            luxChartData.append({"date" : date, "value" : data_point['lux']})
+            tempChartData.append({"date" : date, "waterTemp" : data_point['waterTemp'], "airTemp": data_point['airTemp']})
+            humidityChartData.append({"date" : date, "value" : data_point['humidity']})
         count+=1
-    print data
+    
+    # print pHchartData, ecChartData, luxChartData, tempChartData, humidityChartData
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
     else:
@@ -52,7 +58,8 @@ def list_grow(current_grow):
     
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
-                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, data=data)
+                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
+                           ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, humidityChartData=humidityChartData)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
