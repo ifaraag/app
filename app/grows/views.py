@@ -9,7 +9,7 @@ mod_grows = Blueprint('grows', __name__)
 @login_required
 def list_grow(current_grow):
     count = 0
-    data = {}
+    data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
     user_devices = []
     user_grows = []
     device_list = []
@@ -21,18 +21,19 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
-    # data_points = db.data.find({'grow_name' : current_grow}).sort({_id:-1}).limit(151200)
-    # for datapoint in data_points:
-    #     if count%3600 == 0:
-    #         data['grow_name']['pH'].append(data_point['pH'])
-    #         data['grow_name']['lux'].append(data_point['lux'])
-    #         data['grow_name']['EC'].append(data_point['EC'])
-    #         data['grow_name']['TDS'].append(data_point['TDS'])
-    #         data['grow_name']['PS'].append(data_point['PS'])
-    #         data['grow_name']['humidity'].append(data_point['humidity'])
-    #         data['grow_name']['airTemp'].append(data_point['airTemp'])
-    #         data['grow_name']['waterTemp'].append(data_point['waterTemp'])
-    #     count+=1
+    data_points = db.data.find({'grow_name' : current_grow}).sort('_id',-1).limit(151200)
+    for data_point in data_points:
+        if count%3600 == 0:
+            data['pH'].append(data_point['pH'])
+            data['lux'].append(data_point['lux'])
+            data['EC'].append(data_point['EC'])
+            data['TDS'].append(data_point['TDS'])
+            data['PS'].append(data_point['PS'])
+            data['humidity'].append(data_point['humidity'])
+            data['airTemp'].append(data_point['airTemp'])
+            data['waterTemp'].append(data_point['waterTemp'])
+        count+=1
+    print data
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
     else:
@@ -51,7 +52,7 @@ def list_grow(current_grow):
     
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
-                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows)
+                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, data=data)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
