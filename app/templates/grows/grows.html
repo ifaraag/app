@@ -1676,7 +1676,7 @@
                                                        <h4 class="modal-title">Set Grow Controls</h4>
                                                    </div>
                                                    <div class="modal-body">
-                                                    <form id="grow_controls" class="smart-form">
+                                                    <form id="edit_grow_controls" class="smart-form" action="/edit_grow_controls" method="POST">
                                                         <fieldset>
                                                             <section id="edit_actuator_controls">
                                                                 <label class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
@@ -1967,7 +1967,7 @@
                                                         <button id="edit_add_condition" class="btn btn-primary">Add Condition</button>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button style="margin-top: 20px" type="button" id="external_contron_submit" class="btn btn-primary btn-xs">Save Edits</button>
+                                                        <button style="margin-top: 20px" type="button" id="external_edit_control_submit" class="btn btn-primary btn-xs">Save Edits</button>
                                                         <button style="margin-top: 20px" type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button>
                                                     </div>
                                                 </div>
@@ -3369,6 +3369,7 @@ you can add as many as you like
                     ($('#new_grow_startdate_activity_'+new_grow_actuator_control_number).val() != "") &&
                     ($('#new_grow_finishdate_activity_'+new_grow_actuator_control_number).val() != "")) {
                 $('#new_grow_controls').submit();
+                // /edit_grow_controls
             };
         });
 
