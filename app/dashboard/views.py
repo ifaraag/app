@@ -74,8 +74,7 @@ def get_data():
 	for grow in grows:
 		data_points = db.data.find({'grow_name' : grow['grow_name']})
 		for data_point in data_points:
-			concatenated_data[grow['grow_name']].append(data_point)
-	
-	js = json.dumps(concatenated_data)
-	resp = Response(js, status=200, mimetype='application/json')
+			concatenated_data.setdefault(grow['grow_name'], []).append(data_point)
+			
+	resp = Response(concatenated_data, status=200, mimetype='application/json')
 	return resp
