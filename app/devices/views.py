@@ -163,7 +163,7 @@ def delete_device(device_id):
 @login_required
 def emergency_stop(device_id):
 	
-	result = db.device.update_one(
+	result = db.devices.update_one(
 	      { "device_id" : device_id},
 	      {
 	      '$set': {'emergency_stop': request.form['emergency_stop_status']}
