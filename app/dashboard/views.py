@@ -37,7 +37,7 @@ def dashboard():
 	return render_template('dashboard/dashboard.html', username=username, my_devices=device_list,\
 		 my_grows=grows_list, range_list=range_list)
 
-@mod_dashboard.route('/get_data', methods = ['GET'])
+@mod_dashboard.route('/get_data/', methods = ['GET'])
 @login_required
 def get_data():
 	concatenated_data ={}
@@ -50,4 +50,4 @@ def get_data():
 	
 	js = json.dumps(concatenated_data)
 	resp = Response(js, status=200, mimetype='application/json')
-	return response
+	return resp
