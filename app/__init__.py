@@ -44,15 +44,14 @@ def sub_callback(message, channel):
 			message['EC'] = message['EC'].split(",")[0]
 
 		device_id = message['sender']['device_id']
-		message.pop("sender", None)
-		print message
-		# result = db.data.update_many(
-	 #      { "device_id" : device_id},
-	 #      {
-	 #      '$push': {'data':message}
-	 #      },
-	 #      upsert=True
-	 #      )
+		message['device_id'] = device_id
+		message.pop('sender', None)
+		related_grows = db.grows.find({'device_id' : device_id})
+		for grow in related_grows:
+			message['grow_name'] = grow['grow_name']
+			print message
+			# db.data.insert_one(message)
+			
 		# db.backup.insert_one(message)
 
 # Grant read, write and manage permissions to the pubnub instance that we initialized
