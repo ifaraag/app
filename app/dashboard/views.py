@@ -12,7 +12,7 @@ def dashboard():
 	device_list = []
 	grows_list = []
 	range_list = []
-	seed_data = {}
+	seed_data = []
 	username = current_user.get_id()
 	devices = db.devices.find({'username': current_user.get_id()})
 	for device in devices:
@@ -36,18 +36,28 @@ def dashboard():
 				ec_min = condition_control['value']		
 		range_list.append({"grow_name": grow['grow_name'], "ph_min" : ph_min, "ph_max": ph_max, "ec_min": ec_min, "ec_max":ec_max})
 	grows = db.grows.find({'username' : current_user.get_id()})
-	# for grow in grows:
-	# 	data_points = db.data.find({'grow_name' : grow['grow_name']}).sort({_id:-1}).limit(10);
-	# 	for data_point in data_points:
-	# 		seed_data['grow_name']['pH'].append(data_point['pH'])
-	# 		seed_data['grow_name']['lux'].append(data_point['lux'])
-	# 		seed_data['grow_name']['EC'].append(data_point['EC'])
-	# 		seed_data['grow_name']['TDS'].append(data_point['TDS'])
-	# 		seed_data['grow_name']['PS'].append(data_point['PS'])
-	# 		seed_data['grow_name']['humidity'].append(data_point['humidity'])
-	# 		seed_data['grow_name']['airTemp'].append(data_point['airTemp'])
-	# 		seed_data['grow_name']['waterTemp'].append(data_point['waterTemp'])
-
+	for grow in grows:
+		data_points = db.data.find({'grow_name' : grow['grow_name']}).sort('_id',-1).limit(10);
+		pH_list =[]
+		lux_list = []
+		EC_list =[]
+		TDS_list =[]
+		PS_list =[]
+		humidity_list = []
+		airTemp_list = []
+		waterTemp_list =[]
+		for data_point in data_points:
+			pH_list.append(data_point['pH'])
+			lux_list.append(data_point['lux'])
+			EC_list.append(data_point['EC'])
+			TDS_list.append(data_point['TDS'])
+			PS_list.append(data_point['PS'])
+			humidity_list.append(data_point['humidity'])
+			airTemp_list.append(data_point['airTemp'])
+			waterTemp_list.append(data_point['waterTemp'])
+		seed_data.append({"grow_name": grow['grow_name'], "pH" :pH_list, "lux" :lux_list, "EC" :EC_list, \
+				"TDS" :TDS_list, "PS" : PS_list, "humidity": humidity_list, "airTemp" : airTemp_list, "waterTemp": waterTemp_list})
+		
 	return render_template('dashboard/dashboard.html', username=username, my_devices=device_list,\
 		 my_grows=grows_list, range_list=range_list, seed_data=seed_data)
 

@@ -21,18 +21,18 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
-    data_points = db.data.find({'grow_name' : current_grow}).sort({_id:-1}).limit(151200)
-    for datapoint in data_points:
-        if count%3600 == 0:
-            data['grow_name']['pH'].append(data_point['pH'])
-            data['grow_name']['lux'].append(data_point['lux'])
-            data['grow_name']['EC'].append(data_point['EC'])
-            data['grow_name']['TDS'].append(data_point['TDS'])
-            data['grow_name']['PS'].append(data_point['PS'])
-            data['grow_name']['humidity'].append(data_point['humidity'])
-            data['grow_name']['airTemp'].append(data_point['airTemp'])
-            data['grow_name']['waterTemp'].append(data_point['waterTemp'])
-        count+=1
+    # data_points = db.data.find({'grow_name' : current_grow}).sort({_id:-1}).limit(151200)
+    # for datapoint in data_points:
+    #     if count%3600 == 0:
+    #         data['grow_name']['pH'].append(data_point['pH'])
+    #         data['grow_name']['lux'].append(data_point['lux'])
+    #         data['grow_name']['EC'].append(data_point['EC'])
+    #         data['grow_name']['TDS'].append(data_point['TDS'])
+    #         data['grow_name']['PS'].append(data_point['PS'])
+    #         data['grow_name']['humidity'].append(data_point['humidity'])
+    #         data['grow_name']['airTemp'].append(data_point['airTemp'])
+    #         data['grow_name']['waterTemp'].append(data_point['waterTemp'])
+    #     count+=1
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
     else:

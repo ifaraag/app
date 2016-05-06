@@ -53,7 +53,7 @@ def sub_callback(message, channel):
 			message_temp['grow_name'] = grow['grow_name']
 			message_array.append(message_temp)
 		
-		print message_array
+		# print message_array
 		# db.data.insert_many(message_array)
 		# db.backup.insert_one(message)
 
