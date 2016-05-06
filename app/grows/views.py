@@ -8,12 +8,8 @@ mod_grows = Blueprint('grows', __name__)
 @mod_grows.route('/grows/<current_grow>', methods=['GET'])
 @login_required
 def list_grow(current_grow):
-    ph = []
-    ec = []
-    lux = []
-    temp = []
-    humidity = []
-    utc_datetime = datetime.datetime.utcnow()
+    count = 0
+    data = {}
     user_devices = []
     user_grows = []
     device_list = []
@@ -25,9 +21,18 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
-    data_points = db.data.find({'grow_name' : current_grow})
-    # for datapoint in data_points:
-    #   ph_temp = ()
+    data_points = db.data.find({'grow_name' : current_grow}).sort({_id:-1}).limit(151200)
+    for datapoint in data_points:
+        if count%3600 == 0:
+            data['grow_name']['pH'].append(data_point['pH'])
+            data['grow_name']['lux'].append(data_point['lux'])
+            data['grow_name']['EC'].append(data_point['EC'])
+            data['grow_name']['TDS'].append(data_point['TDS'])
+            data['grow_name']['PS'].append(data_point['PS'])
+            data['grow_name']['humidity'].append(data_point['humidity'])
+            data['grow_name']['airTemp'].append(data_point['airTemp'])
+            data['grow_name']['waterTemp'].append(data_point['waterTemp'])
+        count+=1
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
     else:
@@ -58,12 +63,6 @@ def link(current_grow, link_device):
       { "grow_name" : current_grow},
       {
       '$set': {'device_name' : link_device, 'device_id' : device_id, 'sensors': [], 'actuators' : {}, 'controls' : {"time":[], "condition" :[]} }
-      },
-      upsert=True
-      )
-    result = db.data.update_one({ "grow_name" : current_grow},
-      {
-      '$set': {'device_name' : link_device, 'device_id' : device_id}
       },
       upsert=True
       )
@@ -161,7 +160,6 @@ def add_custom_grow(current_grow):
         new_grow = {"grow_name" : request.form['new_grow_name'], "plant_profile": "user defined" , "experiment" :"false", "device_name" : request.form['device'], "device_id":device_id, \
                         "username":username, "sensors":sensors, "actuators":actuators, "controls": new_grow_controls }
         db.grows.insert_one(new_grow)
-        db.data.insert_one({"device_id": device_id, "grow_name" : request.form['new_grow_name']})
         return redirect(url_for('grows.list_grow', current_grow=request.form['new_grow_name']))
     else:
         return redirect(url_for('grows.list_grow', current_grow=current_grow))
@@ -385,7 +383,6 @@ def add_grow(num=1):
         new_grow = {"grow_name" : request.form['grow_name'], "plant_profile": request.form['plant_type'], "experiment" :request.form['experiment'], "device_name" : request.form['device_name'], "device_id":device_id, \
                         "username":username, "sensors":sensors, "actuators":actuators, "controls": new_grow_controls }
         db.grows.insert_one(new_grow)
-        db.data.insert_one({"device_id": device_id, "grow_name" : request.form['grow_name']})
         return redirect(url_for('grows.list_grow', current_grow=request.form['grow_name']))
     else:
         return redirect(url_for('plant_profiles.list_plant_profiles', num=num))
