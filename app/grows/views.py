@@ -9,7 +9,13 @@ mod_grows = Blueprint('grows', __name__)
 @login_required
 def list_grow(current_grow):
     count = 0
-    data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
+    pHchartData = []
+    ecChartData = [];
+    luxChartData = [];
+    tempChartData = [];
+    humidityChartData = [];
+
+    # data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
     user_devices = []
     user_grows = []
     device_list = []
@@ -24,16 +30,16 @@ def list_grow(current_grow):
     data_points = db.data.find({'grow_name' : current_grow}).sort('_id',-1).limit(151200)
     for data_point in data_points:
         if count%3600 == 0:
-            data['pH'].append(data_point['pH'])
-            data['lux'].append(data_point['lux'])
-            data['EC'].append(data_point['EC'])
-            data['TDS'].append(data_point['TDS'])
-            data['PS'].append(data_point['PS'])
-            data['humidity'].append(data_point['humidity'])
-            data['airTemp'].append(data_point['airTemp'])
-            data['waterTemp'].append(data_point['waterTemp'])
+            date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
+                                hour=data_point['hour'], minute=data_point['min'], second=data_point['sec'])
+            pHchartData.append({"date" : date, "value" : data_point['pH']})
+            ecChartData.append({"date" : date, "ec_value" : data_point['EC'], "tds" : data_point['TDS'], "ps":data_point['PS']})
+            luxChartData.append({"date" : date, "value" : data_point['lux']})
+            tempChartData.append({"date" : date, "waterTemp" : data_point['waterTemp'], "airTemp": data_point['airTemp']})
+            humidityChartData.append({"date" : date, "value" : data_point['humidity']})
         count+=1
-    print data
+    
+    # print pHchartData, ecChartData, luxChartData, tempChartData, humidityChartData
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
     else:
@@ -52,7 +58,8 @@ def list_grow(current_grow):
     
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
-                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, data=data)
+                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
+                           ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, humidityChartData=humidityChartData)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
@@ -107,6 +114,60 @@ def edit_grow(current_grow):
       )
     return redirect(url_for('grows.list_grow', current_grow=current_grow))
 
+@mod_grows.route('/edit_grow_controls/<current_grow>', methods=['POST'])
+@login_required
+def add_grow_controls(current_grow):
+
+    username = current_user.get_id()
+    existing_grow = db.grows.find({'grow_name' : current_grow})
+    for grow in existing_grow:
+        g_actuators = grow['actuators']
+        g_controls = grow['controls']
+        g_sensors = grow['sensors']
+
+    edited_grow_controls = {"time":[], "condition" : []}
+    condition_control_num = 0
+    time_control_num = 0
+    for key in request.form.keys():
+        if key[:-1] == "if_this_condition_":
+            condition_control_num+=1
+        elif key[:-1] == "time_int_":
+            time_control_num+=1
+        if time_control_num == 1:
+            if request.form['time_int_1'] == "":
+                time_control_num = 0
+        if condition_control_num == 1:
+            if request.form['if_this_condition_1'] == "":
+                condition_control_num = 0
+    
+    for i in range(time_control_num):
+        if str(request.form['actuator_control_'+str(i+1)+'_actuator']) in g_actuators.keys():
+            edited_grow_controls["time"].append({"action": "toggle",
+            "actuator": request.form['actuator_control_'+str(i+1)+'_actuator'],
+            "unit": request.form['time_hour_min_'+str(i+1)],
+            "value": int(request.form['time_int_'+str(i+1)]),
+            "start_date" : request.form['startdate_activity_'+str(i+1)],
+            "finish_date" : request.form['finishdate_activity_'+str(i+1)]})
+    
+    for i in range(condition_control_num):
+        if request.form['if_this_condition_'+str(i+1)] in g_sensors and \
+                        request.form['do_this_condition_'+str(i+1)].split("-")[0] in g_actuators.keys():
+            edited_grow_controls["condition"].append({"action": (request.form['do_this_condition_'+str(i+1)].split("-")[1]),
+            "actuator": request.form['do_this_condition_'+str(i+1)].split("-")[0],
+            "sensor" : request.form['if_this_condition_'+str(i+1)],
+            "operator" : request.form['is_condition_'+str(i+1)].split("%")[0],
+            "unit": request.form['if_this_condition_'+str(i+1)],
+            "value": float(request.form['to_this_condition_'+str(i+1)])})
+
+    result = db.grows.update_one(
+      { "grow_name" : current_grow},
+      {
+      '$set': {'controls':edited_grow_controls}
+      },
+      upsert=True
+      )
+    return redirect(url_for('grows.list_grow', current_grow=current_grow))
+
 @mod_grows.route('/add_custom_grows/<current_grow>', methods=['POST'])
 @login_required
 def add_custom_grow(current_grow):
@@ -134,10 +195,7 @@ def add_custom_grow(current_grow):
                 if request.form['if_this_condition_1'] == "":
                     condition_control_num = 0
         
-        print time_control_num, actuators.keys()
         for i in range(time_control_num):
-            
-            print str(request.form['actuator_control_'+str(i+1)+'_actuator'])
             if str(request.form['actuator_control_'+str(i+1)+'_actuator']) in actuators.keys():
                 new_grow_controls["time"].append({"action": "toggle",
                 "actuator": request.form['actuator_control_'+str(i+1)+'_actuator'],
@@ -146,7 +204,6 @@ def add_custom_grow(current_grow):
                 "start_date" : request.form['startdate_activity_'+str(i+1)],
                 "finish_date" : request.form['finishdate_activity_'+str(i+1)]})
         
-        print "here"
         for i in range(condition_control_num):
             if request.form['if_this_condition_'+str(i+1)] in sensors and \
                             request.form['do_this_condition_'+str(i+1)].split("-")[0] in actuators.keys():
@@ -157,7 +214,6 @@ def add_custom_grow(current_grow):
                 "unit": request.form['if_this_condition_'+str(i+1)],
                 "value": float(request.form['to_this_condition_'+str(i+1)])})
 
-        print "here 22222"
         new_grow = {"grow_name" : request.form['new_grow_name'], "plant_profile": "user defined" , "experiment" :"false", "device_name" : request.form['device'], "device_id":device_id, \
                         "username":username, "sensors":sensors, "actuators":actuators, "controls": new_grow_controls }
         db.grows.insert_one(new_grow)

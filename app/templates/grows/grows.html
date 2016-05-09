@@ -1593,7 +1593,7 @@
                                                        <h4 class="modal-title">Set Grow Controls</h4>
                                                    </div>
                                                    <div class="modal-body">
-                                                    <form id="edit_grow_controls" class="smart-form" action="/edit_grow_controls" method="POST">
+                                                    <form id="edit_grow_controls" class="smart-form" action="{{'/edit_grow_controls/'+current_grow}}" method="POST">
                                                         <fieldset>
                                                             <section id="edit_actuator_controls">
                                                                 <label class="label"><strong>What To Do On A Schedule (Controls):</strong></label>
@@ -1602,10 +1602,10 @@
                                                                 <label class="select actuator_select">
                                                                     <select id="edit_actuator_control_1_actuator" name="actuator_control_1_actuator">
                                                                         <option value="">Choose an Actuator</option>
-                                                                        <option value="Light_1">Light #1</option>
-                                                                        <option value="Light_2">Light #2</option>
-                                                                        <option value="Water_Pump_1">Water Pump #1</option>
-                                                                        <option value="Nutrient_Pump_1">Nutrient Pump #1</option>
+                                                                        <option value="light_1">Light #1</option>
+                                                                        <option value="light_2">Light #2</option>
+                                                                        <option value="water_pump">Water Pump</option>
+                                                                        <option value="nutrient_pump">Nutrient Pump</option>
                                                                     </select><i></i>
                                                                 </label>
                                                                 <label for="edit_actuator_control_1_time_int" class="label">Every: </label>
@@ -1867,12 +1867,12 @@
                                                                     <label class="select">
                                                                         <select id="edit_do_this_condition_1" name="do_this_condition_1" class="input-sm">
                                                                             <option value="">Choose</option>
-                                                                            <option value="pH_Upper_On">pH Upper On</option>
-                                                                            <option value="pH_Upper_Off">pH Upper Off</option>
-                                                                            <option value="pH_Downer_On">pH Downer On</option>
-                                                                            <option value="pH_Downer_Off">pH Downer Off</option>
-                                                                            <option value="nutrient_On">Nutrient Pump On</option>
-                                                                            <option value="nutrient_On">Nutrient Pump Off</option>
+                                                                            <option value="phUpper_pump-on">pH Upper On</option>
+                                                                            <option value="phUpper_pump-off">pH Upper Off</option>
+                                                                            <option value="phDowner_pump-on">pH Downer On</option>
+                                                                            <option value="phDowner_pump-off">pH Downer Off</option>
+                                                                            <option value="nutrient_pump-on">Nutrient Pump On</option>
+                                                                            <option value="nutrient_pump-off">Nutrient Pump Off</option>
                                                                         </select> <i></i> </label>
                                                                 </section>
                                                             </section>
@@ -2571,8 +2571,8 @@ you can add as many as you like
                         '<label class="select actuator_select">' +
                         '<select id="edit_actuator_control_' + edit_actuator_control_number + '_actuator" name="actuator_control_' + edit_actuator_control_number + '_actuator">' +
                         '<option value="">Choose an Actuator</option>' +
-                        '<option value="Light_1">Light #1</option>' +
-                        '<option value="Light_2">Light #2</option>' +
+                        '<option value="light_1">Light #1</option>' +
+                        '<option value="light_2">Light #2</option>' +
                         '<option value="water_pump">Water Pump</option>' +
                         '<option value="nutrient_pump">Nutrient Pump</option>' +
                         '</select><i></i>' +
@@ -2611,12 +2611,12 @@ you can add as many as you like
                         '</section>' +
                         '<section class="col col-6">' +
                         '<label class="input"> <i class="icon-append fa fa-calendar"></i>' +
-                        '<input type="text" name="edit_startdate_activity_'+ edit_actuator_control_number +'" id="edit_startdate_activity_' + edit_actuator_control_number + '" placeholder="Start date">' +
+                        '<input type="text" name="startdate_activity_'+ edit_actuator_control_number +'" id="edit_startdate_activity_' + edit_actuator_control_number + '" placeholder="Start date">' +
                         '</label>' +
                         '</section>' +
                         '<section class="col col-6">' +
                         '<label class="input"> <i class="icon-append fa fa-calendar"></i>' +
-                        '<input type="text" name="edit_finishdate_activity_'+ edit_actuator_control_number +'" id="edit_finishdate_activity_'+edit_actuator_control_number+'" placeholder="Finish date">' +
+                        '<input type="text" name="finishdate_activity_'+ edit_actuator_control_number +'" id="edit_finishdate_activity_'+edit_actuator_control_number+'" placeholder="Finish date">' +
                         '</label>' +
                         '</section>'
                 );
@@ -2865,12 +2865,12 @@ you can add as many as you like
                         '<label class="select">'+
                         '<select id="edit_do_this_condition_'+edit_actuator_condition_number+'" name="do_this_condition_'+edit_actuator_condition_number+'" class="input-sm">'+
                         '<option value="">Choose</option>'+
-                        '<option value="pH_Upper_On">pH Upper On</option>'+
-                        '<option value="pH_Upper_Off">pH Upper Off</option>'+
-                        '<option value="pH_Downer_On">pH Downer On</option>'+
-                        '<option value="pH_Downer_Off">pH Downer Off</option>'+
-                        '<option value="nutrient_On">Nutrient Pump On</option>'+
-                        '<option value="nutrient_On">Nutrient Pump Off</option>'+
+                        '<option value="phUpper_pump-on">pH Upper On</option>'+
+                        '<option value="phUpper_pump-off">pH Upper Off</option>'+
+                        '<option value="phDowner_pump-on">pH Downer On</option>'+
+                        '<option value="phDDowner_pump-off">pH Downer Off</option>'+
+                        '<option value="nutrient_pump-on">Nutrient Pump On</option>'+
+                        '<option value="nutrient_pump-off">Nutrient Pump Off</option>'+
                         '</select> <i></i> </label>'+
                         '</section>'+
                         '</section>'
