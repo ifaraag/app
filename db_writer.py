@@ -55,7 +55,7 @@ def sub_callback(message, channel):
 		if int(time_diff.seconds) >= 14400:
 			logging.basicConfig(filename='hydrobase_data.log',level=logging.INFO)
 			logging.info(message_array)
-			db.display.insert_many(message_array)
+			db.data.insert_many(message_array)
 		
 
 if __name__ == '__main__':
