@@ -337,7 +337,7 @@
                         <h4 class="modal-title">Create Grow From Plant Profile</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="smart-form" id="new_grow_form" action="{{'/add_grows/'+cur|string}}" method="POST">
+                        <form class="smart-form" id="new_grow_form" action="{{'/add_grows/'+cur|string+'/'+first|string}}" method="POST">
                             <fieldset>
                                 <section>
                                     <label class="label">Grow Name</label>
@@ -804,17 +804,37 @@
             <!--end link to device modal-->
         </div>
 
-
-                               
-    <ul class="pagination">
-    {% for i in range(1, pages+1) %}
-        {% if i == cur %}
-            <li class="active"><a href="{{'/plant_profile/'+i|string}}">{{i}}</a></li>
-        {%else%}
-            <li><a href="{{'/plant_profiles/'+i|string}}">{{i}}</a></li>
+        {% if search == False %}
+            <div class="text-center">
+                <ul class="pagination pagination-sm">
+                    <li>
+                    {% if first|string == "1"%}
+                      <a>First</a>
+                      <a>Prev</a>
+                    {%else%}
+                    <a href="{{'/plant_profiles_first'}}">First</a>
+                      <a href="{{'/plant_profiles_prev/'+cur|string+'/'+first|string}}">Prev</a>
+                    {%endif%}
+                    </li>
+                    {% for i in range(first, first+3) %}
+                        {% if i == cur %}
+                            <li class="active"><a href="{{'/plant_profiles/'+i|string+'/'+first|string}}">{{i}}</a></li>
+                        {%else%}
+                            <li><a href="{{'/plant_profiles/'+i|string+'/'+first|string}}">{{i}}</a></li>
+                        {%endif%}
+                    {% endfor %}
+                    <li>
+                    {% if first|string == (pages-2)|string%}
+                      <a>Next</a>
+                      <a>Last</a>
+                    {%else%}
+                      <a href="{{'/plant_profiles_next/'+cur|string+'/'+first|string}}">Next</a>
+                      <a href="{{'/plant_profiles_last'}}">Last</a>
+                    {%endif%}
+                    </li>
+                </ul>
+            </div>
         {%endif%}
-    {% endfor %}
-    </ul>
     </div>
     <!-- END MAIN CONTENT -->
 </div>
