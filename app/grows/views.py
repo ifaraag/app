@@ -13,8 +13,6 @@ def list_grow(current_grow):
     luxChartData = [];
     tempChartData = [];
     humidityChartData = [];
-
-    # data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
     user_devices = []
     user_grows = []
     device_list = []
@@ -26,13 +24,8 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
-    
-    data_points = db.data.find({'grow_name' : current_grow}).sort([['year', -1],
-                                                     ['month', -1],
-                                                     ['day', -1],
-                                                     ['hour', -1],
-                                                     ['min', -1],
-                                                     ['sec', -1]]).limit(42)
+
+    data_points = db.data.find({'grow_name' : grow['grow_name']}).sort('_id', -1).limit(42);
     for data_point in data_points:
         date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
                             hour=data_point['hour'], minute=data_point['min'], second=data_point['sec'])
@@ -43,8 +36,6 @@ def list_grow(current_grow):
         luxChartData.append({"date" : date, "value" : float(data_point['lux'])})
         tempChartData.append({"date" : date, "waterTemp" : float(data_point['waterTemp']), "airTemp": float(data_point['airTemp'])})
         humidityChartData.append({"date" : date, "value" : float(data_point['humidity'])})
-    
-    # print len(pHchartData), pHchartData, ecChartData, luxChartData, tempChartData, humidityChartData
     
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
@@ -64,8 +55,9 @@ def list_grow(current_grow):
     
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
-                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
-                           ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, humidityChartData=humidityChartData)
+                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData.reverse(),\
+                           ecChartData=ecChartData.reverse(), luxChartData=luxChartData.reverse(), tempChartData=tempChartData.reverse(), \
+                           humidityChartData=humidityChartData.reverse())
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
