@@ -66,13 +66,14 @@ def last_plant_profiles():
 	else:
 		pages = (num_profiles/lim)+1
 	first=pages-2
-	cur=pages-2
+	cur=pages
 	return redirect(url_for('plant_profiles.list_plant_profiles', cur=cur, first=first))
 
 
-@mod_plant_profiles.route('/search_plant_profiles/<searchterm>', methods=['GET'])
+@mod_plant_profiles.route('/search_plant_profiles', methods=['GET'])
 @login_required
-def search_plant_profiles(searchterm, cur=1, first=1, shift="no change"):
+def search_plant_profiles(cur=1, first=1, shift="no change"):
+	print "here"
 	search = True
 	num_profiles = db.plant_profiles.find().count()
 	skip = (int(cur)-1) * 8
@@ -92,7 +93,9 @@ def search_plant_profiles(searchterm, cur=1, first=1, shift="no change"):
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
 		grows_list.append((grow['grow_name'], grow['device_name']))
-	plants = db.plant_profiles.find({"common_name": searchterm})
+	print "here1111"
+	plants = db.plant_profiles.find({"common_name": request.args.get('search')})
+	print "here222"
 	for plant in plants:
 		plant_list.append(plant)
 	return render_template('plant_profiles/plant_profiles.html', username=username, my_devices=device_list,\
