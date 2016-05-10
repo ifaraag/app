@@ -53,11 +53,16 @@ def list_grow(current_grow):
     for grow in grows:
         user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators'], grow['controls']))
     
+    pHchartData.reverse()
+    ecChartData.reverse()
+    luxChartData.reverse()
+    tempChartData.reverse()
+    humidityChartData.reverse()
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
-                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData.reverse(),\
-                           ecChartData=ecChartData.reverse(), luxChartData=luxChartData.reverse(), tempChartData=tempChartData.reverse(), \
-                           humidityChartData=humidityChartData.reverse())
+                           device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
+                           ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, \
+                           humidityChartData=humidityChartData)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
