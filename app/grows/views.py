@@ -27,7 +27,12 @@ def list_grow(current_grow):
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
     
-    data_points = db.data.find({'grow_name' : current_grow}).sort('_id',-1).limit(42)
+    data_points = db.data.find({'grow_name' : current_grow}).sort([['year', -1],
+                                                     ['month', -1],
+                                                     ['day', -1],
+                                                     ['hour', -1],
+                                                     ['min', -1],
+                                                     ['sec', -1]]).limit(42)
     for data_point in data_points:
         date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
                             hour=data_point['hour'], minute=data_point['min'], second=data_point['sec'])
