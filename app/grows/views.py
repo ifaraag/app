@@ -26,6 +26,7 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
+    
     data_points = db.data.find({'grow_name' : current_grow}).sort('_id',-1).limit(42)
     for data_point in data_points:
         date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
@@ -37,9 +38,8 @@ def list_grow(current_grow):
         luxChartData.append({"date" : date, "value" : float(data_point['lux'])})
         tempChartData.append({"date" : date, "waterTemp" : float(data_point['waterTemp']), "airTemp": float(data_point['airTemp'])})
         humidityChartData.append({"date" : date, "value" : float(data_point['humidity'])})
-        count+=1
     
-    # print pHchartData, ecChartData, luxChartData, tempChartData, humidityChartData
+    # print len(pHchartData), pHchartData, ecChartData, luxChartData, tempChartData, humidityChartData
     
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
