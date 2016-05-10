@@ -8,14 +8,11 @@ mod_grows = Blueprint('grows', __name__)
 @mod_grows.route('/grows/<current_grow>', methods=['GET'])
 @login_required
 def list_grow(current_grow):
-    count = 0
     pHchartData = []
     ecChartData = [];
     luxChartData = [];
     tempChartData = [];
     humidityChartData = [];
-
-    # data = {'pH':[], 'lux': [], 'EC':[], 'TDS':[], 'PS':[], 'PS':[], 'humidity':[], 'airTemp':[], 'waterTemp':[]}
     user_devices = []
     user_grows = []
     device_list = []
@@ -27,19 +24,19 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
-    data_points = db.data.find({'grow_name' : current_grow}).sort('_id',-1).limit(151200)
+
+    data_points = db.data.find({'grow_name' : grow['grow_name']}).sort('_id', -1).limit(42);
     for data_point in data_points:
-        if count%3600 == 0:
-            date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
-                                hour=data_point['hour'], minute=data_point['min'], second=data_point['sec'])
-            pHchartData.append({"date" : date, "value" : data_point['pH']})
-            ecChartData.append({"date" : date, "ec_value" : data_point['EC'], "tds" : data_point['TDS'], "ps":data_point['PS']})
-            luxChartData.append({"date" : date, "value" : data_point['lux']})
-            tempChartData.append({"date" : date, "waterTemp" : data_point['waterTemp'], "airTemp": data_point['airTemp']})
-            humidityChartData.append({"date" : date, "value" : data_point['humidity']})
-        count+=1
+        date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
+                            hour=data_point['hour'], minute=data_point['min'], second=data_point['sec'])
+        pHchartData.append({"year": data_point['year'], "month":data_point['month'], \
+            "day": data_point['day'], "hour": data_point['hour'], "minute": data_point['min'], \
+                "second":data_point['sec'], "value" : float(data_point['pH'])})
+        ecChartData.append({"date" : date, "ec_value" : float(data_point['EC']), "tds" : float(data_point['TDS']), "ps": float(data_point['PS'])})
+        luxChartData.append({"date" : date, "value" : float(data_point['lux'])})
+        tempChartData.append({"date" : date, "waterTemp" : float(data_point['waterTemp']), "airTemp": float(data_point['airTemp'])})
+        humidityChartData.append({"date" : date, "value" : float(data_point['humidity'])})
     
-    # print pHchartData, ecChartData, luxChartData, tempChartData, humidityChartData
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
     else:
@@ -56,10 +53,16 @@ def list_grow(current_grow):
     for grow in grows:
         user_grows.append((grow['grow_name'], grow['device_name'], grow['sensors'], grow['actuators'], grow['controls']))
     
+    pHchartData.reverse()
+    ecChartData.reverse()
+    luxChartData.reverse()
+    tempChartData.reverse()
+    humidityChartData.reverse()
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
-                           ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, humidityChartData=humidityChartData)
+                           ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, \
+                           humidityChartData=humidityChartData)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
@@ -223,7 +226,7 @@ def add_custom_grow(current_grow):
 
 
 @mod_grows.route('/add_grows/', methods=['POST'])
-@mod_grows.route('/add_grows/<num>', methods=['POST'])
+@mod_grows.route('/add_grows/<num>/<first>', methods=['POST'])
 @login_required
 def add_grow(num=1):
     username = current_user.get_id()
@@ -442,7 +445,7 @@ def add_grow(num=1):
         db.grows.insert_one(new_grow)
         return redirect(url_for('grows.list_grow', current_grow=request.form['grow_name']))
     else:
-        return redirect(url_for('plant_profiles.list_plant_profiles', num=num))
+        return redirect(url_for('plant_profiles.list_plant_profiles', num=num, first=first))
 
 @mod_grows.route('/delete_grow/<grow_name>', methods=['POST'])
 @login_required
