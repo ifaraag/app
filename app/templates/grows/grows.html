@@ -77,9 +77,12 @@
         function fill_phData(){
             data = {{pHchartData|safe}}
             for (i = 0; i < data.length; i++) {
+                date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst.setHours(date_utc.getHours() - 8);
                 pHchartData.push(
                         {
-                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "date": date_pst,
                             "value": data[i]['value']
                         }
                 );
@@ -89,10 +92,13 @@
         function fill_ecData(){
             data = {{ecChartData|safe}}
             for (i = 0; i < data.length; i++) {
+                date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst.setHours(date_utc.getHours() - 8);
                 ecChartData.push(
                         {
-                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
-                            "ec_value": data[i]['ec_value'],
+                            "date": date_pst,
+                            "ec_value" : data[i]['ec_value'],
                             "tds": data[i]['tds'],
                             "ps": data[i]['ps']
                         }
@@ -104,9 +110,12 @@
         function fill_luxData(){
             data = {{luxChartData|safe}}
             for (i = 0; i < data.length; i++) {
+                date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst.setHours(date_utc.getHours() - 8);
                 luxChartData.push(
                         {
-                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "date": date_pst,
                             "value": data[i]['value']
                         }
                 );
@@ -116,9 +125,12 @@
         function fill_tempData(){
             data = {{tempChartData|safe}}
             for (i = 0; i < data.length; i++) {
+                date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst.setHours(date_utc.getHours() - 8);
                 tempChartData.push(
                         {
-                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "date": date_pst,
                             "waterTemp": data[i]['waterTemp'],
                             "airTemp": data[i]['airTemp']
                         }
@@ -129,9 +141,12 @@
         function fill_humidityData(){
             data = {{humidityChartData|safe}}
             for (i = 0; i < data.length; i++) {
+                date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
+                date_pst.setHours(date_utc.getHours() - 8);
                 humidityChartData.push(
                         {
-                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "date": date_pst,
                             "value" : data[i]['value']
                         }
                 );
