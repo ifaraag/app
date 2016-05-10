@@ -38,12 +38,7 @@ def dashboard():
 		range_list.append({"grow_name": grow['grow_name'], "ph_min" : ph_min, "ph_max": ph_max, "ec_min": ec_min, "ec_max":ec_max})
 	grows = db.grows.find({'username' : current_user.get_id()})
 	for grow in grows:
-		data_points = db.display.find({'grow_name' : grow['grow_name']}).sort([['year', -1],
-	                                                 ['month', -1],
-	                                                 ['day', -1],
-	                                                 ['hour', -1],
-	                                                 ['min', -1],
-	                                                 ['sec', -1]]).limit(10);
+  		data_points = db.display.find({'grow_name' : grow['grow_name']}).sort('_id', -1).limit(10);
 		pH_list =[]
 		lux_list = []
 		EC_list =[]
@@ -61,9 +56,10 @@ def dashboard():
 			humidity_list.append(data_point['humidity'])
 			airTemp_list.append(data_point['airTemp'])
 			waterTemp_list.append(data_point['waterTemp'])
-		seed_data.append({"grow_name": grow['grow_name'], "pH" :pH_list, "lux" :lux_list, "EC" :EC_list, \
-				"TDS" :TDS_list, "PS" : PS_list, "humidity": humidity_list, "airTemp" : airTemp_list, "waterTemp": waterTemp_list})
-
+		seed_data.append({"grow_name": grow['grow_name'], "pH" :pH_list.reverse(), "lux" :lux_list.reverse(), "EC" :EC_list.reverse(), \
+				"TDS" :TDS_list.reverse(), "PS" : PS_list.reverse(), "humidity": humidity_list.reverse(), "airTemp" : airTemp_list.reverse(),\
+				 "waterTemp": waterTemp_list.reverse()})
+		
 	return render_template('dashboard/dashboard.html', username=username, my_devices=device_list,\
 		 my_grows=grows_list, range_list=range_list, seed_data=seed_data)
 
