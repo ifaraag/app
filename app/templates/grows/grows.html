@@ -73,178 +73,72 @@
             return Math.random() * (max - min) + min;
         }
 
-        //Functions For Creating Random Data Arrays
-        function fill_phData (){
-            var temp_hour = 0;
-            var temp_min = 0;
-            var temp_value = 0;
-            for (i = 0; i < 95; i++){
-                if (temp_min == 0 || temp_min == 15 || temp_min == 30){
-                    temp_min += 15;
-                } else if (temp_min == 45) {
-                    temp_min = 0;
-                    temp_hour += 1;
-                }
-                if (temp_hour < 10){
-                    var hour = " 0" + temp_hour;
-                }
-                else {
-                    var hour = " " + temp_hour;
-                }
-                if (temp_min == 0){
-                    var min = ":0" + temp_min;
-                }
-                else {
-                    var min = ":" + temp_min;
-                }
-                temp_value += 1;
-
+        // Creating data from the data received at the backend
+        function fill_phData(){
+            data = {{pHchartData|safe}}
+            for (i = 0; i < data.length; i++) {
                 pHchartData.push(
                         {
-                            "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "value": get_rando_value(1, 14)
+                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "value": data[i]['value']
                         }
                 );
             }
         }
-        function fill_ecData (){
-            var temp_hour = 0;
-            var temp_min = 0;
-            var temp_value = 0;
-            for (i = 0; i < 95; i++){
-                if (temp_min == 0 || temp_min == 15 || temp_min == 30){
-                    temp_min += 15;
-                } else if (temp_min == 45) {
-                    temp_min = 0;
-                    temp_hour += 1;
-                }
-                if (temp_hour < 10){
-                    var hour = " 0" + temp_hour;
-                }
-                else {
-                    var hour = " " + temp_hour;
-                }
-                if (temp_min == 0){
-                    var min = ":0" + temp_min;
-                }
-                else {
-                    var min = ":" + temp_min;
-                }
-                temp_value += 1;
 
+        function fill_ecData(){
+            data = {{ecChartData|safe}}
+            for (i = 0; i < data.length; i++) {
                 ecChartData.push(
                         {
-                            "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "ec_value": get_rando_value(0, 1500),
-                            "tds": get_rando_value(0, 1200),
-                            "ps": get_rando_value(0,1)
-
+                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "ec_value": data[i]['ec_value'],
+                            "tds": data[i]['tds'],
+                            "ps": data[i]['ps']
                         }
                 );
             }
         }
-        function fill_luxData (){
-            var temp_hour = 0;
-            var temp_min = 0;
-            var temp_value = 0;
-            for (i = 0; i < 95; i++){
-                if (temp_min == 0 || temp_min == 15 || temp_min == 30){
-                    temp_min += 15;
-                } else if (temp_min == 45) {
-                    temp_min = 0;
-                    temp_hour += 1;
-                }
-                if (temp_hour < 10){
-                    var hour = " 0" + temp_hour;
-                }
-                else {
-                    var hour = " " + temp_hour;
-                }
-                if (temp_min == 0){
-                    var min = ":0" + temp_min;
-                }
-                else {
-                    var min = ":" + temp_min;
-                }
-                temp_value += 1;
 
+
+        function fill_luxData(){
+            data = {{luxChartData|safe}}
+            for (i = 0; i < data.length; i++) {
                 luxChartData.push(
                         {
-                            "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "value": get_rando_value(0, 1500)
+                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "value": data[i]['value']
                         }
                 );
             }
         }
-        function fill_tempData (){
-            var temp_hour = 0;
-            var temp_min = 0;
-            var temp_value = 0;
-            for (i = 0; i < 95; i++){
-                if (temp_min == 0 || temp_min == 15 || temp_min == 30){
-                    temp_min += 15;
-                } else if (temp_min == 45) {
-                    temp_min = 0;
-                    temp_hour += 1;
-                }
-                if (temp_hour < 10){
-                    var hour = " 0" + temp_hour;
-                }
-                else {
-                    var hour = " " + temp_hour;
-                }
-                if (temp_min == 0){
-                    var min = ":0" + temp_min;
-                }
-                else {
-                    var min = ":" + temp_min;
-                }
-                temp_value += 1;
 
+        function fill_tempData(){
+            data = {{tempChartData|safe}}
+            for (i = 0; i < data.length; i++) {
                 tempChartData.push(
                         {
-                            "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "waterTemp": get_rando_value(32, 120),
-                            "airTemp": get_rando_value(32,120)
+                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "waterTemp": data[i]['waterTemp'],
+                            "airTemp": data[i]['airTemp']
                         }
                 );
             }
         }
-        function fill_humidityData (){
-            var temp_hour = 0;
-            var temp_min = 0;
-            var temp_value = 0;
-            for (i = 0; i < 95; i++){
-                if (temp_min == 0 || temp_min == 15 || temp_min == 30){
-                    temp_min += 15;
-                } else if (temp_min == 45) {
-                    temp_min = 0;
-                    temp_hour += 1;
-                }
-                if (temp_hour < 10){
-                    var hour = " 0" + temp_hour;
-                }
-                else {
-                    var hour = " " + temp_hour;
-                }
-                if (temp_min == 0){
-                    var min = ":0" + temp_min;
-                }
-                else {
-                    var min = ":" + temp_min;
-                }
-                temp_value += 1;
 
+        function fill_humidityData(){
+            data = {{humidityChartData|safe}}
+            for (i = 0; i < data.length; i++) {
                 humidityChartData.push(
                         {
-                            "date": new Date('March 15, 2016'+ hour + min + ':00'),
-                            "value": get_rando_value(0, 100)
+                            "date": new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0),
+                            "value" : data[i]['value']
                         }
                 );
             }
         }
-
-        //Create Random Data
+        
+        //Create Data
         fill_phData();
         fill_ecData();
         fill_luxData();
@@ -256,6 +150,15 @@
             // SERIAL CHART
             var ph_chart = new AmCharts.AmSerialChart();
 
+            // Get range for pH
+            ph_max = 7.25
+            ph_min = 6.75
+            range_ph = {{range|safe}}
+            for (i = 0; i < range_ph.length; i++) {
+                ph_min = range_ph[i]['ph_min']
+                ph_max = range_ph[i]['ph_max']
+            }
+            
             ph_chart.dataProvider = pHchartData;
             ph_chart.marginLeft = 10;
             ph_chart.categoryField = "date";
@@ -286,8 +189,8 @@
                 "fillColor": "#c6e0b4",
                 "lineAlpha": 0.5,
                 "lineColor": "#757575",
-                "toValue": 8,
-                "value": 6
+                "toValue": ph_max,
+                "value": ph_min
             }];
             ph_chart.addValueAxis(valueAxis);
 
@@ -490,6 +393,15 @@
             // SERIAL CHART
             var ec_chart = new AmCharts.AmSerialChart();
 
+            // Get max and min EC values
+            ec_max = 700
+            ec_min = 600
+            range_ec = {{range|safe}}
+            for (i = 0; i < range_ec.length; i++) {
+                ec_min = range_ec[i]['ec_min']
+                ec_max = range_ec[i]['ec_max']
+            }
+
             ec_chart.dataProvider = ecChartData;
             ec_chart.marginLeft = 10;
             ec_chart.categoryField = "date";
@@ -519,8 +431,8 @@
                 "fillColor": "#3D73B5",
                 "lineAlpha": 0.5,
                 "lineColor": "#757575",
-                "toValue": 1050,
-                "value": 400
+                "toValue": ec_max,
+                "value": ec_min
             }];
             ec_chart.addValueAxis(valueAxis);
 
@@ -591,9 +503,9 @@
                 "fillAlpha": 0.2,
                 "fillColor": "#40BF9E",
                 "lineAlpha": 0.5,
-                "lineColor": "#757575",
-                "toValue": 600,
-                "value": 300
+                "lineColor": "#757575"
+                // "toValue": 600,
+                // "value": 300
             }];
             tds_chart.addValueAxis(valueAxis);
 
@@ -818,17 +730,17 @@
                     "fillAlpha": 0.2,
                     "fillColor": "#3D73B5",
                     "lineAlpha": 0.5,
-                    "lineColor": "#757575",
-                    "toValue": 75, //end value for guide
-                    "value": 65 //start value for guide
+                    "lineColor": "#757575"
+                    // "toValue": 75, //end value for guide
+                    // "value": 65 //start value for guide
                 },
                 {
                     "fillAlpha": 0.2,
                     "fillColor": "#41A6A8",
                     "lineAlpha": 0.5,
-                    "lineColor": "#757575",
-                    "toValue": 80, //end value for guide
-                    "value": 70 //start value for guide
+                    "lineColor": "#757575"
+                    // "toValue": 80, //end value for guide
+                    // "value": 70 //start value for guide
                 }
             ];
             temp_overview_chart.addValueAxis(tempValueAxis);
@@ -942,9 +854,9 @@
                 "fillAlpha": 0.2,
                 "fillColor": "#41A6A8",
                 "lineAlpha": 0.5,
-                "lineColor": "#757575",
-                "toValue": 80,
-                "value": 65
+                "lineColor": "#757575"
+                // "toValue": 80,
+                // "value": 65
             }];
             airTemp_chart.addValueAxis(valueAxis);
 
@@ -1016,9 +928,9 @@
                 "fillAlpha": 0.2,
                 "fillColor": "#3D73B5",
                 "lineAlpha": 0.5,
-                "lineColor": "#757575",
-                "toValue": 75,
-                "value": 65
+                "lineColor": "#757575"
+                // "toValue": 75,
+                // "value": 65
             }];
             waterTemp_chart.addValueAxis(valueAxis);
 
