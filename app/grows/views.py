@@ -9,10 +9,11 @@ mod_grows = Blueprint('grows', __name__)
 @login_required
 def list_grow(current_grow):
     pHchartData = []
-    ecChartData = [];
-    luxChartData = [];
-    tempChartData = [];
-    humidityChartData = [];
+    ecChartData = []
+    luxChartData = []
+    tempChartData = []
+    humidityChartData = []
+    range_list = []
     user_devices = []
     user_grows = []
     device_list = []
@@ -24,7 +25,22 @@ def list_grow(current_grow):
         assoc_device_name = grow['device_name']
         experiment = grow['experiment']
         grows_list.append((current_grow, grow['device_name'], grow['sensors'], grow['actuators'], grow['controls'], grow['plant_profile']))
-
+    ph_min = 0
+    ph_max = 0
+    ec_min = 0
+    ec_max = 0
+    grows = db.grows.find({'grow_name' : current_grow})
+    for grow in grows:
+        for condition_control in grow["controls"]["condition"]:
+            if condition_control['actuator'] == 'phUpper_pump':
+                ph_min = condition_control['value']
+            if condition_control['actuator'] == 'phDowner_pump':
+                ph_max = condition_control['value']
+            if condition_control['actuator'] == 'nutrient_pump' and condition_control['action'] == 'off':
+                ec_max = condition_control['value']
+            if condition_control['actuator'] == 'nutrient_pump' and condition_control['action'] == 'on':
+                ec_min = condition_control['value']     
+        range_list.append({"grow_name": str(grow['grow_name']), "ph_min" : ph_min, "ph_max": ph_max, "ec_min": ec_min, "ec_max":ec_max})
     data_points = db.data.find({'grow_name' : grow['grow_name']}).sort('_id', -1).limit(42);
     for data_point in data_points:
         date = datetime.datetime(year=data_point['year'], month=data_point['month'], day=data_point['day'], \
@@ -32,10 +48,18 @@ def list_grow(current_grow):
         pHchartData.append({"year": data_point['year'], "month":data_point['month'], \
             "day": data_point['day'], "hour": data_point['hour'], "minute": data_point['min'], \
                 "second":data_point['sec'], "value" : float(data_point['pH'])})
-        ecChartData.append({"date" : date, "ec_value" : float(data_point['EC']), "tds" : float(data_point['TDS']), "ps": float(data_point['PS'])})
-        luxChartData.append({"date" : date, "value" : float(data_point['lux'])})
-        tempChartData.append({"date" : date, "waterTemp" : float(data_point['waterTemp']), "airTemp": float(data_point['airTemp'])})
-        humidityChartData.append({"date" : date, "value" : float(data_point['humidity'])})
+        ecChartData.append({"year": data_point['year'], "month":data_point['month'], \
+            "day": data_point['day'], "hour": data_point['hour'], "minute": data_point['min'], \
+                "second":data_point['sec'], "ec_value" : float(data_point['EC']), "tds" : float(data_point['TDS']), "ps": float(data_point['PS'])})
+        luxChartData.append({"year": data_point['year'], "month":data_point['month'], \
+            "day": data_point['day'], "hour": data_point['hour'], "minute": data_point['min'], \
+                "second":data_point['sec'], "value" : float(data_point['lux'])})
+        tempChartData.append({"year": data_point['year'], "month":data_point['month'], \
+            "day": data_point['day'], "hour": data_point['hour'], "minute": data_point['min'], \
+                "second":data_point['sec'], "waterTemp" : float(data_point['waterTemp']), "airTemp": float(data_point['airTemp'])})
+        humidityChartData.append({"year": data_point['year'], "month":data_point['month'], \
+            "day": data_point['day'], "hour": data_point['hour'], "minute": data_point['min'], \
+                "second":data_point['sec'], "value" : float(data_point['humidity'])})
     
     if assoc_device_name == "":
         device_list.append(("No Device Linked", "No Device Linked", [] ,{}, "", ""))
@@ -58,11 +82,12 @@ def list_grow(current_grow):
     luxChartData.reverse()
     tempChartData.reverse()
     humidityChartData.reverse()
+    print range_list
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
                            ecChartData=ecChartData, luxChartData=luxChartData, tempChartData=tempChartData, \
-                           humidityChartData=humidityChartData)
+                           humidityChartData=humidityChartData, range=range_list)
 
 @mod_grows.route('/link/<current_grow>/<link_device>', methods=['POST'])
 @login_required
