@@ -796,6 +796,13 @@ you can add as many as you like
             type: 'line',
             colors: {lux: '#FF9E3A'}
         },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
         bindto: '#Lux_chartDiv'
     });
 
@@ -819,6 +826,13 @@ you can add as many as you like
             type: 'line',
             colors: {
                 humidity: '7BE9FF'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
             }
         },
         bindto: '#humidity_chartDiv'
@@ -845,6 +859,13 @@ you can add as many as you like
                 airTemp: '40BF9E'
             }
         },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
         bindto: '#airTemp_chartDiv'
     });
     var waterTemp_chart = c3.generate({
@@ -867,6 +888,13 @@ you can add as many as you like
             type: 'line',
             colors: {
                 waterTemp: '3D73B5'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
             }
         },
         bindto: '#waterTemp_chartDiv'
@@ -893,6 +921,13 @@ you can add as many as you like
                 pH: '#7F9FD4'
             }
         },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
         bindto: '#pH_chartDiv'
     });
     var EC_chart = c3.generate({
@@ -915,6 +950,13 @@ you can add as many as you like
             type: 'line',
             colors: {
                 EC: '#3D73B5'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
             }
         },
         bindto: '#ec_chartDiv'
@@ -941,6 +983,13 @@ you can add as many as you like
                 TDS: '#40BF9E'
             }
         },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
         bindto: '#tds_chartDiv'
     });
     var PS_chart = c3.generate({
@@ -963,6 +1012,13 @@ you can add as many as you like
             type: 'line',
             colors: {
                 PS: '#FF8048'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
             }
         },
         bindto: '#ps_chartDiv'
