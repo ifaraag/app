@@ -253,7 +253,7 @@ def add_custom_grow(current_grow):
 @mod_grows.route('/add_grows/', methods=['POST'])
 @mod_grows.route('/add_grows/<num>/<first>', methods=['POST'])
 @login_required
-def add_grow(num=1):
+def add_grow(num=1, first=1):
     username = current_user.get_id()
     existing_grow = db.grows.find_one({'grow_name' : request.form['grow_name']})
     if not existing_grow:
