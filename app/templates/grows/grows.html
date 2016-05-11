@@ -79,7 +79,7 @@
             for (i = 0; i < data.length; i++) {
                 date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
                 date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
-                date_pst.setHours(date_utc.getHours() - 8);
+                date_pst.setHours(date_utc.getHours() - 7);
                 pHchartData.push(
                         {
                             "date": date_pst,
@@ -94,7 +94,7 @@
             for (i = 0; i < data.length; i++) {
                 date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
                 date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
-                date_pst.setHours(date_utc.getHours() - 8);
+                date_pst.setHours(date_utc.getHours() - 7);
                 ecChartData.push(
                         {
                             "date": date_pst,
@@ -112,7 +112,7 @@
             for (i = 0; i < data.length; i++) {
                 date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
                 date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
-                date_pst.setHours(date_utc.getHours() - 8);
+                date_pst.setHours(date_utc.getHours() - 7);
                 luxChartData.push(
                         {
                             "date": date_pst,
@@ -127,7 +127,7 @@
             for (i = 0; i < data.length; i++) {
                 date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
                 date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
-                date_pst.setHours(date_utc.getHours() - 8);
+                date_pst.setHours(date_utc.getHours() - 7);
                 tempChartData.push(
                         {
                             "date": date_pst,
@@ -143,7 +143,7 @@
             for (i = 0; i < data.length; i++) {
                 date_utc= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
                 date_pst= new Date(data[i]['year'], data[i]['month']-1, data[i]['day'], data[i]['hour'], data[i]['minute'], data[i]['second'], 0);
-                date_pst.setHours(date_utc.getHours() - 8);
+                date_pst.setHours(date_utc.getHours() - 7);
                 humidityChartData.push(
                         {
                             "date": date_pst,
