@@ -82,7 +82,7 @@ def list_grow(current_grow):
     luxChartData.reverse()
     tempChartData.reverse()
     humidityChartData.reverse()
-    print range_list
+    print (range_list)
     return render_template('grows/grows.html',
                             username=username, current_grow=current_grow, experiment=experiment, current_device=assoc_device_name, \
                            device=device_list, grow=grows_list, my_devices=user_devices, my_grows=user_grows, pHchartData=pHchartData,\
