@@ -10,8 +10,8 @@ MONGO_URI = "mongodb+srv://admin:admin@cluster0-4w9h4.gcp.mongodb.net/hydrosmart
 DB_NAME = 'hydrosmart'
 
 
-PUBNUB_PUBLISH_KEY = 'pub-c-d820df08-5466-4cfc-a868-704d857db647'
-PUBNUB_SUBSCRIBE_KEY = 'sub-c-942b13b6-b313-11ea-875a-ceb74ea8e96a'
-PUBNUB_SECRET_KEY = 'sec-c-OTAyOTY0NWUtNzRhZS00Nzg4LWJmNmItOWMyYjQwYWFkZWYy'
+PUBNUB_PUBLISH_KEY = 'pub-c-662a8ff6-793e-497d-9793-1e870410e1c2'
+PUBNUB_SUBSCRIBE_KEY = 'sub-c-825013ca-afef-11ea-af7b-9a67fd50bac3'
+PUBNUB_SECRET_KEY = 'sec-c-NTc2ZjI4OGEtZjFlNy00Yzc3LWEwYTgtMWMzMjgwZWYwNDcy'
 PUBNUB_AUTH_KEY = 'auth-me-not'
 PUBNUB_CHANNEL_GRP = "hydrosmart"
