@@ -61,7 +61,7 @@ def sub_callback(message, channel):
 # Grant read, write and manage permissions to the pubnub instance that we initialized
 pubnub.grant(channel_group='hydrosmart', auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0, callback=_callback, error=_error)
 
-# Subscribe to the channel group 'hydrobase' that contains the channels for all users to get the data 
+# Subscribe to the channel group 'hydrosmart' that contains the channels for all users to get the data 
 # coming in from different devices and put that into the DB
 pubnub.subscribe_group(channel_groups=app.config['PUBNUB_CHANNEL_GRP'], callback=sub_callback, error=_error)
 
