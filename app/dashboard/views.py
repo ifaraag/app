@@ -15,6 +15,7 @@ def dashboard():
 	range_list = []
 	seed_data = []
 	username = current_user.get_id()
+	print (username,flush=True)
 	devices = db.devices.find({'username': current_user.get_id()})
 	for device in devices:
 		device_list.append((device['device_name'], device['type'], \
