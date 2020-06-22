@@ -24,7 +24,7 @@ def login():
             login_user(user_obj)
             return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/login.html',
-                           title='Log In to Hydrobase',
+                           title='Log In to Hydrosmart',
                            form=form,
                            error=error)
 
@@ -48,7 +48,7 @@ def signup():
             pubnub.grant(channel=user['username'], auth_key=app.config['PUBNUB_AUTH_KEY'], read=True, write=True, manage=True, ttl=0)
             return redirect(url_for('dashboard.dashboard'))
     return render_template('auth/signup.html', form=form,
-                           title='Sign Up for Hydrobase', error=error)
+                           title='Sign Up for Hydrosmart', error=error)
 
 # @mod_auth.route('/googlelogin', methods=['GET', 'POST'])
 
