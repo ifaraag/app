@@ -49,6 +49,7 @@ def dashboard():
 		data_points = db.display.find({'grow_name' : grow['grow_name']}).sort('_id', -1).limit(10);
 
 		for data_point in data_points:
+			
 			pH_list.append(data_point['pH'])
 			lux_list.append(data_point['lux'])
 			EC_list.append(data_point['EC'])
