@@ -60,19 +60,19 @@ def sub_callback(message, channel):
 
 if __name__ == '__main__':
 
-	client = MongoClient('mongodb://admin:admin@ds011268.mlab.com:11268/analytics-hydrobase')
-	db = client['analytics-hydrobase']
+	client = MongoClient('mongodb+srv://admin:admin@cluster0-4w9h4.gcp.mongodb.net/hydrosmart?retryWrites=true&w=majority')
+	db = client['analytics-hydrosmart']
 
 	#initialize the pubnub instance
-	pubnub = Pubnub(publish_key='pub-c-93c6c384-e1a0-412f-87cf-e626aaab6a00', \
-		subscribe_key='sub-c-8ec9d89e-e4aa-11e5-a4f2-0619f8945a4f', secret_key='sec-c-YzQyMTU3NmYtMDNhMS00MzM5LTg3MTgtZjA2N2U0N2IyNGY3', \
-		auth_key='40ed6434-1991-4f7a-8034-20a072abde43')
+	pubnub = Pubnub(publish_key='pub-c-662a8ff6-793e-497d-9793-1e870410e1c2', \
+		subscribe_key='sub-c-825013ca-afef-11ea-af7b-9a67fd50bac3', secret_key='sec-c-NTc2ZjI4OGEtZjFlNy00Yzc3LWEwYTgtMWMzMjgwZWYwNDcy', \
+		auth_key='auth-me-not')
 
 	# Grant read, write and manage permissions to the pubnub instance that we initialized
-	pubnub.grant(channel_group='hydrobase', auth_key='40ed6434-1991-4f7a-8034-20a072abde43',\
+	pubnub.grant(channel_group='hydrosmart', auth_key='auth-me-not',\
 	 read=True, write=True, manage=True, ttl=0, callback=_callback, error=_error)
 
 	# Subscribe to the channel group 'hydrobase' that contains the channels for all users to get the data 
 	# coming in from different devices and put that into the DB
-	pubnub.subscribe_group(channel_groups='hydrobase', \
+	pubnub.subscribe_group(channel_groups='hydrosmart', \
 		callback=sub_callback, error=_error)
