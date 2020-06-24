@@ -768,7 +768,345 @@ you can add as many as you like
 
 </script>
 
+<script>
 
+    var pubnub = PUBNUB.init({
+        publish_key   : 'pub-c-93c6c384-e1a0-412f-87cf-e626aaab6a00',
+        subscribe_key : 'sub-c-8ec9d89e-e4aa-11e5-a4f2-0619f8945a4f',
+        auth_key : '40ed6434-1991-4f7a-8034-20a072abde43'
+    });
+
+    var lux_chart = c3.generate({
+        data: {
+            json: [
+                {lux: {{seed_data[0]['lux'][0]}}},
+                {lux: {{seed_data[0]['lux'][1]}}},
+                {lux: {{seed_data[0]['lux'][2]}}},
+                {lux: {{seed_data[0]['lux'][3]}}},
+                {lux: {{seed_data[0]['lux'][4]}}},
+                {lux: {{seed_data[0]['lux'][5]}}},
+                {lux: {{seed_data[0]['lux'][6]}}},
+                {lux: {{seed_data[0]['lux'][7]}}},
+                {lux: {{seed_data[0]['lux'][8]}}},
+                {lux: {{seed_data[0]['lux'][9]}}}
+            ],
+            keys: {
+                value: ['lux']
+            },
+            type: 'line',
+            colors: {lux: '#FF9E3A'}
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#Lux_chartDiv'
+    });
+
+    var humidity_chart = c3.generate({
+        data: {
+            json: [
+                {humidity: {{seed_data[0]['humidity'][0]}}},
+                {humidity: {{seed_data[0]['humidity'][1]}}},
+                {humidity: {{seed_data[0]['humidity'][2]}}},
+                {humidity: {{seed_data[0]['humidity'][3]}}},
+                {humidity: {{seed_data[0]['humidity'][4]}}},
+                {humidity: {{seed_data[0]['humidity'][5]}}},
+                {humidity: {{seed_data[0]['humidity'][6]}}},
+                {humidity: {{seed_data[0]['humidity'][7]}}},
+                {humidity: {{seed_data[0]['humidity'][8]}}},
+                {humidity: {{seed_data[0]['humidity'][9]}}}
+            ],
+            keys: {
+                value: ['humidity']
+            },
+            type: 'line',
+            colors: {
+                humidity: '7BE9FF'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#humidity_chartDiv'
+    });
+    var airTemp_chart = c3.generate({
+        data: {
+            json: [
+                {airTemp: {{seed_data[0]['airTemp'][0]}}},
+                {airTemp: {{seed_data[0]['airTemp'][1]}}},
+                {airTemp: {{seed_data[0]['airTemp'][2]}}},
+                {airTemp: {{seed_data[0]['airTemp'][3]}}},
+                {airTemp: {{seed_data[0]['airTemp'][4]}}},
+                {airTemp: {{seed_data[0]['airTemp'][5]}}},
+                {airTemp: {{seed_data[0]['airTemp'][6]}}},
+                {airTemp: {{seed_data[0]['airTemp'][7]}}},
+                {airTemp: {{seed_data[0]['airTemp'][8]}}},
+                {airTemp: {{seed_data[0]['airTemp'][9]}}}
+            ],
+            keys: {
+                value: ['airTemp']
+            },
+            type: 'line',
+            colors: {
+                airTemp: '40BF9E'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#airTemp_chartDiv'
+    });
+    var waterTemp_chart = c3.generate({
+        data: {
+            json: [
+                {waterTemp: {{seed_data[0]['waterTemp'][0]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][1]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][2]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][3]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][4]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][5]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][6]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][7]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][8]}}},
+                {waterTemp: {{seed_data[0]['waterTemp'][9]}}}
+            ],
+            keys: {
+                value: ['waterTemp']
+            },
+            type: 'line',
+            colors: {
+                waterTemp: '3D73B5'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#waterTemp_chartDiv'
+    });
+    var pH_chart = c3.generate({
+        data: {
+            json: [
+                {pH: {{seed_data[0]['pH'][0]}}},
+                {pH: {{seed_data[0]['pH'][1]}}},
+                {pH: {{seed_data[0]['pH'][2]}}},
+                {pH: {{seed_data[0]['pH'][3]}}},
+                {pH: {{seed_data[0]['pH'][4]}}},
+                {pH: {{seed_data[0]['pH'][5]}}},
+                {pH: {{seed_data[0]['pH'][6]}}},
+                {pH: {{seed_data[0]['pH'][7]}}},
+                {pH: {{seed_data[0]['pH'][8]}}},
+                {pH: {{seed_data[0]['pH'][9]}}}
+            ],
+            keys: {
+                value: ['pH']
+            },
+            type: 'line',
+            colors: {
+                pH: '#7F9FD4'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#pH_chartDiv'
+    });
+    var EC_chart = c3.generate({
+        data: {
+            json: [
+                {EC: {{seed_data[0]['EC'][0]}}},
+                {EC: {{seed_data[0]['EC'][1]}}},
+                {EC: {{seed_data[0]['EC'][2]}}},
+                {EC: {{seed_data[0]['EC'][3]}}},
+                {EC: {{seed_data[0]['EC'][4]}}},
+                {EC: {{seed_data[0]['EC'][5]}}},
+                {EC: {{seed_data[0]['EC'][6]}}},
+                {EC: {{seed_data[0]['EC'][7]}}},
+                {EC: {{seed_data[0]['EC'][8]}}},
+                {EC: {{seed_data[0]['EC'][9]}}}
+            ],
+            keys: {
+                value: ['EC']
+            },
+            type: 'line',
+            colors: {
+                EC: '#3D73B5'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#ec_chartDiv'
+    });
+    var TDS_chart = c3.generate({
+        data: {
+            json: [
+                {TDS: {{seed_data[0]['TDS'][0]}}},
+                {TDS: {{seed_data[0]['TDS'][1]}}},
+                {TDS: {{seed_data[0]['TDS'][2]}}},
+                {TDS: {{seed_data[0]['TDS'][3]}}},
+                {TDS: {{seed_data[0]['TDS'][4]}}},
+                {TDS: {{seed_data[0]['TDS'][5]}}},
+                {TDS: {{seed_data[0]['TDS'][6]}}},
+                {TDS: {{seed_data[0]['TDS'][7]}}},
+                {TDS: {{seed_data[0]['TDS'][8]}}},
+                {TDS: {{seed_data[0]['TDS'][9]}}}
+            ],
+            keys: {
+                value: ['TDS']
+            },
+            type: 'line',
+            colors: {
+                TDS: '#40BF9E'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#tds_chartDiv'
+    });
+    var PS_chart = c3.generate({
+        data: {
+            json: [
+                {PS: {{seed_data[0]['PS'][0]}}},
+                {PS: {{seed_data[0]['PS'][1]}}},
+                {PS: {{seed_data[0]['PS'][2]}}},
+                {PS: {{seed_data[0]['PS'][3]}}},
+                {PS: {{seed_data[0]['PS'][4]}}},
+                {PS: {{seed_data[0]['PS'][5]}}},
+                {PS: {{seed_data[0]['PS'][6]}}},
+                {PS: {{seed_data[0]['PS'][7]}}},
+                {PS: {{seed_data[0]['PS'][8]}}},
+                {PS: {{seed_data[0]['PS'][9]}}}
+            ],
+            keys: {
+                value: ['PS']
+            },
+            type: 'line',
+            colors: {
+                PS: '#FF8048'
+            }
+        },
+        axis: {
+            y: {
+                tick: {
+                    format: function(d){return d3.round(d,4)}
+                }
+            }
+        },
+        bindto: '#ps_chartDiv'
+    });
+
+
+
+    pubnub.subscribe({
+        channel:'admin',
+        message: function (m) {
+            if (Object.keys(m).indexOf('sender') == 0) {
+                /*console.log('lux: ' + m.lux);
+                console.log('humidity: ' + m.humidity);
+                console.log('airTemp: ' + m.airTemp);
+                console.log('waterTemp: ' + m.waterTemp);
+                console.log('EC Sanity Check: ' + m.EC.split(','));
+                console.log('EC: ' + m.EC.split(',')[0]);
+                console.log('TDS: ' + m.EC.split(',')[1]);
+                console.log('PS: ' + m.EC.split(',')[2]);
+                console.log('pH: ' + parseFloat(m.pH));*/
+                lux_chart.flow({
+                    json: [
+                        m
+                    ],
+                    keys: {
+                        value: ['lux']
+                    }
+                });
+                humidity_chart.flow({
+                    json: [
+                        m
+                    ],
+                    keys: {
+                        value: ['humidity']
+                    }
+                });
+                airTemp_chart.flow({
+                    json: [
+                        m
+                    ],
+                    keys: {
+                        value: ['airTemp']
+                    }
+                });
+                waterTemp_chart.flow({
+                    json: [
+                        m
+                    ],
+                    keys: {
+                        value: ['waterTemp']
+                    }
+                });
+                pH_chart.flow({
+                    json: [
+                        {pH: parseFloat(m.pH)}
+                    ],
+                    keys: {
+                        value: ['pH']
+                    }
+                });
+                EC_chart.flow({
+                    json: [
+                        {EC: parseFloat(m.EC.split(',')[0])}
+                    ],
+                    keys: {
+                        value: ['EC']
+                    }
+                });
+                TDS_chart.flow({
+                    json: [
+                        {TDS: parseFloat(m.EC.split(',')[1])}
+                    ],
+                    keys: {
+                        value: ['TDS']
+                    }
+                });
+                PS_chart.flow({
+                    json: [
+                        {PS: parseFloat(m.EC.split(',')[2])}
+                    ],
+                    keys: {
+                        value: ['PS']
+                    }
+                });
+            }
+        }
+    });
+</script>
 
 <!-- Your GOOGLE ANALYTICS CODE Below -->
 <script type="text/javascript">
