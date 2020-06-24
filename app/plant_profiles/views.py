@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, redirect
 from app import db, login_manager, pubnub
 from flask.ext.login import login_required, current_user
-
+from math import floor
 mod_plant_profiles = Blueprint('plant_profiles', __name__)
 
 
