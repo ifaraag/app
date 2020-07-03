@@ -83,7 +83,7 @@ app.register_blueprint(mod_documentation)
 
 @app.errorhandler(404)
 def not_found(error):
-    return redirect('https://github.com/404'), 404
+    return redirect('404.html'), 404
 
 def notifications(username):
 	notifications  = db.notifications.find({"username" : username}).limit(10)
