@@ -22,7 +22,7 @@ def login():
         else:
             user_obj = User(user['username'])
             login_user(user_obj)
-            return redirect(url_for('devices.devices'))
+            return redirect(url_for('devices.list_devices'))
     return render_template('auth/login.html',
                            title='Log In to Hydrosmart',
                            form=form,
